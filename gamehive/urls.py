@@ -20,6 +20,6 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('guess_the_digit/', include('guess_the_digit.urls')),
-    path('', views.homepage),
+    path('', views.homepage, name='homepage'),
     path('sign_up/', views.sign_up, name='sign_up')
 ]
