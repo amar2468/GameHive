@@ -21,5 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('guess_the_digit/', include('guess_the_digit.urls')),
     path('', views.homepage, name='homepage'),
-    path('sign_up/', views.sign_up, name='sign_up')
+    path('sign_up/', views.sign_up, name='sign_up'),
+    path('contact_page/', views.contact_page, name='contact_page'),
+    path('about/', views.about, name='about')
 ]
