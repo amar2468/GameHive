@@ -1,8 +1,16 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from .forms import RegistrationForm
 
 def homepage(request):
     return render(request, 'index.html')
 
 def sign_up(request):
-    return render(request, 'sign_up.html')
+    if request.method == "POST":
+        form = RegistrationForm(request.POST)
+
+        if form.is_valid():
+            return redirect('')
+    else:
+        form = RegistrationForm()
+    return render(request, 'sign_up.html', {'form': form})
+        
