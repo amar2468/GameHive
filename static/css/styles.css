@@ -114,6 +114,11 @@ main {
   flex-grow: 1;
 }
 
+#intro_about_paragraph
+{
+  font-size: 20px;
+}
+
 hr {
   margin: 1rem 0;
   color: inherit;
