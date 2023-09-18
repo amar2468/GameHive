@@ -39,24 +39,24 @@
                 <div class="container px-5 my-5 px-5">
                     <div class="row gx-5 justify-content-center">
                         <div class="col-lg-6">
-                            <form method="post">
+                            <form method="post" action="{% url 'sign_up' %}">
                                 {% csrf_token %}
                                 <!-- Username input-->
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" id="{{ form.username.id_for_label }}" type="text" placeholder="Enter your name..." data-sb-validations="required" />
+                                    <input class="form-control" id="{{ form.username.id_for_label }}" name="username" type="text" placeholder="Enter your name..." data-sb-validations="required" />
                                     <label for="{{ form.username.id_for_label }}">Username</label>
                                     <div class="invalid-feedback" data-sb-feedback="username:required">A username is required.</div>
                                 </div>
                                 <!-- Email address input-->
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" id="{{ form.email.id_for_label }}" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
+                                    <input class="form-control" id="{{ form.email.id_for_label }}" name="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
                                     <label for="{{ form.email.id_for_label }}">Email address</label>
                                     <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
                                     <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
                                 </div>
                                 <!-- Password input-->
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" id="{{ form.password.id_for_label }}" type="password" placeholder="Enter password..." data-sb-validations="required" />
+                                    <input class="form-control" id="{{ form.password.id_for_label }}" name="password" type="password" placeholder="Enter password..." data-sb-validations="required" />
                                     <label for="{{ form.password.id_for_label }}">Password</label>
                                     <div class="invalid-feedback" data-sb-feedback="password:required">A password is required.</div>
                                 </div>
@@ -73,7 +73,7 @@
                                 <!-- an error submitting the form-->
                                 <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
                                 <!-- Submit Button-->
-                                <div class="d-grid"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">Sign Up</button></div>
+                                <div class="d-grid"><button class="btn btn-primary btn-lg" id="submitButton" type="submit">Sign Up</button></div>
                             </form>
                         </div>
                     </div>
