@@ -164,4 +164,64 @@ class RegistrationTestCase(TestCase):
         form = RegistrationForm(data=data)
 
         self.assertFalse(form.is_valid())
+    
+    def testing_invalid_username(self):
+        # Test if username length is less than required minimum length (3)
+
+        data = {
+            'username': 'te',
+            'email': 'amar@example.com',
+            'password': 'Strongpassword12!'
+        }
+
+        form = RegistrationForm(data=data)
+
+        self.assertFalse(form.is_valid())
+
+        # Test if username length is more than the required maximum length (20)
+
+        data = {
+            'username': 'usernameisthebestasdf',
+            'email': 'amar@example.com',
+            'password': 'Strongpassword12!'
+        }
+
+        form = RegistrationForm(data=data)
+
+        self.assertFalse(form.is_valid())
+
+        # Test if username has spaces
+
+        data = {
+            'username': 'test user',
+            'email': 'amar@example.com',
+            'password': 'Strongpassword12!'
+        }
+
+        form = RegistrationForm(data=data)
+
+        self.assertFalse(form.is_valid())
         
+        # Test if username has special characters
+
+        data = {
+            'username': 'test!*',
+            'email': 'amar@example.com',
+            'password': 'Strongpassword12!'
+        }
+
+        form = RegistrationForm(data=data)
+
+        self.assertFalse(form.is_valid())
+
+        # Test if username contains reserved words
+
+        data = {
+            'username': 'admin',
+            'email': 'amar@example.com',
+            'password': 'Strongpassword12!'
+        }
+
+        form = RegistrationForm(data=data)
+
+        self.assertFalse(form.is_valid())
