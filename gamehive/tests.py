@@ -2,6 +2,11 @@ from django.test import TestCase
 from django.urls import reverse
 from .forms import RegistrationForm
 from django.contrib.auth.models import User
+from django.contrib.auth import password_validation
+from django.core.exceptions import ValidationError
+
+
+# Unit test in the "RegistrationTestCase" class below
 
 class RegistrationTestCase(TestCase):
     def testing_valid_reg_form(self):
@@ -225,3 +230,64 @@ class RegistrationTestCase(TestCase):
         form = RegistrationForm(data=data)
 
         self.assertFalse(form.is_valid())
+
+# Integration test in the "RegistrationIntegrationTestCase" class below
+
+class RegistrationIntegrationTestCase(TestCase):
+    def test_user_registration_process(self):
+        # Defining strong & weak password for testing
+        strong_password = "StrOngp@sswOrd1"
+        weak_password = "weak"
+
+        # Set up sign up view URL
+
+        registration_url = reverse('sign_up')
+
+        # |Checking Whether Weak Password Is Detected |
+
+        # Making a POST request with the vulnerable password
+
+        response_for_weak_password = self.client.post(registration_url,
+                                                      {
+                                                          'username': 'testuser',
+                                                          'email': 'amar@gmail.com',
+                                                          'password': weak_password
+                                                      })
+        
+        # Verify if there are any password validation errors in the response
+        self.assertContains(response_for_weak_password, "This password is too short.")
+
+        # |Checking Whether Strong Password Is Detected |
+
+        # Making a POST request with the strong password
+
+        response_for_strong_password = self.client.post(registration_url,
+                                                      {
+                                                          'username': 'testuser',
+                                                          'email': 'amar@gmail.com',
+                                                          'password': strong_password
+                                                      })
+        
+        # Verify that there are no password validation errors in the response
+        self.assertNotContains(response_for_strong_password, "This password is too short.")
+
+    def test_user_created_in_database(self):
+        # Defining data to put into post
+
+        data = {
+            'username': 'testuser',
+            'email': 'amar@gmail.com',
+            'password': 'StrOngp@assword'
+        }
+
+        # Making a POST request for registration view
+
+        registration_url = reverse('sign_up')
+
+        # Making a POST request for registration url, adding data and setting follow to True which enables HTTP redirects
+        response_registration = self.client.post(registration_url, data, follow=True)
+
+        # Verify that user was created
+        self.assertEqual(response_registration.status_code, 200) # Check to see if 200 code was returned, which indicates success
+
+        self.assertTrue(User.objects.filter(username='testuser').exists()) # See if user exists in database
