@@ -231,7 +231,7 @@ class RegistrationTestCase(TestCase):
 
         self.assertFalse(form.is_valid())
 
-# Integration test in the "RegistrationIntegrationTestCase" class below
+# Integration test for the registration functionality is below
 
 class RegistrationIntegrationTestCase(TestCase):
     def test_user_registration_process(self):
@@ -291,3 +291,32 @@ class RegistrationIntegrationTestCase(TestCase):
         self.assertEqual(response_registration.status_code, 200) # Check to see if 200 code was returned, which indicates success
 
         self.assertTrue(User.objects.filter(username='testuser').exists()) # See if user exists in database
+
+# Integration test for the login functionality is below
+
+class LoginIntegrationTestCase(TestCase):
+    
+    def test_for_login_process(self):
+
+        # Created test user to attempt the login process
+        self.user = User.objects.create_user(
+            username='david12',
+            password='Whatis12!'
+        )
+
+        # Login data below
+        data = {
+            'username': 'david12',
+            'password': 'Whatis12!'
+        }
+
+        # POST request for login process
+        login_url = reverse('login')
+
+        response_for_login = self.client.post(login_url, data, follow=True)
+
+        # Verify for redirect
+
+        self.assertEqual(response_for_login.status_code, 200) # Check to see if 200 code was returned, which indicates success
+        
+        self.assertTrue(response_for_login.context['user'].is_authenticated) # Check if the user has been authenticated
