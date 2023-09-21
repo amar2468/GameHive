@@ -3,7 +3,7 @@ from django.contrib import messages
 from .forms import RegistrationForm
 from .forms import LoginForm
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 
@@ -63,4 +63,12 @@ def sign_in(request):
         form = LoginForm()
 
     return render(request, 'login.html')
-        
+
+# Logout functionality
+def log_out(request):
+
+    # The user will be logged out after this method is executed
+    logout(request)
+
+    # Return to the homepage
+    return redirect('homepage')
