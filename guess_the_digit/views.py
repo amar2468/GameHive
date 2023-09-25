@@ -39,7 +39,9 @@ def guess_the_digit_game(request):
         request.session['correct_number'] = random.randint(1,10)
 
     number_of_guesses = int(request.GET.get('number_of_guesses', ''))
+    level = request.GET.get('selected_level')
     return render(request, 'home.html')
 
+# View that presents the configuration page for the guessing game
 def guess_the_digit_config(request):
     return render(request, 'guessing_game_config.html')
