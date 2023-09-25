@@ -22,14 +22,12 @@
             <form action="{% url 'play' %}" method="get">
                 {% csrf_token %}
                 <div class="dropdown" aria-required="true">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Difficulty
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Easy</a>
-                    <a class="dropdown-item" href="#">Medium</a>
-                    <a class="dropdown-item" href="#">Hard</a>
-                    </div>
+                      <select class="form-select" name="selected_level" aria-label="Pick the game difficulty">
+                        <option selected>Choose the game difficulty</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                      </select>
                 </div>
 
                 <br>
@@ -40,7 +38,7 @@
                 </div>
                 
                 <br>
-
+                
                 <button type="submit" class="btn btn-primary btn-lg">Start Game</button>
             </form>
 
