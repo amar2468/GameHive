@@ -20,6 +20,12 @@ def guess_the_digit_game(request):
 
         if user_guess == correct_number:
             result = "Correct guess! Well done!"
+
+            if 'score' not in request.session:
+                request.session['score'] = 10
+            elif 'score' in request.session:
+                request.session['score'] += 10
+
         elif user_guess != correct_number and number_of_guesses != 0:
             number_of_guesses -= 1
 
@@ -28,6 +34,9 @@ def guess_the_digit_game(request):
             else:
                 result = "Game over! The correct number was " + str(correct_number)
                 request.session.pop('correct_number', None)
+
+                if 'score' in request.session:
+                    request.session['score'] -= 10
         
         # The result is stored in the context so it can be returned back to the html template
         context = {
