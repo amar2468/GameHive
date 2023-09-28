@@ -22,7 +22,7 @@
             <form action="{% url 'play' %}" method="get">
                 {% csrf_token %}
                 <div class="dropdown" aria-required="true">
-                      <select class="form-select" name="selected_level" aria-label="Pick the game difficulty" style="font-size: 25px;">
+                      <select class="form-select" name="selected_level" aria-label="Pick the game difficulty" style="font-size: 20px;">
                         <option selected>Choose the game difficulty</option>
                         <option value="easy">Easy</option>
                         <option value="medium">Medium</option>
@@ -32,14 +32,14 @@
 
                 <br>
 
-                <label for="number_of_guesses" style="font-size: 30px;">Number of Guesses</label>
+                <label for="number_of_guesses" style="font-size: 20px;">Number of Guesses</label>
                 <div class="col-lg-7">
-                    <input class="form-control" type="number" style="font-size: 25px;" id="number_of_guesses" name="number_of_guesses">
+                    <input class="form-control" type="number" style="font-size: 20px;" id="number_of_guesses" name="number_of_guesses">
                 </div>
                 
                 <br>
                 
-                <button type="submit" style="font-size: 25px;" class="btn btn-primary btn-lg">Start Game</button>
+                <button type="submit" style="font-size: 20px;" class="btn btn-primary btn-lg">Start Game</button>
             </form>
 
         </div>
