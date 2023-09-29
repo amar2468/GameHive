@@ -7,6 +7,7 @@ import random
 @login_required
 def guess_the_digit_game(request):
     global number_of_guesses
+    global level
     if request.method == "POST":
 
         # Take the guess from the user
@@ -22,9 +23,19 @@ def guess_the_digit_game(request):
             result = "Correct guess! Well done!"
 
             if 'score' not in request.session:
-                request.session['score'] = 10
+                if level == "easy":
+                    request.session['score'] = 10
+                elif level == "medium":
+                    request.session['score'] = 50
+                elif level == "hard":
+                    request.session['score'] = 100
             elif 'score' in request.session:
-                request.session['score'] += 10
+                if level == "easy":
+                    request.session['score'] += 10
+                elif level == "medium":
+                    request.session['score'] += 50
+                elif level == "hard":
+                    request.session['score'] += 100
 
         elif user_guess != correct_number and number_of_guesses != 0:
             number_of_guesses -= 1
@@ -36,12 +47,19 @@ def guess_the_digit_game(request):
                 request.session.pop('correct_number', None)
 
                 if 'score' in request.session:
-                    request.session['score'] -= 10
+                    if level == "easy":
+                        request.session['score'] -= 10
+                    elif level == "medium":
+                        request.session['score'] -= 50
+                    elif level == "hard":
+                        request.session['score'] -= 100
         
         # The result is stored in the context so it can be returned back to the html template
         context = {
-            'result': result
+            'result': result,
+            'latest_score': request.session.get('score')
         }
+
 
         return render(request, 'home.html', context)
     
