@@ -21,9 +21,10 @@
 
             <form id="guessing_game_config_form" action="{% url 'play' %}" method="get">
                 {% csrf_token %}
+                Levels will bring benefits and disadvantages. Beginners may prefer the easy level
                 <div class="dropdown" aria-required="true">
-                      <select class="form-select" name="selected_level" aria-label="Pick the game difficulty" style="font-size: 20px;">
-                        <option selected>Choose the game difficulty</option>
+                      <select class="form-select" name="selected_level" aria-label="Pick the game difficulty" style="font-size: 20px;" required>
+                        <option selected disabled value="">Choose the game difficulty</option>
                         <option value="easy">Easy</option>
                         <option value="medium">Medium</option>
                         <option value="hard">Hard</option>
@@ -32,9 +33,10 @@
 
                 <br>
 
+                If you select "yes", it will enable the hint. If you guess the correct number, you will only get 50% of the points
                 <div class="dropdown" aria-required="true">
-                    <select class="form-select" name="hints" aria-label="Do you want hints during the game?" style="font-size: 20px;">
-                      <option selected>Do you want hints during the game?</option>
+                    <select class="form-select" name="hints" aria-label="Do you want hints during the game?" style="font-size: 20px;" required>
+                      <option selected disabled value="">Do you want hints during the game?</option>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                     </select>
