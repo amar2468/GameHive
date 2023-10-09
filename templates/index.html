@@ -53,39 +53,46 @@
                 </div>
             </div>
         </header>
-        <!-- Games section-->
-        <section class="bg-light py-5 border-bottom">
-            <div class="container px-5 my-5">
-                <div class="text-center mb-5">
-                    <h2 class="fw-bolder">Games Available</h2>
-                    <p class="lead mb-0">Play any of the games below - for free!</p>
-                </div>
-                <div class="row gx-5 justify-content-center">
-                    <!-- Guess the Digit Game-->
-                    <div class="col-lg-6 col-xl-4">
-                        <div class="card mb-5 mb-xl-0">
-                            <div class="card-body p-5">
-                                <div class="mb-3">
-                                    <span class="display-6 fw-bold">Guess the Digit</span>
+        {% if user.is_authenticated %}
+            <!-- Games section-->
+            <section class="bg-light py-5 border-bottom">
+                <div class="container px-5 my-5">
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bolder">Games Available</h2>
+                        <p class="lead mb-0">Play any of the games below - for free!</p>
+                    </div>
+                    <div class="row gx-5 justify-content-center">
+                        <!-- Guess the Digit Game-->
+                        <div class="col-lg-6 col-xl-4">
+                            <div class="card mb-5 mb-xl-0">
+                                <div class="card-body p-5">
+                                    <div class="mb-3">
+                                        <span class="display-6 fw-bold">Guess the Digit</span>
+                                    </div>
+                                    <div class="d-grid"><a class="btn btn-outline-primary" href="{% url 'config' %}">Play</a></div>
                                 </div>
-                                <div class="d-grid"><a class="btn btn-outline-primary" href="{% url 'config' %}">Play</a></div>
+                            </div>
+                        </div>
+                        <!-- Rock Paper Scissors Game-->
+                        <div class="col-lg-6 col-xl-4">
+                            <div class="card mb-5 mb-xl-0">
+                                <div class="card-body p-5">
+                                    <div class="mb-3">
+                                        <span class="display-6 fw-bold">Rock, Paper, Scissors</span>
+                                    </div>
+                                    <div class="d-grid"><a class="btn btn-outline-primary" href="#!">Play</a></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Rock Paper Scissors Game-->
-                    <div class="col-lg-6 col-xl-4">
-                        <div class="card mb-5 mb-xl-0">
-                            <div class="card-body p-5">
-                                <div class="mb-3">
-                                    <span class="display-6 fw-bold">Rock, Paper, Scissors</span>
-                                </div>
-                                <div class="d-grid"><a class="btn btn-outline-primary" href="#!">Play</a></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        {% else %}
+            <section class="py-5 border-bottom" style="background-color: #FFD700;">
+                <div class="container px-5 my-5">
+                </div>
+            </section>
+        {% endif %}
         <!-- Footer-->
         <footer class="py-5" style="background-color: #191970;">
             <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; GameHive 2023</p></div>
@@ -94,10 +101,6 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="{% static 'js/scripts.js' %}"></script>
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     </body>
 </html>
