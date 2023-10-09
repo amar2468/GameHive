@@ -25,18 +25,55 @@ def guess_the_digit_game(request):
 
             if 'score' not in request.session:
                 if level == "easy":
-                    request.session['score'] = 10
+                    # No hints were enabled, so user gets the full score
+                    if specific_hint == "":
+                        request.session['score'] = 10
+                    # Hints were enabled, half the score, regardless of level
+                    else:
+                        request.session['score'] = 5
+
                 elif level == "medium":
-                    request.session['score'] = 50
+
+                    # No hints were enabled, so user gets the full score
+                    if specific_hint == "":
+                        request.session['score'] = 50
+
+                    # Hints were enabled, half the score, regardless of level
+                    else:
+                        request.session['score'] = 25
+
                 elif level == "hard":
-                    request.session['score'] = 100
+                    # No hints were enabled, so user gets the full score
+                    if specific_hint == "":
+                        request.session['score'] = 100
+
+                    # Hints were enabled, half the score, regardless of level
+                    else:
+                        request.session['score'] = 50
+
             elif 'score' in request.session:
                 if level == "easy":
-                    request.session['score'] += 10
+                    # No hints were enabled, so user gets the full score
+                    if specific_hint == "":
+                        request.session['score'] += 10
+                    # Hints were enabled, half the score, regardless of level
+                    else:
+                        request.session['score'] += 5
+
                 elif level == "medium":
-                    request.session['score'] += 50
+                    # No hints were enabled, so user gets the full score
+                    if specific_hint == "":
+                        request.session['score'] += 50
+                    # Hints were enabled, half the score, regardless of level
+                    else:
+                        request.session['score'] += 25
                 elif level == "hard":
-                    request.session['score'] += 100
+                    # No hints were enabled, so user gets the full score
+                    if specific_hint == "":
+                        request.session['score'] += 100
+                    # Hints were enabled, half the score, regardless of level
+                    else:
+                        request.session['score'] += 50
 
         elif user_guess != correct_number and number_of_guesses != 0:
             number_of_guesses -= 1
