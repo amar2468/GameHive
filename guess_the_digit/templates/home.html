@@ -22,6 +22,12 @@
 
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
+                    {% if specific_hint != "" %}
+                        <p>{{ specific_hint }}</p>
+                    {% endif %}
+
+                    <br>
+
                     <form id="guessing_game_form" method="post">
                         {% csrf_token %}
                         <label for="guess_number_input_field">Guess the number</label>
