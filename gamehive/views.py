@@ -36,7 +36,10 @@ def sign_up(request):
 
             return render(request, 'login.html')
         if not form.is_valid():
-            print(form.errors)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.capitalize()}: {error}")
+            return render(request, 'sign_up.html', {'form':form})
     else:
         form = RegistrationForm()
     return render(request, 'sign_up.html', {'form': form})
@@ -58,7 +61,9 @@ def sign_in(request):
                 return render(request, 'login.html')
         
         else:
-            print(form.errors)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.capitalize()}: {error}")
     else:
         form = LoginForm()
 
