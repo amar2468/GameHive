@@ -13,8 +13,8 @@ def homepage(request):
 def about(request):
     return render(request, 'about.html')
 
-def contact_page(request):
-    return render(request, 'contact.html')
+def testimonials_page(request):
+    return render(request, 'testimonials.html')
 
 def sign_up(request):
     if request.method == "POST":
