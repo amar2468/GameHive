@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Testimonials{% endblock %}
+<body>
+    {% load static %}
+    {% block content %}
+    <div class="wrapper bg-light">
+        <!-- Header-->
+        <header class="bg-light py-5">
+            <div class="container px-5 my-5 px-5">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bolder">Tell us your thoughts</h2>
+                    <p class="lead mb-0">Leave your review using this form below...</p>
+                </div>
+                <div class="row gx-5 justify-content-center">
+                    <div class="col-lg-6">
+                        <form id="contact-form" method="post" action="#">
+                            <!-- First name -->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="first_name" type="text" placeholder="Enter your name..." data-sb-validations="required" autocomplete="off" />
+                                <label for="first_name">Name</label>
+                            </div>
+
+                            <!-- Surname -->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="surname" type="text" placeholder="Enter your name..." data-sb-validations="required" autocomplete="off" />
+                                <label for="surname">Surname</label>
+                            </div>
+
+                            <!-- Message -->
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required" autocomplete="off"></textarea>
+                                <label for="message">Message</label>
+                            </div>
+
+                            <!-- Submit Button-->
+                            <div class="d-grid"><button class="btn btn-primary btn-lg" id="submitButton" type="submit">Submit Your Review</button></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+    {% endblock %}
+</body>
