@@ -7,6 +7,10 @@
         <!-- Header-->
         <header class="bg-light py-5">
             <div class="container px-5 my-5 px-5">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bolder">Create your GameHive account</h2>
+                    <p class="lead mb-0">Enter a valid username, email, and password</p>
+                </div>
                 <div class="row gx-5 justify-content-center">
                     <div class="col-lg-6">
                         {% if messages %}
@@ -23,12 +27,12 @@
                             {% csrf_token %}
                             <!-- Username input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.username.id_for_label }}" name="username" type="text" placeholder="Enter your name..." data-sb-validations="required" />
+                                <input class="form-control" id="{{ form.username.id_for_label }}" name="username" type="text" placeholder="Enter your name..." data-sb-validations="required" autocomplete="off" />
                                 <label for="{{ form.username.id_for_label }}">Username</label>
                             </div>
                             <!-- Email address input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.email.id_for_label }}" name="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
+                                <input class="form-control" id="{{ form.email.id_for_label }}" name="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" autocomplete="off" />
                                 <label for="{{ form.email.id_for_label }}">Email address</label>
                             </div>
                             <!-- Password input-->
