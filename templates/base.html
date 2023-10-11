@@ -25,12 +25,12 @@
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'homepage' %}" style="color:black;">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'about' %}" style="color:black;">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'testimonials_page' %}" style="color:black;">Testimonials</a></li>
                         {% if user.is_authenticated %}
-                            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" style="color:black;">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" style="color:black;">Logout</a></li>
                         {% else %}
                             <li class="nav-item"><a class="nav-link" href="{% url 'sign_up' %}" style="color:black;">Sign Up</a></li>
                         {% endif %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'contact_page' %}" style="color:black;">Contact</a></li>
                     </ul>
                 </div>
             </div>
