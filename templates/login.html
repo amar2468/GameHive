@@ -7,6 +7,11 @@
         <!-- Header-->
         <header class="bg-light py-5">
             <div class="container px-5 my-5 px-5">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bolder">Sign in to your GameHive account</h2>
+                    <p class="lead mb-0">Enter your valid username and password</p>
+                </div>
+
                 <div class="row gx-5 justify-content-center">
                     <div class="col-lg-6">
 
@@ -24,13 +29,13 @@
                             {% csrf_token %}
                             <!-- Username input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.username.id_for_label }}" name="username" type="text" placeholder="Enter your name..." data-sb-validations="required" />
+                                <input class="form-control" id="{{ form.username.id_for_label }}" name="username" type="text" placeholder="Enter your username..." data-sb-validations="required" autocomplete="off" />
                                 <label for="{{ form.username.id_for_label }}">Username</label>
                                 <div class="invalid-feedback" data-sb-feedback="username:required">A username is required.</div>
                             </div>
                             <!-- Password input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.password.id_for_label }}" name="password" type="password" placeholder="Enter password..." data-sb-validations="required" />
+                                <input class="form-control" id="{{ form.password.id_for_label }}" name="password" type="password" placeholder="Enter password..." data-sb-validations="required" autocomplete="off" />
                                 <label for="{{ form.password.id_for_label }}">Password</label>
                                 <div class="invalid-feedback" data-sb-feedback="password:required">A password is required.</div>
                             </div>
