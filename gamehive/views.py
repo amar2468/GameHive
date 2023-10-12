@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
+from gamehive.models import GameUserProfile
 
 def homepage(request):
     return render(request, 'index.html')
@@ -32,7 +33,12 @@ def sign_up(request):
                     messages.error(request, error)
                 return render(request, 'sign_up.html', {'form':form})
 
-            User.objects.create_user(username=username, email=email, password=password)
+            user = User.objects.create_user(username=username, email=email, password=password)
+
+            game_user_profile = GameUserProfile.objects.get_or_create(user=user)
+            game_user_profile = game_user_profile[0]
+            game_user_profile.current_score = 0
+            game_user_profile.save()
 
             return render(request, 'login.html')
         if not form.is_valid():
