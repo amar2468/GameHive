@@ -17,6 +17,11 @@ def about(request):
 def testimonials_page(request):
     return render(request, 'testimonials.html')
 
+# Adding view for profile page of the user
+
+def my_profile(request):
+    return render(request, 'profile.html')
+
 def sign_up(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST)
