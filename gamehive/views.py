@@ -20,7 +20,8 @@ def testimonials_page(request):
 # Adding view for profile page of the user
 
 def my_profile(request):
-    return render(request, 'profile.html')
+    leaderboard_entries = GameUserProfile.objects.all().order_by('-current_score')
+    return render(request, 'profile.html', {'leaderboard_entries': leaderboard_entries})
 
 def sign_up(request):
     if request.method == "POST":
