@@ -11,9 +11,11 @@
                     <div class="text-center my-5">
                         <h1 class="display-5 fw-bolder text-black mb-2">Unlock Fun, One Game at a Time</h1>
                         <p class="lead text-black-50 mb-4">Exciting games that will make you feel happy!</p>
-                        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                            <a class="btn btn-primary btn-lg px-4 me-sm-3" href="{% url 'sign_up' %}">Get Started</a>
-                        </div>
+                        {% if not user.is_authenticated %}
+                            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                                <a class="btn btn-primary btn-lg px-4 me-sm-3" href="{% url 'sign_up' %}">Get Started</a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
