@@ -4,17 +4,19 @@
 <body>
     {% load static %}
     {% block content %}
-    <table class="table table-bordered table-hover" style="border: 2px solid black;">
+    <table class="table table-bordered table-hover" style="border: 2px solid black;width:50%;margin-left:auto;margin-right:auto;">
         <thead class="table-dark">
             <th colspan="3" style="text-align: center;">Leaderboard</th>
         </thead>
 
         <tbody>
-            <tr class="table-danger">
-                <td>1</td>
-                <td>Amar12</td>
-                <td>100</td>
-            </tr>
+            {% for leaderboard in leaderboard_entries %}
+                <tr class="table-danger">
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ leaderboard.user.username }}</td>
+                    <td>{{ leaderboard.current_score }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
     {% endblock %}
