@@ -13,22 +13,23 @@
                 </div>
                 <div class="row gx-5 justify-content-center">
                     <div class="col-lg-6">
-                        <form id="contact-form" method="post" action="#">
+                        <form id="contact-form" method="post" action="{% url 'testimonials_page' %}">
+                            {% csrf_token %}
                             <!-- First name -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="first_name" type="text" placeholder="Enter your name..." data-sb-validations="required" autocomplete="off" />
+                                <input class="form-control" id="first_name" name="first_name" type="text" placeholder="Enter your name..." data-sb-validations="required" autocomplete="off" />
                                 <label for="first_name">Name</label>
                             </div>
 
                             <!-- Surname -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="surname" type="text" placeholder="Enter your name..." data-sb-validations="required" autocomplete="off" />
+                                <input class="form-control" id="surname" name="last_name" type="text" placeholder="Enter your name..." data-sb-validations="required" autocomplete="off" />
                                 <label for="surname">Surname</label>
                             </div>
 
                             <!-- Message -->
                             <div class="form-floating mb-3">
-                                <textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required" autocomplete="off"></textarea>
+                                <textarea class="form-control" id="message" name="testimonial_message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required" autocomplete="off"></textarea>
                                 <label for="message">Message</label>
                             </div>
 
