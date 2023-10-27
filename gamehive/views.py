@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
-from gamehive.models import GameUserProfile
+from gamehive.models import GameUserProfile,TestimonialsModel
 
 def homepage(request):
     return render(request, 'index.html')
@@ -15,7 +15,22 @@ def about(request):
     return render(request, 'about.html')
 
 def testimonials_page(request):
-    return render(request, 'testimonials.html')
+    if request.method == "POST":
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        testimonials_message = request.POST.get('testimonial_message')
+
+        new_testimonial = TestimonialsModel(
+            name=first_name,
+            surname=last_name,
+            message=testimonials_message,
+        )
+
+        new_testimonial.save()
+
+        return render(request, 'testimonials.html')
+    else:
+        return render(request, 'testimonials.html')
 
 # Adding view for profile page of the user
 
