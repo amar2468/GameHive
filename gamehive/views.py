@@ -80,7 +80,10 @@ def sign_up(request):
             return render(request, 'sign_up.html', {'form':form})
     else:
         form = RegistrationForm()
-    return render(request, 'sign_up.html', {'form': form})
+    if request.user.is_authenticated:
+        return render(request, '403.html')
+    else:
+        return render(request, 'sign_up.html', {'form': form})
 
 # Sign in view has the POST method, which will take the login form as submitted by user and check if it is valid, after which 
 # authentication will occur. If a user is found, it will login the user. Otherwise, the login will not work and the user will be
@@ -109,14 +112,23 @@ def sign_in(request):
     else:
         form = LoginForm()
 
-    return render(request, 'login.html')
+    if request.user.is_authenticated:
+        return render(request, '403.html')
+    else:
+        return render(request, 'login.html')
 
-# Logout functionality which simply logs out the user, if they don't want to be logged in, for any reason.
+# Logout functionality which simply logs out the user
 
 def log_out(request):
 
-    # The user will be logged out after this method is executed
-    logout(request)
+    # Checks if user is logged in and will perform logout in that case
+    if request.user.is_authenticated:
+        # The user will be logged out after this method is executed
+        logout(request)
 
-    # Return to the homepage
-    return redirect('homepage')
+        # Return to the homepage
+        return redirect('homepage')
+    
+    # If user isn't logged in, the logout will not be allowed
+    else:
+        return render(request, '403.html')
