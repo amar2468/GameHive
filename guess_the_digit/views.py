@@ -24,81 +24,44 @@ def guess_the_digit_game(request):
         if user_guess == correct_number:
             result = "Correct guess! Well done!"
 
-            if 'score' not in request.session:
-                if level == "easy":
-                    # No hints were enabled, so user gets the full score
-                    if specific_hint == "":
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score = 10
-                        game_user_profile.save()
-                    # Hints were enabled, half the score, regardless of level
-                    else:
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score = 5
-                        game_user_profile.save()
+            if level == "easy":
+                # No hints were enabled, so user gets the full score
+                if specific_hint == "":
+                    game_user_profile = GameUserProfile.objects.get(user=request.user)
+                    game_user_profile.current_score += 10
+                    game_user_profile.save()
+                # Hints were enabled, half the score, regardless of level
+                else:
+                    game_user_profile = GameUserProfile.objects.get(user=request.user)
+                    game_user_profile.current_score += 5
+                    game_user_profile.save()
 
-                elif level == "medium":
+            elif level == "medium":
 
-                    # No hints were enabled, so user gets the full score
-                    if specific_hint == "":
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score = 50      
-                        game_user_profile.save()        
+                # No hints were enabled, so user gets the full score
+                if specific_hint == "":
+                    game_user_profile = GameUserProfile.objects.get(user=request.user)
+                    game_user_profile.current_score += 50      
+                    game_user_profile.save()        
 
-                    # Hints were enabled, half the score, regardless of level
-                    else:
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score = 25
-                        game_user_profile.save()
+                # Hints were enabled, half the score, regardless of level
+                else:
+                    game_user_profile = GameUserProfile.objects.get(user=request.user)
+                    game_user_profile.current_score += 25
+                    game_user_profile.save()
 
-                elif level == "hard":
-                    # No hints were enabled, so user gets the full score
-                    if specific_hint == "":
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score = 100
-                        game_user_profile.save()
+            elif level == "hard":
+                # No hints were enabled, so user gets the full score
+                if specific_hint == "":
+                    game_user_profile = GameUserProfile.objects.get(user=request.user)
+                    game_user_profile.current_score += 100
+                    game_user_profile.save()
 
-                    # Hints were enabled, half the score, regardless of level
-                    else:
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score = 50
-                        game_user_profile.save()
-
-            elif 'score' in request.session:
-                if level == "easy":
-                    # No hints were enabled, so user gets the full score
-                    if specific_hint == "":
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score += 10
-                        game_user_profile.save()
-                    # Hints were enabled, half the score, regardless of level
-                    else:
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score += 5
-                        game_user_profile.save()
-
-                elif level == "medium":
-                    # No hints were enabled, so user gets the full score
-                    if specific_hint == "":
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score += 50
-                        game_user_profile.save()
-                    # Hints were enabled, half the score, regardless of level
-                    else:
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score += 25
-                        game_user_profile.save()
-                elif level == "hard":
-                    # No hints were enabled, so user gets the full score
-                    if specific_hint == "":
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score += 100
-                        game_user_profile.save()
-                    # Hints were enabled, half the score, regardless of level
-                    else:
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score += 50
-                        game_user_profile.save()
+                # Hints were enabled, half the score, regardless of level
+                else:
+                    game_user_profile = GameUserProfile.objects.get(user=request.user)
+                    game_user_profile.current_score += 50
+                    game_user_profile.save()
 
         elif user_guess != correct_number and number_of_guesses != 0:
             number_of_guesses -= 1
