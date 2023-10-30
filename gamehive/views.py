@@ -42,8 +42,11 @@ def testimonials_page(request):
 # View that will present the current leaderboard for all users
 
 def my_profile(request):
-    leaderboard_entries = GameUserProfile.objects.all().order_by('-current_score')
-    return render(request, 'profile.html', {'leaderboard_entries': leaderboard_entries})
+    if request.user.is_authenticated:
+        leaderboard_entries = GameUserProfile.objects.all().order_by('-current_score')
+        return render(request, 'profile.html', {'leaderboard_entries': leaderboard_entries})
+    else:
+        return render(request, '403.html')
 
 # View has the POST part, which will take the user registration details and check if they are valid, after which the password will
 # be validated. Finally, the user will be added to the user model and the current score will be set to 0 as the user has only been
