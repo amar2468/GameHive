@@ -30,7 +30,7 @@
                     <form id="guessing_game_form" method="post">
                         {% csrf_token %}
                         <label for="guess_number_input_field">Guess the number</label>
-                        <input class="form-control" type="number" id="guess_number_input_field" name="guess_number_input_field">
+                        <input class="form-control" type="number" id="guess_number_input_field" name="guess_number_input_field" required>
                         <br>
                         <button type="submit" id="guess_number_button" class="btn btn-primary">Guess</button>
                     </form>
