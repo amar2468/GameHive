@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gamehive',
-    'guess_the_digit'
+    'guess_the_digit',
+    'rock_paper_scissors'
 ]
 
 MIDDLEWARE = [
