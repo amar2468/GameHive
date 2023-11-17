@@ -8,10 +8,11 @@
     <div class="container" style="display: flex;justify-content: center; align-items: center;height: 30vh;">
         <div class="card" style="display: flex;justify-content: center; align-items: center;width:70%;">
             <div class="card-body">
-                <div>
+                <form method="post" action="{% url 'edit_personal_details' %}">
+                    {% csrf_token %}
                     <p style="font-size:26px;">Welcome {{ request.user }}!</p>
-                    <button type="button" class="btn btn-secondary">Edit Details</button>
-                </div>
+                    <button type="submit" class="btn btn-secondary">Edit Details</button>
+                </form>
             </div>
         </div>
     </div>
