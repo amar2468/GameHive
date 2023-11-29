@@ -7,7 +7,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from gamehive.models import GameUserProfile,TestimonialsModel
-from django.http import HttpResponse
 
 # View that renders the homepage which allows a user to either sign up/login or play the game of their choice
 
@@ -18,9 +17,6 @@ def homepage(request):
 
 def about(request):
     return render(request, 'about.html')
-
-def edit_personal_details(request):
-    return HttpResponse("Change your personal details here!")
 
 # First part of this view is the POST method, which saves a testimonial to the relevant custom model. The else part will just display
 # the page to the user without submitting any forms
