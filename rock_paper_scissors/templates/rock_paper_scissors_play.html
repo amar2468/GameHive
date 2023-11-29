@@ -22,35 +22,70 @@
             <p style="font-size:22px;">Select rock, paper, or scissors!</p>
             <br><br>
 
-            <div id="carousel_rps" class="carousel slide" data-ride="carousel" data-interval="false">
+            <form id="rps_form" method="POST" action="{% url 'rock_paper_scissors:rps_form_submitted' %}">
+                {% csrf_token %}
+                <div class="flex_container_rps" style="display:flex;">
+                    <div id="carousel_container_player" style="flex:1;margin-right: 60px;">
+                        <div id="carousel_rps_player" class="carousel slide" data-ride="carousel" data-interval="false">
 
-                <div class="carousel-inner">
+                            <div class="carousel-inner">
 
-                    <div class="carousel-item active">
-                        <img src="{% static 'assets/paper.jpg' %}" alt="Picture of a paper">
+                                <div class="carousel-item active">
+                                    <img src="{% static 'assets/paper.jpg' %}" alt="Picture of a paper">
+                                </div>
+
+                                <div class="carousel-item">
+                                    <img src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
+                                </div>
+
+                                <div class="carousel-item">
+                                    <img src="{% static 'assets/scissors.jpg' %}" alt="Picture of scissors">
+                                </div>
+
+                            </div>
+
+                            <a class="carousel-control-prev" id="carousel_control_prev_player" href="#carousel_rps_player" style="background-color: blue;" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" id="carousel_control_next_player" href="#carousel_rps_player" style="background-color: blue;" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
                     </div>
 
-                    <div class="carousel-item">
-                        <img src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
-                    </div>
+                    <div id="carousel_container_computer" style="flex:1;margin-left: 60px;">
+                        <div id="carousel_rps_computer" style="display:none;" class="carousel slide" data-ride="carousel" data-interval="false">
 
-                    <div class="carousel-item">
-                        <img src="{% static 'assets/scissors.jpg' %}" alt="Picture of scissors">
+                            <div class="carousel-inner">
+
+                                <div id="paper_computer" class="carousel-item active" style="display: none;">
+                                    <img src="{% static 'assets/paper.jpg' %}" alt="Picture of a paper">
+                                </div>
+
+                                <div id="rock_computer" class="carousel-item" style="display: none;">
+                                    <img src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
+                                </div>
+
+                                <div id="scissors_computer" class="carousel-item" style="display: none;">
+                                    <img src="{% static 'assets/scissors.jpg' %}" alt="Picture of scissors">
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
 
                 </div>
 
-                <a class="carousel-control-prev" href="#carousel_rps" style="background-color: blue;" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carousel_rps" style="background-color: blue;" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
-            <br><br>
-            <button type="submit" id="selected_rps" style="font-size: 20px;" class="btn btn-primary btn-lg">Select</button>
+                <br><br>
+
+                <h3 id="rps_outcome"></h3>
+
+                <br><br>
+
+                <button type="submit" id="selected_rps" style="font-size: 20px;" class="btn btn-primary btn-lg">Select</button>
+            </form>
 
             <br><br>
 
@@ -65,19 +100,69 @@
 
         <script>
             $(document).ready(function(){
-                $('#carousel_rps').carousel();
+                $('#carousel_rps_player').carousel();
         
-                $('.carousel-control-prev').click(function(){
-                    $('#carousel_rps').carousel('prev');
+                $('#carousel_control_prev_player').click(function(){
+                    $('#carousel_rps_player').carousel('prev');
                 });
         
-                $('.carousel-control-next').click(function(){
-                    $('#carousel_rps').carousel('next');
+                $('#carousel_control_next_player').click(function(){
+                    $('#carousel_rps_player').carousel('next');
                 });
 
-                $('#selected_rps').click(function(){
+                $('#selected_rps').click(function(e){
+                    e.preventDefault();
                     $('#loading_rps').show();
+
+                    setTimeout(function() {
+
+                        rps_form_submission();
+
+                    }, 2000);
                 });
+
+                function rps_form_submission() 
+                {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'rock_paper_scissors:rps_form_submitted' %}",
+                        data: $('#rps_form').serialize(),
+
+                        success: function(response) {
+                            $('#loading_rps').hide();
+
+                            let computer_rps_choice = response.computer_rps_choice;
+
+                            if (computer_rps_choice === "Rock")
+                            {
+                                $('#paper_computer').hide();
+                                $('#scissors_computer').hide();
+                                $('#rock_computer').show();
+                            }
+
+                            else if (computer_rps_choice === "Paper")
+                            {
+                                $('#rock_computer').hide();
+                                $('#scissors_computer').hide();
+                                $('#paper_computer').show();
+                            }
+
+                            else if (computer_rps_choice === "Scissors")
+                            {
+                                $('#rock_computer').hide();
+                                $('#paper_computer').hide();
+                                $('#scissors_computer').show();
+                            }
+
+                            $('#carousel_rps_computer').show();
+
+                        },
+
+                        error: function(error) {
+                            console.error(error);
+                        }
+                    });
+                }
             });
         </script>
     </body>
