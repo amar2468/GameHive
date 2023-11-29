@@ -1,44 +1,152 @@
-{% extends "base.html" %}
-{% block title %}My Profile{% endblock %}
+{% load static %}
 
-<body>
-    {% load static %}
-    {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Profile</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    </head>
+    <body style="background-color: #E6F7FF;">
+        <div class="wrapper" style="justify-content: center;align-items: center;display: flex;">
 
-    <div class="container" style="display: flex;justify-content: center; align-items: center;height: 30vh;">
-        <div class="card" style="display: flex;justify-content: center; align-items: center;width:70%;">
-            <div class="card-body">
-                <form method="post" action="{% url 'edit_personal_details' %}">
-                    {% csrf_token %}
-                    <p style="font-size:26px;">Welcome {{ request.user }}!</p>
-                    <button type="submit" class="btn btn-secondary">Edit Details</button>
-                </form>
-            </div>
-        </div>
-    </div>
+            <div class="container-fluid">
+                <div class="row flex-nowrap">
+                    <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+                        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
 
-    <div class="container" style="display: flex; justify-content: center; align-items: center; height: 80vh;">
-        <div class="card" style="display: flex;justify-content: center; align-items: center;width:70%;">
-            <div class="card-body" style="width: 60%;">
-                <div style="border: 2px solid black; border-radius: 20px; overflow: hidden;">
-                    <table class="table table-bordered table-striped table-hover" style="width: 100%;">
-                        <thead style="background-color:RGB(108, 122, 224);">
-                            <th colspan="3" style="text-align: center; color: white;">Leaderboard</th>
-                        </thead>
-                        <tbody>
-                            {% for leaderboard in leaderboard_entries %}
-                                <tr>
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ leaderboard.user.username }}</td>
-                                    <td>{{ leaderboard.current_score }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                            <span class="fs-5 d-none d-sm-inline" style="color:#C0C0C0;">Profile</span>
+
+                            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                                <li class="nav-item">
+                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="update_personal_info">
+                                        <span class="ms-1 d-none d-sm-inline">Update Personal Information</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="change_password">
+                                        <span class="ms-1 d-none d-sm-inline">Change Password</span> </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="leaderboard_link">
+                                        <span class="ms-1 d-none d-sm-inline">Leaderboard</span> </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col py-3">
+                        <div id="personal_details_div">
+                            <form id="update_details_form" method="post" action="{% url 'rock_paper_scissors:update_personal_details' %}">
+                                {% csrf_token %}
+                                <h3>Update Personal Information</h3>
+                                <!-- Change Email address -->
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" id="{{ form.change_email.id_for_label }}" name="change_email" value="{{ user.email }}" type="email" placeholder="name@example.com" data-sb-validations="required,email" autocomplete="off" required />
+                                    <label for="{{ form.change_email.id_for_label }}">Email Address</label>
+                                </div>
+                
+                                <!-- Change/Add First Name -->
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" id="{{ form.change_first_name.id_for_label }}" name="change_first_name" type="text" data-sb-validations="required" autocomplete="off" required />
+                                    <label for="{{ form.change_first_name.id_for_label }}">First Name</label>
+                                </div>
+                
+                                <!-- Change/Add Surname -->
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" id="{{ form.change_surname.id_for_label }}" name="change_surname" type="text" data-sb-validations="required" autocomplete="off" />
+                                    <label for="{{ form.change_surname.id_for_label }}">Surname</label>
+                                </div>
+                
+                                <div class="d-grid"><button class="btn btn-primary btn-lg" id="update_details_btn" type="submit">Update Personal Details</button></div>
+                
+                            </form>
+                        </div>
+
+                        <div id="change_password_div" style="display:none;">
+                            <form id="update_password_form" method="post" action="{% url 'rock_paper_scissors:change_password' %}">
+                                {% csrf_token %}
+                                <h3>Change Password</h3>
+                                <!-- New Password -->
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" id="{{ form.change_password.id_for_label }}" name="change_password" type="password" placeholder="Enter password..." data-sb-validations="required" required />
+                                    <label for="{{ form.change_password.id_for_label }}">New Password</label>
+                                </div>
+                
+                                <!-- Confirm New Password -->
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" id="{{ form.change_password_confirm.id_for_label }}" name="change_password_confirm" type="password" placeholder="Enter password..." data-sb-validations="required" required />
+                                    <label for="{{ form.change_password_confirm.id_for_label }}">Confirm New Password</label>
+                                </div>
+                
+                                <div class="d-grid"><button class="btn btn-primary btn-lg" id="update_password_btn" type="submit">Update Password</button></div>
+                
+                            </form>
+                        </div>
+
+                        <div id="leaderboard_div" style="border: 2px solid black; border-radius: 20px; overflow: hidden;display:none;">
+                            <table class="table table-bordered table-striped table-hover" style="width: 100%;">
+                                <thead style="background-color:RGB(108, 122, 224);">
+                                    <th colspan="3" style="text-align: center; color: white;">Leaderboard</th>
+                                </thead>
+                                <tbody>
+                                    {% for leaderboard in leaderboard_entries %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ leaderboard.user.username }}</td>
+                                            <td>{{ leaderboard.current_score }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    {% endblock %}
-</body>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+        <script>
+            $(document).ready(function() {
+                $('#update_personal_info').click(function() {
+                    $('#personal_details_div').show();
+                    $('#change_password_div').hide();
+                    $('#leaderboard_div').hide();
+                });
+
+                $('#change_password').click(function(){
+                    $('#personal_details_div').hide();
+                    $('#leaderboard_div').hide();
+                    $('#change_password_div').show();
+                });
+
+                $('#leaderboard_link').click(function(){
+                    $('#personal_details_div').hide();
+                    $('#change_password_div').hide();
+                    $('#leaderboard_div').show();
+
+                });
+
+                $('#update_password_form').submit(function(e) {
+                    e.preventDefault();
+                });
+
+                $('#update_details_form').submit(function(e) {
+                    e.preventDefault();
+                });
+            });
+        </script>
+    </body>
+</html>
