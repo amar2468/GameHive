@@ -84,6 +84,10 @@
 
                 <br><br>
 
+                <h3 id="attempts"></h3>
+
+                <br><br>
+
                 <input type="hidden" id="carousel_value" name="carousel_value" value="">
 
                 <button type="submit" id="selected_rps" style="font-size: 20px;" class="btn btn-primary btn-lg">Select</button>
@@ -166,7 +170,20 @@
 
                             $('#carousel_rps_computer').show();
 
-                            $('#rps_outcome').text("You " + response.rps_outcome);
+                            if (response.rps_outcome == "Game Over!")
+                            {
+                                $('#rps_outcome').text(response.rps_outcome);
+                                $('#rock_computer').hide();
+                                $('#paper_computer').hide();
+                                $('#scissors_computer').hide();
+                                $('#attempts').text("Number of Attempts left : 0");
+                            }
+                            
+                            else
+                            {
+                                $('#rps_outcome').text("You " + response.rps_outcome);
+                                $('#attempts').text("Number of Attempts left : " + (response.attempts + 1));
+                            }
 
                         },
 
