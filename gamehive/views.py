@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import RegistrationForm
-from .forms import LoginForm
+from .forms import RegistrationForm,LoginForm, TestimonialsForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import password_validation
@@ -23,19 +22,35 @@ def about(request):
 
 def testimonials_page(request):
     if request.method == "POST":
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        testimonials_message = request.POST.get('testimonial_message')
 
-        new_testimonial = TestimonialsModel(
-            name=first_name,
-            surname=last_name,
-            message=testimonials_message,
-        )
+        # Uses the TestimonialsForm in forms.py file which indicates the constraints (i.e. max length, validation)
+        form = TestimonialsForm(request.POST)
 
-        new_testimonial.save()
+        # If the form is valid (everything is filled in), the data that is posted (name,surname,testimonial message) will be 
+        # cleaned and inserted into the testimonials model which will hold all the testimonials by users
 
-        return render(request, 'testimonials.html')
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            testimonials_message = form.cleaned_data['testimonial_message']
+
+            new_testimonial = TestimonialsModel(
+                name=first_name,
+                surname=last_name,
+                message=testimonials_message,
+            )
+
+            new_testimonial.save()
+
+            return render(request, 'testimonials.html')
+        else:
+            # This will iterate through the errors that have occurred (user entered a name that is too long, sent an empty form, etc..)
+            # These errors will then be displayed in the testimonials page, so user can fix their errors and submit a valid form.
+            
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.capitalize()}: {error}")
+            return render(request, 'testimonials.html', {'form':form})
     else:
         return render(request, 'testimonials.html')
 
