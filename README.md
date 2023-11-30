@@ -7,7 +7,7 @@ There are two games that the user can play:
 1. Guessing Game
 2. Rock, Paper, Scissors
 
-Core Functionality (Still Being Developed):
+**Core Functionality (Still Being Developed):**
 1. Registration - Used forms.py to create a registration form using the Django forms import. This will provide a safer authentication process.
 
 2. Login
@@ -20,7 +20,7 @@ Core Functionality (Still Being Developed):
 
 6. Two Games - User can choose between two games: Guessing Game & Rock, Paper, Scissors.
 
-Core Functionality of Guessing Game (Still Being Developed):
+**Core Functionality of Guessing Game (Still Being Developed):**
 
 1. Level - User can choose between three levels: Easy, Medium, and Hard. 
 
@@ -38,7 +38,7 @@ get 5 points (instead of 10 points) due to the fact that they enabled hints)
 (b) Medium Level - 50 points - 25 points if the hints are enabled
 (c) Hard Level - 100 points - 50 points if the hints are enabled
 
-Core Functionality of Rock, Paper, Scissors (Still Being Developed)
+**Core Functionality of Rock, Paper, Scissors (Still Being Developed)**
 
 1. Player Choice - User chooses between rock, paper, scissors
 
