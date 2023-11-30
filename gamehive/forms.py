@@ -26,3 +26,8 @@ class RegistrationForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=25, required=True, validators=[validate_username])
     password = forms.CharField(widget=forms.PasswordInput(), required=True)
+
+class TestimonialsForm(forms.Form):
+    first_name = forms.CharField(max_length=25, required=True)
+    last_name = forms.CharField(max_length=25, required=True)
+    testimonial_message = forms.CharField(widget=forms.Textarea, required=True)
