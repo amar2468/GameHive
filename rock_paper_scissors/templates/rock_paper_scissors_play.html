@@ -30,15 +30,15 @@
 
                             <div class="carousel-inner">
 
-                                <div class="carousel-item active">
+                                <div class="carousel-item active" data-value="paper">
                                     <img src="{% static 'assets/paper.jpg' %}" alt="Picture of a paper">
                                 </div>
 
-                                <div class="carousel-item">
+                                <div class="carousel-item" data-value="rock">
                                     <img src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
                                 </div>
 
-                                <div class="carousel-item">
+                                <div class="carousel-item" data-value="scissors">
                                     <img src="{% static 'assets/scissors.jpg' %}" alt="Picture of scissors">
                                 </div>
 
@@ -84,6 +84,8 @@
 
                 <br><br>
 
+                <input type="hidden" id="carousel_value" name="carousel_value" value="">
+
                 <button type="submit" id="selected_rps" style="font-size: 20px;" class="btn btn-primary btn-lg">Select</button>
             </form>
 
@@ -123,31 +125,39 @@
 
                 function rps_form_submission() 
                 {
+                    var selected_rps_player = $('#carousel_rps_player .carousel-item.active').data('value');
+
+                    var form_data = $('#rps_form').serialize();
+
+                    $('#carousel').val(selected_rps_player);
+
+                    form_data += '&carousel_value=' + selected_rps_player;
+                    
                     $.ajax({
                         type: 'POST',
                         url: "{% url 'rock_paper_scissors:rps_form_submitted' %}",
-                        data: $('#rps_form').serialize(),
+                        data: form_data,
 
                         success: function(response) {
                             $('#loading_rps').hide();
 
                             let computer_rps_choice = response.computer_rps_choice;
 
-                            if (computer_rps_choice === "Rock")
+                            if (computer_rps_choice === "rock")
                             {
                                 $('#paper_computer').hide();
                                 $('#scissors_computer').hide();
                                 $('#rock_computer').show();
                             }
 
-                            else if (computer_rps_choice === "Paper")
+                            else if (computer_rps_choice === "paper")
                             {
                                 $('#rock_computer').hide();
                                 $('#scissors_computer').hide();
                                 $('#paper_computer').show();
                             }
 
-                            else if (computer_rps_choice === "Scissors")
+                            else if (computer_rps_choice === "scissors")
                             {
                                 $('#rock_computer').hide();
                                 $('#paper_computer').hide();
@@ -155,6 +165,8 @@
                             }
 
                             $('#carousel_rps_computer').show();
+
+                            $('#rps_outcome').text("You " + response.rps_outcome);
 
                         },
 
