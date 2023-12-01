@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import RegistrationForm,LoginForm, TestimonialsForm
+from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from gamehive.models import GameUserProfile,TestimonialsModel
+from django.http import JsonResponse
 
 # View that renders the homepage which allows a user to either sign up/login or play the game of their choice
 
@@ -46,7 +47,7 @@ def testimonials_page(request):
         else:
             # This will iterate through the errors that have occurred (user entered a name that is too long, sent an empty form, etc..)
             # These errors will then be displayed in the testimonials page, so user can fix their errors and submit a valid form.
-            
+
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f"{field.capitalize()}: {error}")
@@ -62,6 +63,51 @@ def my_profile(request):
         return render(request, 'profile.html', {'leaderboard_entries': leaderboard_entries})
     else:
         return render(request, '403.html')
+    
+# This view will update the personal details of the user (email, first name, and surname) - STILL BEING DEVELOPED
+
+def update_personal_details(request):
+    if request.method == "POST":
+        form = UpdatePersonalDetails(request.POST)
+
+        if form.is_valid():
+            change_first_name = form.cleaned_data['change_first_name']
+            change_surname = form.cleaned_data['change_surname']
+            change_email = form.cleaned_data['change_email']
+
+            user_entries = User.objects.all()
+
+            for user in user_entries:
+                if user.username == request.user:
+                    if change_email != user.email:
+                        pass
+
+            return render(request, 'profile.html')
+    return render(request, 'profile.html')
+
+# This view will update the passsword of the user - STILL BEING DEVELOPED
+
+def change_password(request):
+    if request.method == "POST":
+        form = ChangePasswordForm(request.POST)
+
+        if form.is_valid():
+            change_password = form.cleaned_data['change_password']
+            change_password_confirm = form.cleaned_data['change_password_confirm']
+
+            if change_password != change_password_confirm:
+                response_info_for_password = {
+                    'passwords_match' : False
+                }
+
+            else:
+                response_info_for_password = {
+                    'passwords_match' : True
+                }
+
+            return JsonResponse(response_info_for_password)
+            
+    return render(request, 'profile.html')
 
 # View has the POST part, which will take the user registration details and check if they are valid, after which the password will
 # be validated. Finally, the user will be added to the user model and the current score will be set to 0 as the user has only been
