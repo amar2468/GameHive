@@ -46,7 +46,7 @@
                     </div>
                     <div class="col py-3">
                         <div id="personal_details_div">
-                            <form id="update_details_form" method="post" action="{% url 'rock_paper_scissors:update_personal_details' %}">
+                            <form id="update_details_form" method="post" action="{% url 'update_personal_details' %}">
                                 {% csrf_token %}
                                 <h3>Update Personal Information</h3>
                                 <!-- Change Email address -->
@@ -57,7 +57,7 @@
                 
                                 <!-- Change/Add First Name -->
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" id="{{ form.change_first_name.id_for_label }}" name="change_first_name" type="text" data-sb-validations="required" autocomplete="off" required />
+                                    <input class="form-control" id="{{ form.change_first_name.id_for_label }}" name="change_first_name" type="text" data-sb-validations="required" autocomplete="off" />
                                     <label for="{{ form.change_first_name.id_for_label }}">First Name</label>
                                 </div>
                 
@@ -68,13 +68,17 @@
                                 </div>
                 
                                 <div class="d-grid"><button class="btn btn-primary btn-lg" id="update_details_btn" type="submit">Update Personal Details</button></div>
-                
+                                
+                                <br><br>
+                                
+                                <div class="alert alert-success" id="update_details_success" role="alert" style="display:none;"></div>
                             </form>
                         </div>
 
                         <div id="change_password_div" style="display:none;">
-                            <form id="update_password_form" method="post" action="{% url 'rock_paper_scissors:change_password' %}">
+                            <form id="update_password_form" method="post">
                                 {% csrf_token %}
+                                {{ form.non_field_errors }}
                                 <h3>Change Password</h3>
                                 <!-- New Password -->
                                 <div class="form-floating mb-3">
@@ -89,7 +93,12 @@
                                 </div>
                 
                                 <div class="d-grid"><button class="btn btn-primary btn-lg" id="update_password_btn" type="submit">Update Password</button></div>
-                
+
+                                <br><br>
+
+                                <div class="alert alert-success" id="update_password_success" role="alert" style="display: none;"></div>
+                                <div class="alert alert-danger" id="update_password_fail" role="alert" style="display: none;background-color: red;color:white;"></div>
+
                             </form>
                         </div>
 
@@ -141,10 +150,56 @@
 
                 $('#update_password_form').submit(function(e) {
                     e.preventDefault();
+
+                    form_data = $('#update_password_form').serialize();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'change_password' %}",
+                        data: form_data,
+
+                        success: function(response) {
+
+                            if (response.passwords_match == true)
+                            {
+                                $('#update_password_fail').hide();
+                                $('#update_password_success').text("Password has been updated successfully!");
+                                $('#update_password_success').show();
+                            }
+                            else
+                            {   
+                                $('#update_password_success').hide();
+                                $('#update_password_fail').text("Passwords don't match. Try again.");
+                                $('#update_password_fail').show();
+                            }
+                        },
+
+                        error: function(error) {
+                            console.error(error);
+                        }
+                    });
                 });
 
                 $('#update_details_form').submit(function(e) {
                     e.preventDefault();
+
+                    form_data = $('#update_details_form').serialize();
+                    
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'update_personal_details' %}",
+                        data: form_data,
+
+                        success: function(response) {
+                            $('#update_details_success').text("Personal details have been updated successfully!");
+                            $('#update_details_success').show();
+                        },
+
+                        error: function(error) {
+                            console.error(error);
+                        }
+                    });
+
                 });
             });
         </script>
