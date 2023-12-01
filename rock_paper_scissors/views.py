@@ -60,31 +60,3 @@ def rps_form_submitted(request):
         # Returning the dictionary in JSON format to jQuery, which will then be inserted into the HTML template
         return JsonResponse(response_info)
     return render(request, 'rock_paper_scissors_play.html')
-
-# This view will update the personal details of the user (email, first name, and surname) - STILL BEING DEVELOPED
-
-def update_personal_details(request):
-
-    user_entries = User.objects.all()
-
-    for user in user_entries:
-        if user.username == request.user:
-            if change_email != user.email:
-                pass
-
-    change_first_name = request.POST.get('change_first_name')
-    change_surname = request.POST.get('change_surname')
-    change_email = request.POST.get('change_email')
-
-    return render(request, 'profile.html')
-
-# This view will update the passsword of the user - STILL BEING DEVELOPED
-
-def change_password(request):
-    change_password = request.POST.get('change_password')
-    change_password_confirm = request.POST.get('change_password_confirm')
-
-    print(change_password)
-    print(change_password_confirm)
-    
-    return render(request, 'profile.html')
