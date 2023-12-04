@@ -57,13 +57,13 @@
                 
                                 <!-- Change/Add First Name -->
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" id="{{ form.change_first_name.id_for_label }}" name="change_first_name" type="text" data-sb-validations="required" autocomplete="off" />
+                                    <input class="form-control" id="{{ form.change_first_name.id_for_label }}" name="change_first_name" value="{{ user_details.first_name }}" type="text" data-sb-validations="required" autocomplete="off" />
                                     <label for="{{ form.change_first_name.id_for_label }}">First Name</label>
                                 </div>
                 
                                 <!-- Change/Add Surname -->
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" id="{{ form.change_surname.id_for_label }}" name="change_surname" type="text" data-sb-validations="required" autocomplete="off" />
+                                    <input class="form-control" id="{{ form.change_surname.id_for_label }}" name="change_surname" value="{{ user_details.surname }}" type="text" data-sb-validations="required" autocomplete="off" />
                                     <label for="{{ form.change_surname.id_for_label }}">Surname</label>
                                 </div>
                 
@@ -78,7 +78,7 @@
                         <div id="change_password_div" style="display:none;">
                             <form id="update_password_form" method="post">
                                 {% csrf_token %}
-                                {{ form.non_field_errors }}
+                                <div class="alert alert-danger" id="form_errors" style="display:none;" role="alert"></div>
                                 <h3>Change Password</h3>
                                 <!-- New Password -->
                                 <div class="form-floating mb-3">
@@ -166,11 +166,23 @@
                                 $('#update_password_success').text("Password has been updated successfully!");
                                 $('#update_password_success').show();
                             }
-                            else
+                            else if (response.passwords_match == false)
                             {   
                                 $('#update_password_success').hide();
                                 $('#update_password_fail').text("Passwords don't match. Try again.");
                                 $('#update_password_fail').show();
+                            }
+
+                            else
+                            {
+                                $('#form_errors').text("");
+
+                                for(var error in response.error_messages)
+                                {
+                                    $('#form_errors').append(response.error_messages[error] + "<br>");
+                                }
+
+                                $('#form_errors').show();
                             }
                         },
 
@@ -191,7 +203,7 @@
                         data: form_data,
 
                         success: function(response) {
-                            $('#update_details_success').text("Personal details have been updated successfully!");
+                            $('#update_details_success').text(response.success);
                             $('#update_details_success').show();
                         },
 
