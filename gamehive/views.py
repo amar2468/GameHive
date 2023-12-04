@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
-from gamehive.models import GameUserProfile,TestimonialsModel
+from gamehive.models import GameUserProfile,TestimonialsModel, PersonalDetails
 from django.http import JsonResponse
 
 # View that renders the homepage which allows a user to either sign up/login or play the game of their choice
@@ -55,37 +55,57 @@ def testimonials_page(request):
     else:
         return render(request, 'testimonials.html')
 
-# View that will present the current leaderboard for all users
+# View that will present the current leaderboard for all users, as well as provide the user the option to update their personal info
 
 def my_profile(request):
     if request.user.is_authenticated:
         leaderboard_entries = GameUserProfile.objects.all().order_by('-current_score')
-        return render(request, 'profile.html', {'leaderboard_entries': leaderboard_entries})
+        user_details = PersonalDetails.objects.get(user=request.user)
+        return render(request, 'profile.html', {'leaderboard_entries': leaderboard_entries, 'user_details' : user_details})
     else:
         return render(request, '403.html')
-    
-# This view will update the personal details of the user (email, first name, and surname) - STILL BEING DEVELOPED
+
+# This view will update the personal details of the user (email, first name, and surname). This view uses a custom model, which will
+# have a one-to-one relationship with the built-in User model. It updates the personal information of the user.
 
 def update_personal_details(request):
     if request.method == "POST":
+
         form = UpdatePersonalDetails(request.POST)
+
+        change_email = request.POST.get('change_email')
 
         if form.is_valid():
             change_first_name = form.cleaned_data['change_first_name']
             change_surname = form.cleaned_data['change_surname']
-            change_email = form.cleaned_data['change_email']
 
-            user_entries = User.objects.all()
+        try:
+            user_details = PersonalDetails.objects.get(user=request.user)
+        except PersonalDetails.DoesNotExist:
+            user_details = PersonalDetails(user=request.user, first_name = change_first_name, surname = change_surname)
+            user_details.save()
 
-            for user in user_entries:
-                if user.username == request.user:
-                    if change_email != user.email:
-                        pass
+        user_details.first_name = change_first_name
 
-            return render(request, 'profile.html')
-    return render(request, 'profile.html')
+        user_details.surname = change_surname
 
-# This view will update the passsword of the user - STILL BEING DEVELOPED
+        user_details.user.email = change_email
+
+        user_details.save()
+
+        user_details.user.save()
+            
+        response_info_update_personal_details = {
+            'success' : "Personal details updated successfully."
+        }
+
+        return JsonResponse(response_info_update_personal_details)
+    else:
+        return render(request, 'profile.html')
+
+# This view will update the passsword of the user. The password will be validated, to see if it matches the requirements for a password
+# If it does, a value of True will be returned back to jQuery. Otherwise, false will be returned and the user will be told what they
+# need to improve for the password to be considered "strong"
 
 def change_password(request):
     if request.method == "POST":
@@ -101,9 +121,28 @@ def change_password(request):
                 }
 
             else:
-                response_info_for_password = {
-                    'passwords_match' : True
-                }
+                try:
+                    password_validation.validate_password(change_password)
+                except ValidationError as e:
+                    for error in e.messages:
+                        messages.error(request, error)
+                    
+                    response_info_for_password = {
+                        'error_messages' : e.messages
+                    }
+                    
+                    return JsonResponse(response_info_for_password)
+                else:
+
+                    user = User.objects.get(username=request.user)
+
+                    user.set_password(change_password)
+
+                    user.save()
+
+                    response_info_for_password = {
+                        'passwords_match' : True
+                    }
 
             return JsonResponse(response_info_for_password)
             
