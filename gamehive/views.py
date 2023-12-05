@@ -59,8 +59,14 @@ def testimonials_page(request):
 
 def my_profile(request):
     if request.user.is_authenticated:
-        leaderboard_entries = GameUserProfile.objects.all().order_by('-current_score')
-        user_details = PersonalDetails.objects.get(user=request.user)
+        leaderboard_entries = GameUserProfile.objects.all().order_by('-current_score_guess_number_game')
+
+        try:
+            user_details = PersonalDetails.objects.get(user=request.user)
+        except PersonalDetails.DoesNotExist:
+            user_details = PersonalDetails(user=request.user)
+            user_details.save()
+
         return render(request, 'profile.html', {'leaderboard_entries': leaderboard_entries, 'user_details' : user_details})
     else:
         return render(request, '403.html')
