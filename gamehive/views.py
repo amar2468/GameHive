@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.db import IntegrityError
 from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -174,7 +175,16 @@ def sign_up(request):
                     messages.error(request, error)
                 return render(request, 'sign_up.html', {'form':form})
 
-            user = User.objects.create_user(username=username, email=email, password=password)
+            # This try/except block looks for whether the username entered in the "sign up" page is unique. If it is, it will allow
+            # for the creation of the account. However, if the username already exists, the user will get an error message telling them
+            # to pick a unique username.
+            
+            try:
+                user = User.objects.create_user(username=username, email=email, password=password)
+            except IntegrityError as e:
+                if 'UNIQUE constraint failed: auth_user.username' in str(e):
+                    error_message = "Username already exists. Please choose a different username."
+                    return render(request, 'sign_up.html', {'error_message': error_message})
 
             game_user_profile = GameUserProfile.objects.get_or_create(user=user)
             game_user_profile = game_user_profile[0]
