@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from gamehive.models import GameUserProfile
 import random
 
 
@@ -17,6 +18,8 @@ def rps_form_submitted(request):
     if request.method == "POST":
 
         attempts = request.session.get('attempts', 3)
+
+        total_wins = request.session.get('total_wins', 0)
 
         user_rps_choice = request.POST.get('carousel_value', '')
 
@@ -40,6 +43,10 @@ def rps_form_submitted(request):
             # will be the value in the dictionary. If it is a draw, a draw will be returned
             rps_outcome = rps_outcomes[user_rps_choice].get(computer_rps_choice, 'draw')
 
+            if rps_outcome == "win":
+                total_wins += 1
+                request.session['total_wins'] = total_wins
+
             # Adding the user's choice, computer's choice, and the outcome of the round back to the user so they are informed
             response_info = {
                 'computer_rps_choice' : computer_rps_choice,
@@ -48,7 +55,22 @@ def rps_form_submitted(request):
                 'attempts' : attempts
             }
         else:
+            # Remove the "attempts" session variable as the round has finished so it should be reset back to 3 attempts for the new one
+
             del request.session['attempts']
+
+            # In every round, the user has three attempts. If they get 2 or more attempts correct, they won that round. Hence 10
+            # points would be added to their total score
+
+            if 'total_wins' in request.session:
+                if request.session['total_wins'] >= 2:
+                        game_user_profile = GameUserProfile.objects.get(user=request.user)
+                        game_user_profile.current_score_rps += 10
+                        game_user_profile.save()
+
+                # Remove the "total_score" session variable as the score has been saved in the GameUserProfile custom model
+            
+                del request.session['total_wins']
 
             # Adding the user's choice, computer's choice, and informing user that the round is over
             response_info = {
