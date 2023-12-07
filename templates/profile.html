@@ -102,17 +102,36 @@
                             </form>
                         </div>
 
-                        <div id="leaderboard_div" style="border: 2px solid black; border-radius: 20px; overflow: hidden;display:none;">
+                        <div id="leaderboard_div_guess_the_digit" style="border: 2px solid black; border-radius: 20px; overflow: hidden;display:none;">
                             <table class="table table-bordered table-striped table-hover" style="width: 100%;">
                                 <thead style="background-color:RGB(108, 122, 224);">
-                                    <th colspan="3" style="text-align: center; color: white;">Leaderboard</th>
+                                    <th colspan="3" style="text-align: center; color: white;">Leaderboard : Guess The Digit</th>
                                 </thead>
                                 <tbody>
-                                    {% for leaderboard in leaderboard_entries %}
+                                    {% for leaderboard in leaderboard_entries_guess_the_digit %}
                                         <tr>
                                             <td>{{ forloop.counter }}</td>
                                             <td>{{ leaderboard.user.username }}</td>
-                                            <td>{{ leaderboard.current_score }}</td>
+                                            <td>{{ leaderboard.current_score_guess_number_game }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <br><br>
+
+                        <div id="leaderboard_div_rps" style="border: 2px solid black; border-radius: 20px; overflow: hidden;display:none;">
+                            <table class="table table-bordered table-striped table-hover" style="width: 100%;">
+                                <thead style="background-color:RGB(108, 122, 224);">
+                                    <th colspan="3" style="text-align: center; color: white;">Leaderboard : Rock, Paper, Scissors</th>
+                                </thead>
+                                <tbody>
+                                    {% for leaderboard in leaderboard_entries_rock_paper_scissors %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ leaderboard.user.username }}</td>
+                                            <td>{{ leaderboard.current_score_rps }}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -132,19 +151,22 @@
                 $('#update_personal_info').click(function() {
                     $('#personal_details_div').show();
                     $('#change_password_div').hide();
-                    $('#leaderboard_div').hide();
+                    $('#leaderboard_div_rps').hide();
+                    $('#leaderboard_div_guess_the_digit').hide();
                 });
 
                 $('#change_password').click(function(){
                     $('#personal_details_div').hide();
-                    $('#leaderboard_div').hide();
+                    $('#leaderboard_div_guess_the_digit').hide();
+                    $('#leaderboard_div_rps').hide();
                     $('#change_password_div').show();
                 });
 
                 $('#leaderboard_link').click(function(){
                     $('#personal_details_div').hide();
                     $('#change_password_div').hide();
-                    $('#leaderboard_div').show();
+                    $('#leaderboard_div_guess_the_digit').show();
+                    $('#leaderboard_div_rps').show();
 
                 });
 
