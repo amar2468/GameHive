@@ -24,7 +24,7 @@
                         </div>
                         {% endif %}
 
-                        <form id="contact-form" method="post" action="{% url 'testimonials_page' %}">
+                        <form id="testimonials_form" method="post" action="{% url 'testimonials_page' %}">
                             {% csrf_token %}
                             <!-- First name -->
                             <div class="form-floating mb-3">
