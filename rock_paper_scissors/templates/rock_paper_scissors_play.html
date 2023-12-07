@@ -176,13 +176,23 @@
                                 $('#rock_computer').hide();
                                 $('#paper_computer').hide();
                                 $('#scissors_computer').hide();
+                                $('#selected_rps').text("Try Again");
                                 $('#attempts').text("Number of Attempts left : 0");
                             }
                             
                             else
                             {
                                 $('#rps_outcome').text("You " + response.rps_outcome);
-                                $('#attempts').text("Number of Attempts left : " + (response.attempts + 1));
+                                $('#attempts').text("Number of Attempts left : " + response.attempts);
+
+                                if (response.attempts != 0)
+                                {
+                                    $('#selected_rps').text("Select");
+                                }
+                                else
+                                {
+                                    $('#selected_rps').text("End Round");
+                                }
                             }
 
                         },
