@@ -64,19 +64,25 @@ def rps_form_submitted(request):
 
             if 'total_wins' in request.session:
                 if request.session['total_wins'] >= 2:
+                        rps_outcome = "Game Over! You won this round! You have received 10 points!"
                         game_user_profile = GameUserProfile.objects.get(user=request.user)
                         game_user_profile.current_score_rps += 10
                         game_user_profile.save()
+                else:
+                    rps_outcome = "Game Over! You failed to win this round! Good luck next time!"
 
                 # Remove the "total_score" session variable as the score has been saved in the GameUserProfile custom model
             
                 del request.session['total_wins']
+            
+            else:
+                rps_outcome = "Game Over! You failed to win this round! Good luck next time!"
 
             # Adding the user's choice, computer's choice, and informing user that the round is over
             response_info = {
                 'computer_rps_choice' : computer_rps_choice,
                 'user_rps_choice' : user_rps_choice,
-                'rps_outcome': 'Game Over!'
+                'rps_outcome': rps_outcome
             }
 
         # Returning the dictionary in JSON format to jQuery, which will then be inserted into the HTML template
