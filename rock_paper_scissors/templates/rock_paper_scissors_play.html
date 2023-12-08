@@ -80,11 +80,15 @@
 
                 <br><br>
 
-                <h3 id="rps_outcome"></h3>
+                <div class="alert alert-primary" id="rps_outcome_div" role="alert" style="display:none;">
+                    <p id="rps_outcome"></p>
+                </div>
 
                 <br><br>
 
-                <h3 id="attempts"></h3>
+                <div class="alert alert-warning" id="attempts_div" role="alert" style="display:none;">
+                    <p id="attempts"></p>
+                </div>
 
                 <br><br>
 
@@ -170,20 +174,26 @@
 
                             $('#carousel_rps_computer').show();
 
-                            if (response.rps_outcome == "Game Over!")
+                            if (response.rps_outcome == "Game Over! You failed to win this round! Good luck next time!" || response.rps_outcome == "Game Over! You won this round! You have received 10 points!")
                             {
                                 $('#rps_outcome').text(response.rps_outcome);
                                 $('#rock_computer').hide();
                                 $('#paper_computer').hide();
                                 $('#scissors_computer').hide();
                                 $('#selected_rps').text("Try Again");
-                                $('#attempts').text("Number of Attempts left : 0");
+                                $('#attempts').text("Attempts Left : 0");
+
+                                $('#rps_outcome_div').show();
+                                $('#attempts_div').show();
                             }
                             
                             else
                             {
                                 $('#rps_outcome').text("You " + response.rps_outcome);
-                                $('#attempts').text("Number of Attempts left : " + response.attempts);
+                                $('#attempts').text("Attempts Left : " + response.attempts);
+
+                                $('#rps_outcome_div').show();
+                                $('#attempts_div').show();
 
                                 if (response.attempts != 0)
                                 {
