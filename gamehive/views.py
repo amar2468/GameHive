@@ -135,13 +135,11 @@ def change_password(request):
                 try:
                     password_validation.validate_password(change_password)
                 except ValidationError as e:
-                    for error in e.messages:
-                        messages.error(request, error)
                     
                     response_info_for_password = {
                         'error_messages' : e.messages
                     }
-                    
+
                     return JsonResponse(response_info_for_password)
                 else:
 
