@@ -43,3 +43,22 @@ get 5 points (instead of 10 points) due to the fact that they enabled hints)
 1. Player Choice - User chooses between rock, paper, scissors
 
 2. Computer Choice - A random choice will be made between rock, paper, scissors
+
+3. Attempts - User is given three attempts to win the round. In order to win points, they need to either:
+(a) Win 3 times
+(b) Win 2 times
+
+4. Points - If the user wins the round, they will receive 10 points. This will be added to their total score for this game and the 
+leaderboard for this game can be found in the profile page under the sidebar heading "Leaderboard"
+
+**Testing**
+
+Testing is required with any app that is being created. For GameHive, unit testing and integration testing were/are being used to test
+a variety of functionalities such as:
+(a) Registration process
+(b) Login process
+(c) Testimonials form
+(d) Update personal details form
+(e) Change password form
+
+This ensures that these aspects of GameHive work correctly. The test files are called tests.py and can be found in this project.
