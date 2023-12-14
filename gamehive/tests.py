@@ -1,6 +1,6 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
-from .forms import RegistrationForm
+from .forms import RegistrationForm, TestimonialsForm, UpdatePersonalDetails, ChangePasswordForm
 from django.contrib.auth.models import User
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
@@ -320,3 +320,295 @@ class LoginIntegrationTestCase(TestCase):
         self.assertEqual(response_for_login.status_code, 200) # Check to see if 200 code was returned, which indicates success
         
         self.assertTrue(response_for_login.context['user'].is_authenticated) # Check if the user has been authenticated
+
+# Unit test in the "TestimonialsForm" class below
+
+class TestimonialsFormTestCase(TestCase):
+    def testing_valid_testimonials_form(self):
+        data = {
+            'first_name' : 'Amar',
+            'last_name' : 'Plakalo',
+            'testimonial_message' : 'Hello there!'
+        }
+
+        form = TestimonialsForm(data=data)
+
+        self.assertTrue(form.is_valid())
+
+    def testing_invalid_testimonials_form(self):
+        data = {}
+
+        form = TestimonialsForm(data=data)
+
+        self.assertFalse(form.is_valid())
+    
+    def testing_empty_first_name_field(self):
+
+        data = {
+            'first_name' : '',
+            'last_name' : 'Plakalo',
+            'testimonial_message' : 'Hello there!'
+        }
+
+        form = TestimonialsForm(data=data)
+
+        self.assertFalse(form.is_valid())
+
+        self.assertIn('first_name', form.errors)
+        self.assertEqual(form.errors['first_name'], ['This field is required.'])
+    
+    def testing_empty_last_name_field(self):
+
+        data = {
+            'first_name' : 'Amar',
+            'last_name' : '',
+            'testimonial_message' : 'Hello there!'
+        }
+
+        form = TestimonialsForm(data=data)
+
+        self.assertFalse(form.is_valid())
+
+        self.assertIn('last_name', form.errors)
+        self.assertEqual(form.errors['last_name'], ['This field is required.'])
+
+    def testing_empty_testimonial_message_field(self):
+
+        data = {
+            'first_name' : 'Amar',
+            'last_name' : 'Plakalo',
+            'testimonial_message' : ''
+        }
+
+        form = TestimonialsForm(data=data)
+
+        self.assertFalse(form.is_valid())
+
+        self.assertIn('testimonial_message', form.errors)
+        self.assertEqual(form.errors['testimonial_message'], ['This field is required.'])
+
+# Integration test for the "TestimonialsForm" functionality is below
+
+class TestimonialsFormIntegrationTestCase(TestCase):
+    
+    def test_for_testimonials_form_process(self):
+
+        # Data for the testimonial form is below. This will be tested.
+
+        data = {
+            'first_name' : 'Amar',
+            'last_name' : 'Plakalo',
+            'testimonial_message' : 'Hello there!'
+        }
+
+        # POST request for "testimonial form" process
+        testimonials_url = reverse('testimonials_page')
+
+        response_for_testimonials_url = self.client.post(testimonials_url, data, follow=True)
+
+        # Verify for redirect
+
+        self.assertEqual(response_for_testimonials_url.status_code, 200) # Check to see if 200 code was returned, which indicates success
+
+# Unit test in the "UpdatePersonalDetails" class below
+
+class UpdatePersonalDetailsTestCase(TestCase):
+    def test_update_personal_details_form(self):
+        data = {
+            'change_first_name' : 'Amar',
+            'change_surname' : 'Plakalo',
+            'change_email' : 'amar@gmail.com'
+        }
+
+        form = UpdatePersonalDetails(data=data)
+
+        self.assertTrue(form.is_valid())
+    
+    def test_empty_first_name_personal_details_form(self):
+        data = {
+            'change_first_name' : '',
+            'change_surname' : 'Plakalo',
+            'change_email' : 'amar@gmail.com'
+        }
+
+        form = UpdatePersonalDetails(data=data)
+
+        self.assertFalse(form.is_valid())
+    
+    def test_empty_surname_personal_details_form(self):
+        data = {
+            'change_first_name' : 'Amar',
+            'change_surname' : '',
+            'change_email' : 'amar@gmail.com'
+        }
+
+        form = UpdatePersonalDetails(data=data)
+
+        self.assertFalse(form.is_valid())
+    
+    def test_empty_email_personal_details_form(self):
+        data = {
+            'change_first_name' : 'Amar',
+            'change_surname' : 'Plakalo',
+            'change_email' : ''
+        }
+
+        form = UpdatePersonalDetails(data=data)
+
+        self.assertFalse(form.is_valid())
+
+    def test_empty_invalid_email_personal_details_form(self):
+        
+        # Testing email without .com part
+
+        data = {
+            'change_first_name' : 'Amar',
+            'change_surname' : 'Plakalo',
+            'change_email' : 'amar@gmail'
+        }
+
+        form = UpdatePersonalDetails(data=data)
+
+        self.assertFalse(form.is_valid())
+
+        # Testing email without gmail.com part
+
+        data = {
+            'change_first_name' : 'Amar',
+            'change_surname' : 'Plakalo',
+            'change_email' : 'amar@'
+        }
+
+        form = UpdatePersonalDetails(data=data)
+
+        self.assertFalse(form.is_valid())
+
+        # Testing email with weird characters
+
+        data = {
+            'change_first_name' : 'Amar',
+            'change_surname' : 'Plakalo',
+            'change_email' : '&"*"*"@gmail.com'
+        }
+
+        form = UpdatePersonalDetails(data=data)
+
+        self.assertFalse(form.is_valid())
+
+        # Test missing @gmail part
+
+        data = {
+            'change_first_name' : 'Amar',
+            'change_surname' : 'Plakalo',
+            'change_email' : 'amar.com'
+        }
+
+        form = UpdatePersonalDetails(data=data)
+
+        self.assertFalse(form.is_valid())
+
+        # Testing spaces in email
+
+        data = {
+            'change_first_name' : 'Amar',
+            'change_surname' : 'Plakalo',
+            'change_email' : 'amar pla@gmail.com'
+        }
+
+        form = UpdatePersonalDetails(data=data)
+
+        self.assertFalse(form.is_valid())
+
+        # Testing excessive length emails
+
+        data = {
+            'change_first_name' : 'Amar',
+            'change_surname' : 'Plakalo',
+            'change_email' : 'a'*1000 + '@' + 'b'*1000 + '.com'
+        }
+
+        form = UpdatePersonalDetails(data=data)
+
+        self.assertFalse(form.is_valid())
+
+        # Testing non-ASCII email
+
+        data = {
+            'change_first_name' : 'Amar',
+            'change_surname' : 'Plakalo',
+            'change_email' : 'юзер@example.com'
+        }
+
+        form = UpdatePersonalDetails(data=data)
+
+        self.assertFalse(form.is_valid())
+
+# Integration test for the "UpdatePersonalDetails" functionality is below
+
+class UpdatePersonalDetailsIntegrationTestCase(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='Password34*')
+        self.client = Client()
+    
+    def test_for_update_personal_details_process(self):
+
+        self.client.login(username='testuser', password='Password34*')
+        
+        # Data for the update personal details form is below. This will be tested.
+
+        data = {
+            'change_first_name' : 'Amar',
+            'change_surname' : 'Plakalo',
+            'change_email' : 'amar@gmail.com'
+        }
+
+        # POST request for "Update Personal Details" process
+        update_personal_details_url = reverse('update_personal_details')
+
+        response_for_update_personal_details_url = self.client.post(update_personal_details_url, data, follow=True)
+
+        # Verify for redirect
+
+        self.assertEqual(response_for_update_personal_details_url.status_code, 200) # Check to see if 200 code was returned, which indicates success
+
+# Unit test in the "ChangePasswordForm" class below
+
+class ChangePasswordFormTestCase(TestCase):
+    def testing_change_password_form(self):
+        data = {
+            'change_password' : 'Testpassword12!',
+            'change_password_confirm' : 'Testpassword12!'
+        }
+
+        form = ChangePasswordForm(data=data)
+
+        self.assertTrue(form.is_valid())
+
+# Integration test for the "ChangePasswordForm" functionality is below
+
+class ChangePasswordFormIntegrationTestCase(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='Password34*')
+        self.client = Client()
+    
+    def test_for_change_password_process(self):
+
+        self.client.login(username='testuser', password='Password34*')
+
+        # Data for the change password form is below. This will be tested.
+
+        data = {
+            'change_password' : 'Testpassword12!',
+            'change_password_confirm' : 'Testpassword12!'
+        }
+
+        # POST request for "ChangePasswordForm" process
+        change_password_form_url = reverse('change_password')
+
+        response_for_change_password_form_url = self.client.post(change_password_form_url, data, follow=True)
+
+        # Verify for redirect
+
+        self.assertEqual(response_for_change_password_form_url.status_code, 200) # Check to see if 200 code was returned, which indicates success
