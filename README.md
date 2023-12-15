@@ -38,6 +38,12 @@ get 5 points (instead of 10 points) due to the fact that they enabled hints)
 (b) Medium Level - 50 points - 25 points if the hints are enabled
 (c) Hard Level - 100 points - 50 points if the hints are enabled
 
+5. Attempts - The user will be given a number of attempts to guess the correct digit, depending on the level chosen and whether they
+enabled the hints for that game. This is a breakdown of the number of attempts given:
+(a) Easy Level - 4 attempts if hints are DISABLED - 2 attempts if hints are ENABLED
+(b) Medium Level - 10 attempts if hints are DISABLED - 5 attempts if hints are ENABLED
+(c) Hard Level - 20 attempts if hints are DISABLED - 10 attempts if hints are ENABLED
+
 **Core Functionality of Rock, Paper, Scissors (Still Being Developed)**
 
 1. Player Choice - User chooses between rock, paper, scissors
