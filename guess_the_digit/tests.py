@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from .forms import GuessTheNumberInputForm
 from django.urls import reverse
 from django.contrib.auth.models import User
+from gamehive.models import GameUserProfile
 
 # Unit test for "Guess the Digit" game
 
@@ -55,3 +56,15 @@ class GuessTheDigitTestCase(TestCase):
         form = GuessTheNumberInputForm(data=data)
 
         self.assertFalse(form.is_valid())
+
+
+# Integration test for "Guess the Digit" game
+
+class GuessTheDigitIntegrationTestCase(TestCase):
+    # Create the user so that the integration test for the game can be carried out
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='Password34*')
+        self.client = Client()
+    
+    def test_for_guess_the_digit_process(self):
+        self.client.login(username='testuser', password='Password34*')
