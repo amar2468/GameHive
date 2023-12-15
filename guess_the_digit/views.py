@@ -87,7 +87,8 @@ def guess_the_digit_game(request):
             context = {
                 'result': result,
                 'latest_score': game_user_profile.current_score_guess_number_game,
-                'specific_hint' : specific_hint
+                'specific_hint' : specific_hint,
+                'level' : level
             }
 
 
@@ -116,7 +117,10 @@ def guess_the_digit_game(request):
 
             specific_hint = create_hint(request.session['correct_number'])
 
-            number_of_guesses = 5
+            if specific_hint == "":
+                number_of_guesses = 4
+            else:
+                number_of_guesses = 2
         
         # If the level is medium, generate a random number between 1 and 50
         elif level == 'medium':
@@ -124,7 +128,10 @@ def guess_the_digit_game(request):
 
             specific_hint = create_hint(request.session['correct_number'])
 
-            number_of_guesses = 10
+            if specific_hint == "":
+                number_of_guesses = 10
+            else:
+                number_of_guesses = 5
 
         # If the level is hard, generate a random number between 1 and 100
         elif level == 'hard':
@@ -132,7 +139,11 @@ def guess_the_digit_game(request):
 
             specific_hint = create_hint(request.session['correct_number'])
 
-            number_of_guesses = 20
+            if specific_hint == "":
+                number_of_guesses = 20
+            else:
+                number_of_guesses = 10
+                
     # If the correct number has already been specified, it needs to be re-generated
     if 'correct_number' in request.session:
 
@@ -143,7 +154,10 @@ def guess_the_digit_game(request):
 
             specific_hint = create_hint(request.session['correct_number'])
 
-            number_of_guesses = 5
+            if specific_hint == "":
+                number_of_guesses = 4
+            else:
+                number_of_guesses = 2
         
         # If the level is medium, generate a random number between 1 and 50
         elif level == 'medium':
@@ -152,7 +166,10 @@ def guess_the_digit_game(request):
             
             specific_hint = create_hint(request.session['correct_number'])
 
-            number_of_guesses = 10
+            if specific_hint == "":
+                number_of_guesses = 10
+            else:
+                number_of_guesses = 5
 
         # If the level is hard, generate a random number between 1 and 100
         elif level == 'hard':
@@ -161,10 +178,14 @@ def guess_the_digit_game(request):
 
             specific_hint = create_hint(request.session['correct_number'])
 
-            number_of_guesses = 20
+            if specific_hint == "":
+                number_of_guesses = 20
+            else:
+                number_of_guesses = 10
     
     context = {
-        'specific_hint' : specific_hint
+        'specific_hint' : specific_hint,
+        'level' : level
     }
 
     return render(request, 'home.html', context)
