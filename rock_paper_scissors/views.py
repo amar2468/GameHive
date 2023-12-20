@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from gamehive.models import GameUserProfile
@@ -12,8 +13,8 @@ def play(request):
 
 # This view will allow the computer to choose a random option (rock,paper, or scissors) and inform the user of the choice.
 # Additionally, the user's choice is compared against the computer's choice and an outcome is returned to the user (win,lose,draw)
-# Note: This view is STILL BEING DEVELOPED.
 
+@login_required
 def rps_form_submitted(request):
     if request.method == "POST":
 
