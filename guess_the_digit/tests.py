@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from .forms import GuessTheNumberInputForm
 from django.urls import reverse
 from django.contrib.auth.models import User
+from unittest.mock import patch
 from gamehive.models import GameUserProfile
 
 # Unit test for "Guess the Digit" game
@@ -63,8 +64,164 @@ class GuessTheDigitTestCase(TestCase):
 class GuessTheDigitIntegrationTestCase(TestCase):
     # Create the user so that the integration test for the game can be carried out
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='Password34*')
+        self.user = User.objects.create_user(username='testuser', email='testuser@gmail.com', password='Password34*')
         self.client = Client()
     
-    def test_for_guess_the_digit_process(self):
+    @patch('guess_the_digit.views.random.randint')
+    def test_for_guess_the_digit_process_level_easy(self, mock_random_number):
         self.client.login(username='testuser', password='Password34*')
+
+        mock_random_number.return_value = 5
+
+        guess_the_digit_game_url = reverse('play')
+
+        # Get request for guess the digit game. This will be executed when the user initially opens the "Guess the Digit" game
+
+        params = {'selected_level' : 'easy', 'hints' : 'yes'}
+
+        get_response_for_guess_digit_game_url = self.client.get(guess_the_digit_game_url, params)
+
+        self.assertEqual(get_response_for_guess_digit_game_url.status_code, 200) # Check to see if 200 code was returned, which indicates success
+
+        # Post request for guess the digit game, which will simulate the game and see whether the desired results are achieved
+
+        # First guess by user
+
+        data = {
+            'guess_number_input_field' : 3
+        }
+
+        post_response_for_guess_digit_game_url = self.client.post(guess_the_digit_game_url, data, follow=True)
+
+        self.assertEqual(post_response_for_guess_digit_game_url.status_code, 200) # Check to see if 200 code was returned, which indicates success
+        
+        self.assertEqual(post_response_for_guess_digit_game_url.context['level'], "easy") # Checking whether the level was set correctly
+
+        self.assertEqual(post_response_for_guess_digit_game_url.context['result'], "Wrong guess! Try again!") # Checking whether the guess was correct
+
+        # Second guess by user - correct number guessed
+
+        data = {
+            'guess_number_input_field' : 5
+        }
+
+        GameUserProfile.objects.filter(user__username='testuser').delete()
+
+        game_user_profile = GameUserProfile.objects.create(user=self.user, current_score_guess_number_game=0)
+
+        post_response_for_guess_digit_game_url = self.client.post(guess_the_digit_game_url, data, follow=True)
+
+        self.assertEqual(post_response_for_guess_digit_game_url.status_code, 200) # Check to see if 200 code was returned, which indicates success
+        
+        self.assertEqual(post_response_for_guess_digit_game_url.context['level'], "easy") # Checking whether the level was set correctly
+
+        if post_response_for_guess_digit_game_url.context['result'] == "Correct guess! Well done!":
+            game_user_profile.current_score_guess_number_game = 5
+        
+        self.assertEqual(game_user_profile.current_score_guess_number_game, 5)
+
+    @patch('guess_the_digit.views.random.randint')
+    def test_for_guess_the_digit_process_level_medium(self, mock_random_number):
+        self.client.login(username='testuser', password='Password34*')
+
+        mock_random_number.return_value = 12
+
+        guess_the_digit_game_url = reverse('play')
+
+        # Get request for guess the digit game. This will be executed when the user initially opens the "Guess the Digit" game
+
+        params = {'selected_level' : 'medium', 'hints' : 'yes'}
+
+        get_response_for_guess_digit_game_url = self.client.get(guess_the_digit_game_url, params)
+
+        self.assertEqual(get_response_for_guess_digit_game_url.status_code, 200) # Check to see if 200 code was returned, which indicates success
+
+        # Post request for guess the digit game, which will simulate the game and see whether the desired results are achieved
+
+        # First guess by user
+
+        data = {
+            'guess_number_input_field' : 26
+        }
+
+        post_response_for_guess_digit_game_url = self.client.post(guess_the_digit_game_url, data, follow=True)
+
+        self.assertEqual(post_response_for_guess_digit_game_url.status_code, 200) # Check to see if 200 code was returned, which indicates success
+        
+        self.assertEqual(post_response_for_guess_digit_game_url.context['level'], "medium") # Checking whether the level was set correctly
+
+        self.assertEqual(post_response_for_guess_digit_game_url.context['result'], "Wrong guess! Try again!") # Checking whether the guess was correct
+
+        # Second guess by user - correct number guessed
+
+        data = {
+            'guess_number_input_field' : 12
+        }
+
+        GameUserProfile.objects.filter(user__username='testuser').delete()
+
+        game_user_profile = GameUserProfile.objects.create(user=self.user, current_score_guess_number_game=0)
+
+        post_response_for_guess_digit_game_url = self.client.post(guess_the_digit_game_url, data, follow=True)
+
+        self.assertEqual(post_response_for_guess_digit_game_url.status_code, 200) # Check to see if 200 code was returned, which indicates success
+        
+        self.assertEqual(post_response_for_guess_digit_game_url.context['level'], "medium") # Checking whether the level was set correctly
+
+        if post_response_for_guess_digit_game_url.context['result'] == "Correct guess! Well done!":
+            game_user_profile.current_score_guess_number_game = 25
+        
+        self.assertEqual(game_user_profile.current_score_guess_number_game, 25)
+    
+    @patch('guess_the_digit.views.random.randint')
+    def test_for_guess_the_digit_process_level_hard(self, mock_random_number):
+        self.client.login(username='testuser', password='Password34*')
+
+        mock_random_number.return_value = 69
+
+        guess_the_digit_game_url = reverse('play')
+
+        # Get request for guess the digit game. This will be executed when the user initially opens the "Guess the Digit" game
+
+        params = {'selected_level' : 'hard', 'hints' : 'yes'}
+
+        get_response_for_guess_digit_game_url = self.client.get(guess_the_digit_game_url, params)
+
+        self.assertEqual(get_response_for_guess_digit_game_url.status_code, 200) # Check to see if 200 code was returned, which indicates success
+
+        # Post request for guess the digit game, which will simulate the game and see whether the desired results are achieved
+
+        # First guess by user
+
+        data = {
+            'guess_number_input_field' : 33
+        }
+
+        post_response_for_guess_digit_game_url = self.client.post(guess_the_digit_game_url, data, follow=True)
+
+        self.assertEqual(post_response_for_guess_digit_game_url.status_code, 200) # Check to see if 200 code was returned, which indicates success
+        
+        self.assertEqual(post_response_for_guess_digit_game_url.context['level'], "hard") # Checking whether the level was set correctly
+
+        self.assertEqual(post_response_for_guess_digit_game_url.context['result'], "Wrong guess! Try again!") # Checking whether the guess was correct
+
+        # Second guess by user - correct number guessed
+
+        data = {
+            'guess_number_input_field' : 69
+        }
+
+        GameUserProfile.objects.filter(user__username='testuser').delete()
+
+        game_user_profile = GameUserProfile.objects.create(user=self.user, current_score_guess_number_game=0)
+
+        post_response_for_guess_digit_game_url = self.client.post(guess_the_digit_game_url, data, follow=True)
+
+        self.assertEqual(post_response_for_guess_digit_game_url.status_code, 200) # Check to see if 200 code was returned, which indicates success
+        
+        self.assertEqual(post_response_for_guess_digit_game_url.context['level'], "hard") # Checking whether the level was set correctly
+
+        if post_response_for_guess_digit_game_url.context['result'] == "Correct guess! Well done!":
+            game_user_profile.current_score_guess_number_game = 50
+        
+        self.assertEqual(game_user_profile.current_score_guess_number_game, 50)
