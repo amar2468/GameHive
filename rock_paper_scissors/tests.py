@@ -1,6 +1,5 @@
 from django.test import TestCase, Client
 from .forms import RockPaperScissorsInputForm
-from django.urls import reverse
 from django.contrib.auth.models import User
 
 # Unit Test for Rock, Paper, Scissors game
