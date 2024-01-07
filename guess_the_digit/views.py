@@ -142,7 +142,7 @@ def guess_the_digit_game(request):
             if specific_hint == "":
                 number_of_guesses = 20
             else:
-                number_of_guesses = 10
+                number_of_guesses = 11
                 
     # If the correct number has already been specified, it needs to be re-generated
     if 'correct_number' in request.session:
@@ -181,7 +181,7 @@ def guess_the_digit_game(request):
             if specific_hint == "":
                 number_of_guesses = 20
             else:
-                number_of_guesses = 10
+                number_of_guesses = 11
     
     context = {
         'specific_hint' : specific_hint,
