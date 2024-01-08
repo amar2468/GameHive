@@ -67,6 +67,8 @@ class GuessTheDigitIntegrationTestCase(TestCase):
         self.user = User.objects.create_user(username='testuser', email='testuser@gmail.com', password='Password34*')
         self.client = Client()
     
+    # Simulating the "Guess the Digit" game using the scenario that the user chose the easy level with hints enabled
+        
     @patch('guess_the_digit.views.random.randint')
     def test_for_guess_the_digit_process_level_easy_hints_enabled(self, mock_random_number):
         self.client.login(username='testuser', password='Password34*')
@@ -121,6 +123,8 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                     game_user_profile.current_score_guess_number_game = 5
                 
                 self.assertEqual(game_user_profile.current_score_guess_number_game, 5)
+    
+    # Simulating the "Guess the Digit" game using the scenario that the user chose the easy level with hints disabled
 
     @patch('guess_the_digit.views.random.randint')
     def test_for_guess_the_digit_process_level_easy_hints_disabled(self, mock_random_number):
@@ -178,6 +182,8 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 
                 self.assertEqual(game_user_profile.current_score_guess_number_game, 10)
 
+    # Simulating the "Guess the Digit" game using the scenario that the user chose the medium level with hints enabled
+
     @patch('guess_the_digit.views.random.randint')
     def test_for_guess_the_digit_process_level_medium_hints_enabled(self, mock_random_number):
         self.client.login(username='testuser', password='Password34*')
@@ -233,6 +239,8 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                     game_user_profile.current_score_guess_number_game = 25
                 
                 self.assertEqual(game_user_profile.current_score_guess_number_game, 25)
+
+    # Simulating the "Guess the Digit" game using the scenario that the user chose the medium level with hints disabled
 
     @patch('guess_the_digit.views.random.randint')
     def test_for_guess_the_digit_process_level_medium_hints_disabled(self, mock_random_number):
@@ -290,6 +298,8 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 
                 self.assertEqual(game_user_profile.current_score_guess_number_game, 50)
     
+    # Simulating the "Guess the Digit" game using the scenario that the user chose the hard level with hints enabled
+
     @patch('guess_the_digit.views.random.randint')
     def test_for_guess_the_digit_process_level_hard_hints_enabled(self, mock_random_number):
         self.client.login(username='testuser', password='Password34*')
@@ -345,6 +355,8 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                     game_user_profile.current_score_guess_number_game = 50
                 
                 self.assertEqual(game_user_profile.current_score_guess_number_game, 50)
+
+    # Simulating the "Guess the Digit" game using the scenario that the user chose the hard level with hints disabled
 
     @patch('guess_the_digit.views.random.randint')
     def test_for_guess_the_digit_process_level_hard_hints_disabled(self, mock_random_number):
