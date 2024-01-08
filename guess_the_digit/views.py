@@ -64,7 +64,7 @@ def guess_the_digit_game(request):
                     # Hints were enabled, half the score, regardless of level
                     else:
                         game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score_guess_number_game += 50
+                        game_user_profile.current_score_guess_number_game += 75
                         game_user_profile.save()
 
             elif user_guess != correct_number and number_of_guesses != 0:
