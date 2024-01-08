@@ -36,7 +36,7 @@ get 5 points (instead of 10 points) due to the fact that they enabled hints)
 4. Points - If the user guesses the correct number, they will receive points. These are the points based on the levels:
 (a) Easy Level - 10 points - 5 points if the hints are enabled
 (b) Medium Level - 50 points - 25 points if the hints are enabled
-(c) Hard Level - 100 points - 50 points if the hints are enabled
+(c) Hard Level - 100 points - 75 points if the hints are enabled
 
 5. Attempts - The user will be given a number of attempts to guess the correct digit, depending on the level chosen and whether they
 enabled the hints for that game. This is a breakdown of the number of attempts given:
