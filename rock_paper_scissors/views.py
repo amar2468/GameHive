@@ -67,7 +67,7 @@ def rps_form_submitted(request):
                 if request.session['total_wins'] >= 2:
                         rps_outcome = "Game Over! You won this round! You have received 10 points!"
                         game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score_rps += 10
+                        game_user_profile.current_score += 10
                         game_user_profile.save()
                 else:
                     rps_outcome = "Game Over! You failed to win this round! Good luck next time!"
