@@ -154,7 +154,7 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 GameUserProfile.objects.filter(user__username='testuser').delete()
 
                 # Create a game user profile with the current username and the score of the game set to 0
-                game_user_profile = GameUserProfile.objects.create(user=self.user, current_score_guess_number_game=0)
+                game_user_profile = GameUserProfile.objects.create(user=self.user, current_score=0)
 
                 # Make a POST request using the data from above
                 post_response_for_guess_digit_game_url = self.client.post(guess_the_digit_game_url, data, follow=True)
@@ -168,10 +168,10 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 # If the user guessed the number correctly, do this
                 if post_response_for_guess_digit_game_url.context['result'] == "Correct guess! Well done!":
                     # Set the score to 5
-                    game_user_profile.current_score_guess_number_game = 5
+                    game_user_profile.current_score = 5
                 
                 # Check whether the score is 5
-                self.assertEqual(game_user_profile.current_score_guess_number_game, 5)
+                self.assertEqual(game_user_profile.current_score, 5)
     
     # Simulating the "Guess the Digit" game using the scenario that the user chose the easy level with hints disabled
 
@@ -238,7 +238,7 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 GameUserProfile.objects.filter(user__username='testuser').delete()
 
                 # Create a game user profile with the current username and the score of the game set to 0
-                game_user_profile = GameUserProfile.objects.create(user=self.user, current_score_guess_number_game=0)
+                game_user_profile = GameUserProfile.objects.create(user=self.user, current_score=0)
 
                 # Make a POST request using the data from above
                 post_response_for_guess_digit_game_url = self.client.post(guess_the_digit_game_url, data, follow=True)
@@ -252,10 +252,10 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 # If the user guessed the number correctly, do this
                 if post_response_for_guess_digit_game_url.context['result'] == "Correct guess! Well done!":
                     # Set the score to 10
-                    game_user_profile.current_score_guess_number_game = 10
+                    game_user_profile.current_score = 10
                 
                 # Check whether the score is 10
-                self.assertEqual(game_user_profile.current_score_guess_number_game, 10)
+                self.assertEqual(game_user_profile.current_score, 10)
 
     # Simulating the "Guess the Digit" game using the scenario that the user chose the medium level with hints enabled
 
@@ -322,7 +322,7 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 GameUserProfile.objects.filter(user__username='testuser').delete()
 
                 # Create a game user profile with the current username and the score of the game set to 0
-                game_user_profile = GameUserProfile.objects.create(user=self.user, current_score_guess_number_game=0)
+                game_user_profile = GameUserProfile.objects.create(user=self.user, current_score=0)
 
                 # Make a POST request using the data from above
                 post_response_for_guess_digit_game_url = self.client.post(guess_the_digit_game_url, data, follow=True)
@@ -336,10 +336,10 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 # If the user guessed the number correctly, do this
                 if post_response_for_guess_digit_game_url.context['result'] == "Correct guess! Well done!":
                     # Set the score to 25
-                    game_user_profile.current_score_guess_number_game = 25
+                    game_user_profile.current_score = 25
                 
                 # Check whether the score is 25
-                self.assertEqual(game_user_profile.current_score_guess_number_game, 25)
+                self.assertEqual(game_user_profile.current_score, 25)
 
     # Simulating the "Guess the Digit" game using the scenario that the user chose the medium level with hints disabled
 
@@ -406,7 +406,7 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 GameUserProfile.objects.filter(user__username='testuser').delete()
 
                 # Create a game user profile with the current username and the score of the game set to 0
-                game_user_profile = GameUserProfile.objects.create(user=self.user, current_score_guess_number_game=0)
+                game_user_profile = GameUserProfile.objects.create(user=self.user, current_score=0)
 
                 # Make a POST request using the data from above
                 post_response_for_guess_digit_game_url = self.client.post(guess_the_digit_game_url, data, follow=True)
@@ -420,10 +420,10 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 # If the user guessed the number correctly, do this
                 if post_response_for_guess_digit_game_url.context['result'] == "Correct guess! Well done!":
                     # Set the score to 50
-                    game_user_profile.current_score_guess_number_game = 50
+                    game_user_profile.current_score = 50
                 
                 # Check whether the score is 50
-                self.assertEqual(game_user_profile.current_score_guess_number_game, 50)
+                self.assertEqual(game_user_profile.current_score, 50)
     
     # Simulating the "Guess the Digit" game using the scenario that the user chose the hard level with hints enabled
 
@@ -490,7 +490,7 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 GameUserProfile.objects.filter(user__username='testuser').delete()
 
                 # Create a game user profile with the current username and the score of the game set to 0
-                game_user_profile = GameUserProfile.objects.create(user=self.user, current_score_guess_number_game=0)
+                game_user_profile = GameUserProfile.objects.create(user=self.user, current_score=0)
 
                 # Make a POST request using the data from above
                 post_response_for_guess_digit_game_url = self.client.post(guess_the_digit_game_url, data, follow=True)
@@ -504,10 +504,10 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 # If the user guessed the number correctly, do this
                 if post_response_for_guess_digit_game_url.context['result'] == "Correct guess! Well done!":
                     # Set the score to 75
-                    game_user_profile.current_score_guess_number_game = 75
+                    game_user_profile.current_score = 75
                 
                 # Check whether the score is 75
-                self.assertEqual(game_user_profile.current_score_guess_number_game, 75)
+                self.assertEqual(game_user_profile.current_score, 75)
 
     # Simulating the "Guess the Digit" game using the scenario that the user chose the hard level with hints disabled
 
@@ -574,7 +574,7 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 GameUserProfile.objects.filter(user__username='testuser').delete()
 
                 # Create a game user profile with the current username and the score of the game set to 0
-                game_user_profile = GameUserProfile.objects.create(user=self.user, current_score_guess_number_game=0)
+                game_user_profile = GameUserProfile.objects.create(user=self.user, current_score=0)
 
                 # Make a POST request using the data from above
                 post_response_for_guess_digit_game_url = self.client.post(guess_the_digit_game_url, data, follow=True)
@@ -588,7 +588,7 @@ class GuessTheDigitIntegrationTestCase(TestCase):
                 # If the user guessed the number correctly, do this
                 if post_response_for_guess_digit_game_url.context['result'] == "Correct guess! Well done!":
                     # Set the score to 100
-                    game_user_profile.current_score_guess_number_game = 100
+                    game_user_profile.current_score = 100
                 
                 # Check whether the score is 100
-                self.assertEqual(game_user_profile.current_score_guess_number_game, 100)
+                self.assertEqual(game_user_profile.current_score, 100)
