@@ -43,6 +43,12 @@
                                         <span class="ms-1">Leaderboard</span>
                                     </a>
                                 </li>
+
+                                <li class="nav-item">
+                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="redeem_points">
+                                        <span class="ms-1">Redeem Points</span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         
@@ -105,36 +111,17 @@
                             </form>
                         </div>
 
-                        <div id="leaderboard_div_guess_the_digit" style="border: 2px solid black; border-radius: 20px; overflow: hidden;display:none;">
-                            <table class="table table-bordered table-striped table-hover" style="width: 100%;">
-                                <thead style="background-color:RGB(108, 122, 224);">
-                                    <th colspan="3" style="text-align: center; color: white;">Leaderboard : Guess The Digit</th>
+                        <div id="leaderboard_div" style="display:none;">
+                            <table class="table table-striped table-dark">
+                                <thead>
+                                    <th colspan="3" style="text-align: center; color: white;">Leaderboard</th>
                                 </thead>
                                 <tbody>
-                                    {% for leaderboard in leaderboard_entries_guess_the_digit %}
+                                    {% for leaderboard in leaderboard_entries %}
                                         <tr>
                                             <td>{{ forloop.counter }}</td>
                                             <td>{{ leaderboard.user.username }}</td>
-                                            <td>{{ leaderboard.current_score_guess_number_game }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <br><br>
-
-                        <div id="leaderboard_div_rps" style="border: 2px solid black; border-radius: 20px; overflow: hidden;display:none;">
-                            <table class="table table-bordered table-striped table-hover" style="width: 100%;">
-                                <thead style="background-color:RGB(108, 122, 224);">
-                                    <th colspan="3" style="text-align: center; color: white;">Leaderboard : Rock, Paper, Scissors</th>
-                                </thead>
-                                <tbody>
-                                    {% for leaderboard in leaderboard_entries_rock_paper_scissors %}
-                                        <tr>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>{{ leaderboard.user.username }}</td>
-                                            <td>{{ leaderboard.current_score_rps }}</td>
+                                            <td>{{ leaderboard.current_score }}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -154,22 +141,19 @@
                 $('#update_personal_info').click(function() {
                     $('#personal_details_div').show();
                     $('#change_password_div').hide();
-                    $('#leaderboard_div_rps').hide();
-                    $('#leaderboard_div_guess_the_digit').hide();
+                    $('#leaderboard_div').hide();
                 });
 
                 $('#change_password').click(function(){
                     $('#personal_details_div').hide();
-                    $('#leaderboard_div_guess_the_digit').hide();
-                    $('#leaderboard_div_rps').hide();
+                    $('#leaderboard_div').hide();
                     $('#change_password_div').show();
                 });
 
                 $('#leaderboard_link').click(function(){
                     $('#personal_details_div').hide();
                     $('#change_password_div').hide();
-                    $('#leaderboard_div_guess_the_digit').show();
-                    $('#leaderboard_div_rps').show();
+                    $('#leaderboard_div').show();
 
                 });
 
