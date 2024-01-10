@@ -4,7 +4,7 @@ GameHive is a Web application which allows users to play the game of their choic
 Note: This project is still being developed. The documentation will be updated as new functionality is being introduced.
 
 There are two games that the user can play:
-1. Guessing Game
+1. Guess the Digit
 2. Rock, Paper, Scissors
 
 **Core Functionality (Still Being Developed):**
@@ -18,7 +18,7 @@ There are two games that the user can play:
 
 5. Testimonials - People can submit their review regarding GameHive. 
 
-6. Two Games - User can choose between two games: Guessing Game & Rock, Paper, Scissors.
+6. Two Games - User can choose between two games: Guess the Digit & Rock, Paper, Scissors.
 
 **Core Functionality of Guessing Game (Still Being Developed):**
 
@@ -61,10 +61,14 @@ leaderboard for this game can be found in the profile page under the sidebar hea
 
 Testing is required with any app that is being created. For GameHive, unit testing and integration testing were/are being used to test
 a variety of functionalities such as:
-(a) Registration process
-(b) Login process
-(c) Testimonials form
-(d) Update personal details form
-(e) Change password form
+1. Registration process
+2. Login process
+3. Testimonials form
+4. Update personal details form
+5. Change password form
+
+Additionally, unit & integration tests were used to test:
+1. Guess the Digit game using valid and invalid inputs, as well as simulating the process using each level and hints enabled/disabled.
+2. Rock, Paper, Scissors game, where there were two integration tests: A situation where the user has lost the round and a situation where the user has won the round.
 
 This ensures that these aspects of GameHive work correctly. The test files are called tests.py and can be found in this project.
