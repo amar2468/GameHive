@@ -62,9 +62,7 @@ def testimonials_page(request):
 
 def my_profile(request):
     if request.user.is_authenticated:
-        leaderboard_entries_guess_the_digit = GameUserProfile.objects.all().order_by('-current_score_guess_number_game')
-
-        leaderboard_entries_rock_paper_scissors = GameUserProfile.objects.all().order_by('-current_score_rps')
+        leaderboard_entries = GameUserProfile.objects.all().order_by('-current_score')
 
         try:
             user_details = PersonalDetails.objects.get(user=request.user)
@@ -72,7 +70,7 @@ def my_profile(request):
             user_details = PersonalDetails(user=request.user)
             user_details.save()
 
-        return render(request, 'profile.html', {'leaderboard_entries_guess_the_digit': leaderboard_entries_guess_the_digit, 'leaderboard_entries_rock_paper_scissors' : leaderboard_entries_rock_paper_scissors, 'user_details' : user_details})
+        return render(request, 'profile.html', {'leaderboard_entries': leaderboard_entries, 'user_details' : user_details})
     else:
         return render(request, '403.html')
 
@@ -156,6 +154,12 @@ def change_password(request):
             return JsonResponse(response_info_for_password)
             
     return render(request, 'profile.html')
+
+# View that deals with redeeming points. When a user redeems a certain number of points, they will be able to buy useful things using
+# those points. 
+
+def redeeming_points(request):
+    pass
 
 # View has the POST part, which will take the user registration details and check if they are valid, after which the password will
 # be validated. Finally, the user will be added to the user model and the current score will be set to 0 as the user has only been
