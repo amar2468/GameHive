@@ -32,12 +32,12 @@ def guess_the_digit_game(request):
                     # No hints were enabled, so user gets the full score
                     if specific_hint == "":
                         game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score_guess_number_game += 10
+                        game_user_profile.current_score += 10
                         game_user_profile.save()
                     # Hints were enabled, half the score, regardless of level
                     else:
                         game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score_guess_number_game += 5
+                        game_user_profile.current_score += 5
                         game_user_profile.save()
 
                 elif level == "medium":
@@ -45,26 +45,26 @@ def guess_the_digit_game(request):
                     # No hints were enabled, so user gets the full score
                     if specific_hint == "":
                         game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score_guess_number_game += 50      
+                        game_user_profile.current_score += 50      
                         game_user_profile.save()        
 
                     # Hints were enabled, half the score, regardless of level
                     else:
                         game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score_guess_number_game += 25
+                        game_user_profile.current_score += 25
                         game_user_profile.save()
 
                 elif level == "hard":
                     # No hints were enabled, so user gets the full score
                     if specific_hint == "":
                         game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score_guess_number_game += 100
+                        game_user_profile.current_score += 100
                         game_user_profile.save()
 
                     # Hints were enabled, half the score, regardless of level
                     else:
                         game_user_profile = GameUserProfile.objects.get(user=request.user)
-                        game_user_profile.current_score_guess_number_game += 75
+                        game_user_profile.current_score += 75
                         game_user_profile.save()
 
             elif user_guess != correct_number and number_of_guesses != 0:
@@ -86,7 +86,7 @@ def guess_the_digit_game(request):
             
             context = {
                 'result': result,
-                'latest_score': game_user_profile.current_score_guess_number_game,
+                'latest_score': game_user_profile.current_score,
                 'specific_hint' : specific_hint,
                 'level' : level
             }
@@ -98,7 +98,7 @@ def guess_the_digit_game(request):
 
     hints = request.GET.get('hints')
 
-    # Generate the hint (if number is odd or even) depending on the current_score_guess_number_game condition
+    # Generate the hint (if number is odd or even) depending on the current_score condition
     def create_hint(odd_or_even):
         if hints == "yes":
             if odd_or_even % 2 == 0:
@@ -108,7 +108,7 @@ def guess_the_digit_game(request):
         else:
             return ""
 
-    # Check if the correct number has been specified in the current_score_guess_number_game session
+    # Check if the correct number has been specified in the current_score session
     if 'correct_number' not in request.session:
 
         # If the level is easy, generate a random number between 1 and 10
