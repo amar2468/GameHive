@@ -306,7 +306,7 @@ class RockPaperScissorsIntegrationTestCase(TestCase):
 
         # Creating a user profile, so that the current score in the rock paper scissors game can be tracked
 
-        game_user_profile = GameUserProfile.objects.create(user=self.user, current_score_rps=0)
+        game_user_profile = GameUserProfile.objects.create(user=self.user, current_score=0)
 
         # POST request is made, in order to end the round
 
@@ -327,8 +327,8 @@ class RockPaperScissorsIntegrationTestCase(TestCase):
         # Checking to see if the user won the round and if they did, add 10 points to their score
 
         if rps_response_data['rps_outcome'] == "Game Over! You won this round! You have received 10 points!":
-            game_user_profile.current_score_rps = 10
+            game_user_profile.current_score = 10
         
         # Check whether the user has 10 points, which indicates that they won the round
         
-        self.assertEqual(game_user_profile.current_score_rps, 10)
+        self.assertEqual(game_user_profile.current_score, 10)
