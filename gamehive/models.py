@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 
 class GameUserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    current_score_guess_number_game = models.IntegerField(default=0)
-    current_score_rps = models.IntegerField(default=0)
+    current_score = models.IntegerField(default=0)
 
 class PersonalDetails(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
