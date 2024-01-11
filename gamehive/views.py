@@ -159,7 +159,10 @@ def change_password(request):
 # those points. 
 
 def redeeming_points(request):
-    pass
+    if request.method == "POST":
+        pass
+    else:
+        return render(request, 'profile.html')
 
 # View has the POST part, which will take the user registration details and check if they are valid, after which the password will
 # be validated. Finally, the user will be added to the user model and the current score will be set to 0 as the user has only been
