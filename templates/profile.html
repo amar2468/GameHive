@@ -28,12 +28,12 @@
                         
                             <ul class="nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                                 <li class="nav-item">
-                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="update_personal_info">
+                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="update_personal_info_link">
                                         <span class="ms-1">Update Personal Information</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="change_password">
+                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="change_password_link">
                                         <span class="ms-1">Change Password</span>
                                     </a>
                                 </li>
@@ -45,7 +45,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="redeem_points">
+                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="redeem_points_link">
                                         <span class="ms-1">Redeem Points</span>
                                     </a>
                                 </li>
@@ -127,6 +127,34 @@
                                 </tbody>
                             </table>
                         </div>
+                        
+                        <div id="reedem_points_div" style="display:none;"> 
+                            <h1>GameHive Store</h1>
+                            
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="card">
+                                        <img class="card-img-top" src="..." alt="Card image cap">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Item 1</h5>
+                                            <p class="card-text">Short description about the item...</p>
+                                            <a href="#" class="btn btn-primary">1000 points</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="card">
+                                        <img class="card-img-top" src="..." alt="Card image cap">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Item 2</h5>
+                                            <p class="card-text">Short description about the item...</p>
+                                            <a href="#" class="btn btn-primary">2000 points</a>
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -138,22 +166,33 @@
 
         <script>
             $(document).ready(function() {
-                $('#update_personal_info').click(function() {
+                $('#update_personal_info_link').click(function() {
                     $('#personal_details_div').show();
                     $('#change_password_div').hide();
                     $('#leaderboard_div').hide();
+                    $('#reedem_points_div').hide();
                 });
 
-                $('#change_password').click(function(){
+                $('#change_password_link').click(function(){
                     $('#personal_details_div').hide();
                     $('#leaderboard_div').hide();
+                    $('#reedem_points_div').hide();
                     $('#change_password_div').show();
                 });
 
                 $('#leaderboard_link').click(function(){
                     $('#personal_details_div').hide();
                     $('#change_password_div').hide();
+                    $('#reedem_points_div').hide();
                     $('#leaderboard_div').show();
+
+                });
+
+                $('#redeem_points_link').click(function(){
+                    $('#personal_details_div').hide();
+                    $('#change_password_div').hide();
+                    $('#leaderboard_div').hide();
+                    $('#reedem_points_div').show();
 
                 });
 
