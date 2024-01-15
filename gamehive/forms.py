@@ -40,3 +40,6 @@ class UpdatePersonalDetails(forms.Form):
 class ChangePasswordForm(forms.Form):
     change_password = forms.CharField(widget=forms.PasswordInput(), required=True)
     change_password_confirm = forms.CharField(widget=forms.PasswordInput(), required=True)
+
+class BuyItemForm(forms.Form):
+    price_for_item_in_points = forms.IntegerField()
