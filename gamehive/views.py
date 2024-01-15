@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db import IntegrityError
-from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails
+from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails, BuyItemForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import password_validation
@@ -160,7 +160,28 @@ def change_password(request):
 
 def redeeming_points(request):
     if request.method == "POST":
-        pass
+        form = BuyItemForm(request.POST)
+
+        if form.is_valid():
+            price_for_item_in_points = form.cleaned_data['price_for_item_in_points']
+
+            game_user_profile = GameUserProfile.objects.get(user=request.user)
+
+            if price_for_item_in_points <= game_user_profile.current_score:
+                game_user_profile.current_score -= price_for_item_in_points
+                game_user_profile.save()
+
+                response_info_redeeming_points = {
+                    'outcome_from_attempted_purchase' : "Purchase completed successfully!"
+                }
+
+                return JsonResponse(response_info_redeeming_points)
+
+            response_info_redeeming_points = {
+                'outcome_from_attempted_purchase' : "Not enough points to complete the purchase!"
+            }
+
+            return JsonResponse(response_info_redeeming_points)
     else:
         return render(request, 'profile.html')
 
