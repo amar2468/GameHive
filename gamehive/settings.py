@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gamehive',
     'guess_the_digit',
-    'rock_paper_scissors'
+    'rock_paper_scissors',
+    'channels'
 ]
 
 MIDDLEWARE = [
@@ -73,8 +74,16 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gamehive.wsgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        
+        "Backend" :"channels.layers.InMemoryChannelLayer"
+    },
+}
+
+WSGI_APPLICATION = 'gamehive.wsgi.application'
+ASGI_APPLICATION = 'gamehive.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
