@@ -48,7 +48,40 @@
                                 <div class="mb-3">
                                     <span class="display-6 fw-bold">Rock, Paper, Scissors</span>
                                 </div>
-                                <div class="d-grid"><a class="btn btn-outline-primary" href="{% url 'rock_paper_scissors:play' %}">Play</a></div>
+                                <form id="form_rps_single_player_multiplayer" method="post">
+                                    {% csrf_token %}
+                                    <div class="d-grid"><button type="submit" class="btn btn-outline-primary">Play</button></div>
+                                </form>
+
+
+                                <div class="modal" id="rps_single_player_or_multiplayer_toggle" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title">Choose Game Mode</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                          </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="card mx-sm-4 mb-4">
+                                                <div class="card-body">
+                                                    <h5 class="card-title"><a href="{% url 'rock_paper_scissors:single_player_rps' %}">Single Player</a></h5>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="card mx-sm-4 mb-4">
+                                                <div class="card-body">
+                                                    <h5 class="card-title"><a href="{% url 'rock_paper_scissors:multiplayer_rps' %}">Multiplayer</a></h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -61,5 +94,14 @@
             </div>
         </section>
     {% endif %}
+    <script>
+        $(document).ready(function() {
+            $('#form_rps_single_player_multiplayer').submit(function(e) {
+                e.preventDefault();
+
+                $('#rps_single_player_or_multiplayer_toggle').modal('show');
+            });
+        });
+    </script>
     {% endblock %}
 </body>
