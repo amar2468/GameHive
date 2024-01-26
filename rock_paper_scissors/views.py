@@ -6,9 +6,13 @@ from gamehive.models import GameUserProfile
 import random
 
 
-# This view opens the game for the user, which will allow them to select an option (rock,paper, or scissors)
+# This view allows a user to play single player mode, which will load the relevant template
 
-def play(request):
+def single_player_rps(request):
+    return render(request, 'rock_paper_scissors_play.html')
+
+# This view allows a user to play multiplayer mode, which will load the relevant template
+def multiplayer_rps(request):
     return render(request, 'rock_paper_scissors_play.html')
 
 # This view will allow the computer to choose a random option (rock,paper, or scissors) and inform the user of the choice.
