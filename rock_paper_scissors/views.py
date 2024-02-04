@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.contrib.auth.models import User
 from gamehive.models import GameUserProfile
 import random
 
@@ -11,9 +10,15 @@ import random
 def single_player_rps(request):
     return render(request, 'rock_paper_scissors_play.html')
 
-# This view allows a user to play multiplayer mode, which will load the relevant template
-def multiplayer_rps(request):
-    return render(request, 'rock_paper_scissors_play.html')
+# This view allows a user to open the config page, so that they can select the room id, in order to set up the game
+def multiplayer_rps_config(request):
+    return render(request, 'config_rock_paper_scissors_multiplayer.html')
+
+# This view sends the user to the multiplayer game page
+def multiplayer_rps_start_game(request):
+    room_id = request.POST.get('room_id', '1')
+
+    return render(request, "multiplayer_rock_paper_scissors_play.html", {"room_id": room_id})
 
 # This view will allow the computer to choose a random option (rock,paper, or scissors) and inform the user of the choice.
 # Additionally, the user's choice is compared against the computer's choice and an outcome is returned to the user (win,lose,draw)
