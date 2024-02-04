@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from rock_paper_scissors.views import multiplayer_rps_start_game
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('multiplayer_rps/<room_id>/', multiplayer_rps_start_game, name='multiplayer_rps'),
     path('guess_the_digit/', include('guess_the_digit.urls')),
     path('rock_paper_scissors/', include('rock_paper_scissors.urls')),
     path('', views.homepage, name='homepage'),
