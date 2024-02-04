@@ -1,13 +1,7 @@
 import os
 
-import django
+from django.core.asgi import get_asgi_application
 
-from channels import AsgiHandler
-from channels.routing import ProtocolTypeRouter
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "gamehive.settings")
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'gamehive.settings')
-django.setup()
-
-application = ProtocolTypeRouter({
-  "http": AsgiHandler(),
-})
+application = get_asgi_application()
