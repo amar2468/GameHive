@@ -38,10 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'gamehive',
     'guess_the_digit',
-    'rock_paper_scissors',
-    'channels'
+    'rock_paper_scissors'
 ]
 
 MIDDLEWARE = [
@@ -76,14 +76,12 @@ TEMPLATES = [
 
 
 CHANNEL_LAYERS = {
-    'default': {
-        
-        "Backend" :"channels.layers.InMemoryChannelLayer"
-    },
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
 }
 
-WSGI_APPLICATION = 'gamehive.wsgi.application'
-ASGI_APPLICATION = 'gamehive.asgi.application'
+ASGI_APPLICATION = 'gamehive.routing.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -137,3 +135,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
