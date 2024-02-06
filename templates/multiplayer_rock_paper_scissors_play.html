@@ -21,13 +21,14 @@
 
             <p style="font-size:22px;">Welcome to room {{ room_id }}. Select rock, paper, or scissors!</p>
             <input id="room_id_input" type="number" value="{{ room_id }}" style="display:none;" />
+            <input id="username" type="text" value="{{ request.user }}" style="display:none;" />
             <br><br>
 
-            <form id="rps_form" method="POST" action="#!">
+            <form id="multiplayer_rps_game" method="POST" action="#!">
                 {% csrf_token %}
                 <div class="flex_container_rps" style="display:flex;">
-                    <div id="carousel_container_player" style="flex:1;margin-right: 60px;">
-                        <div id="carousel_rps_player" class="carousel slide" data-ride="carousel" data-interval="false">
+                    <div id="carousel_container_user" style="flex:1;margin-right: 60px;">
+                        <div id="carousel_rps_user" class="carousel slide" data-ride="carousel" data-interval="false">
 
                             <div class="carousel-inner">
 
@@ -45,11 +46,11 @@
 
                             </div>
 
-                            <a class="carousel-control-prev" id="carousel_control_prev_player" href="#carousel_rps_player" style="background-color: blue;" role="button" data-slide="prev">
+                            <a class="carousel-control-prev" id="carousel_control_prev_for_user" href="#carousel_rps_user" style="background-color: blue;" role="button" data-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Previous</span>
                             </a>
-                            <a class="carousel-control-next" id="carousel_control_next_player" href="#carousel_rps_player" style="background-color: blue;" role="button" data-slide="next">
+                            <a class="carousel-control-next" id="carousel_control_next_for_user" href="#carousel_rps_user" style="background-color: blue;" role="button" data-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Next</span>
                             </a>
@@ -60,26 +61,26 @@
 
                 <br><br>
 
-                <div class="alert alert-primary" id="rps_outcome_div" role="alert" style="display:none;">
-                    <p id="rps_outcome" style="text-align:center;"></p>
+                <div class="alert alert-primary" id="multiplayer_rps_outcome_div" role="alert" style="display:none;">
+                    <p id="multiplayer_rps_outcome" style="text-align:center;"></p>
                 </div>
 
                 <br><br>
 
-                <div class="alert alert-warning" id="attempts_div" role="alert" style="display:none;">
-                    <p id="attempts" style="text-align:center;"></p>
+                <div class="alert alert-warning" id="multiplayer_attempts_div" role="alert" style="display:none;">
+                    <p id="multiplayer_attempts" style="text-align:center;"></p>
                 </div>
 
                 <br><br>
 
-                <input type="hidden" id="carousel_value" name="carousel_value" value="">
+                <input type="hidden" id="multiplayer_carousel_value" name="multiplayer_carousel_value" value="">
 
-                <button type="submit" id="selected_rps" style="font-size: 20px;" class="btn btn-primary btn-lg">Select</button>
+                <button type="submit" id="multiplayer_selected_rps" style="font-size: 20px;" class="btn btn-primary btn-lg">Select</button>
             </form>
 
             <br><br>
 
-            <div class="spinner-border" id="loading_rps" role="status" style="display:none;">
+            <div class="spinner-border" id="multiplayer_loading_rps" role="status" style="display:none;">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
@@ -87,6 +88,7 @@
         <script>
 
             let roomcode = document.getElementById("room_id_input").value;
+            let username = document.getElementById("username").value;
 
             const gameSocket = new WebSocket(
                 'ws://' + window.location.host +
@@ -94,8 +96,8 @@
             );
 
             const message = {
-                action: "greeting",
-                content: "Rock, Paper, Scissors multiplayer game connection succeeded!"
+                message: "Rock, Paper, Scissors multiplayer game connection succeeded!",
+                username : username
             };
 
             gameSocket.addEventListener("open", (event) => {
