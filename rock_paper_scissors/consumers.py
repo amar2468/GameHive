@@ -8,6 +8,8 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
 
         self.room_state = {}
 
+        self.attempts = 3 # initialise the number of attempts for this round
+
         await self.channel_layer.group_add(self.rps_room_name, self.channel_name)
 
         await self.accept()
@@ -44,40 +46,56 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
         username = event["username"]
 
         self.room_state.setdefault('rps_options', {})
-        self.room_state['rps_options'][username] = user_option
+        self.room_state['rps_options'][username] = {
+            "user_option" : user_option,
+            "rps_outcome": ""
+        }
+
+        self.room_state.setdefault('attempts', 3)
 
         if len(self.room_state['rps_options']) == 2:
 
-            for username, choice in self.room_state['rps_options'].items():
+
+            for username in self.room_state['rps_options'].keys():
                 if username != user:
-                    user2_choice = choice
+                    user2_choice = self.room_state['rps_options'][username]['user_option']
                     user2_name = username
                 else:
-                    user1_choice = choice
+                    user1_choice = self.room_state['rps_options'][user]['user_option']
                     user1_name = user
                     
 
             if user1_choice != "" and user2_choice != "":
 
-                rps_outcomes = {
-                    'rock' : {'paper' : 'lose', 'scissors' : 'win'},
-                    'paper' : {'rock' : 'win', 'scissors' : 'lose'},
-                    'scissors' : {'rock' : 'lose', 'paper' : 'win'}
-                }
+                if self.attempts > 0:
+                    self.attempts -= 1
 
-                rps_outcome = rps_outcomes[user1_choice].get(user2_choice, 'draw')
+                    rps_outcomes = {
+                        'rock' : {'paper' : 'lose', 'scissors' : 'win'},
+                        'paper' : {'rock' : 'win', 'scissors' : 'lose'},
+                        'scissors' : {'rock' : 'lose', 'paper' : 'win'}
+                    }
 
-                print(rps_outcome)              
+                    rps_outcome_user_1 = rps_outcomes[user1_choice].get(user2_choice, 'draw')
+                    rps_outcome_user_2 = rps_outcomes[user2_choice].get(user1_choice, 'draw')
 
-                print(user1_name, user1_choice)
-                print(user2_name, user2_choice)
+                    self.room_state['rps_options'][user1_name] = {
+                        "user_option" : user1_choice,
+                        "rps_outcome": rps_outcome_user_1
+                    }
 
-            self.room_state['rps_options'] = {}
+                    self.room_state['rps_options'][user2_name] = {
+                        "user_option" : user2_choice,
+                        "rps_outcome": rps_outcome_user_2
+                    }
+
+                #self.room_state['rps_options'] = {}
 
         await self.send(
             text_data=json.dumps(
                 {
-                    "payload" : event
+                    "rps_options": self.room_state['rps_options'],
+                    "attempts" : self.attempts
                 }
             )
         )
