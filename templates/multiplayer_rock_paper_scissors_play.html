@@ -130,6 +130,22 @@
             gameSocket.addEventListener("message", (event) => {
                 const message = JSON.parse(event.data);
                 console.log('Received message from server:', message);
+
+                if (message.hasOwnProperty('rps_options')) {
+                    let rps_options = message.rps_options;
+                    let attempts = message.attempts;
+
+                    if (rps_options[username]["rps_outcome"] != "")
+                    {
+                        $('#multiplayer_rps_outcome').text("You " + rps_options[username]["rps_outcome"]);
+                        $('#multiplayer_rps_outcome_div').show();
+
+                        $('#multiplayer_attempts').text("Attempts Left : " + attempts);
+                        $('#multiplayer_attempts_div').show();
+                    }
+
+                    console.log('Received rps_options:', rps_options);
+                }
             });
 
             gameSocket.addEventListener("error", (event) => {
