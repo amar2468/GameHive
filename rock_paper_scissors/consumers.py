@@ -10,6 +10,12 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
 
         self.attempts = 3 # initialise the number of attempts for this round
 
+        global user1_name
+        user1_name = ""
+
+        global user2_name
+        user2_name = ""
+
         await self.channel_layer.group_add(self.rps_room_name, self.channel_name)
 
         await self.accept()
@@ -44,6 +50,8 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
         user = str(self.scope["user"])
         user_option = event["user_option"]
         username = event["username"]
+        global user1_name
+        global user2_name
 
         self.room_state.setdefault('rps_options', {})
         self.room_state['rps_options'][username] = {
@@ -89,11 +97,12 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                         "rps_outcome": rps_outcome_user_2
                     }
 
-                #self.room_state['rps_options'] = {}
+                    #self.room_state['rps_options'] = {}
 
         await self.send(
             text_data=json.dumps(
                 {
+                    "user_list" : [user1_name, user2_name],
                     "rps_options": self.room_state['rps_options'],
                     "attempts" : self.attempts
                 }
