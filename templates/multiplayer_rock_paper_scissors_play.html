@@ -134,9 +134,43 @@
                 if (message.hasOwnProperty('rps_options')) {
                     let rps_options = message.rps_options;
                     let attempts = message.attempts;
+                    let user_list = message.user_list;
 
-                    if (rps_options[username]["rps_outcome"] != "")
+                    for(let i = 0; i < user_list.length; i++)
                     {
+                        if(user_list[i] !== username)
+                        {
+                            opponent_username = user_list[i];
+                            break;
+                        }
+                    }
+
+                    if (rps_options[opponent_username]["rps_outcome"] != "")
+                    {
+                        
+                        if (rps_options[opponent_username]["user_option"] === "rock")
+                        {
+                            $('#paper_opponent').hide();
+                            $('#scissors_opponent').hide();
+                            $('#rock_opponent').show();
+                        }
+
+                        else if (rps_options[opponent_username]["user_option"] === "paper")
+                        {
+                            $('#rock_opponent').hide();
+                            $('#scissors_opponent').hide();
+                            $('#paper_opponent').show();
+                        }
+
+                        else if (rps_options[opponent_username]["user_option"] === "scissors")
+                        {
+                            $('#rock_opponent').hide();
+                            $('#paper_opponent').hide();
+                            $('#scissors_opponent').show();
+                        }
+
+                        $('#carousel_rps_opponent').show();
+
                         $('#multiplayer_rps_outcome').text("You " + rps_options[username]["rps_outcome"]);
                         $('#multiplayer_rps_outcome_div').show();
 
