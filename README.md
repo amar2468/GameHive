@@ -1,13 +1,11 @@
 # GameHive
 GameHive is a Web application which allows users to play the game of their choice.
 
-Note: This project is still being developed. The documentation will be updated as new functionality is being introduced.
-
 There are two games that the user can play:
 1. Guess the Digit
-2. Rock, Paper, Scissors
+2. Rock, Paper, Scissors (Single Player & Multiplayer Mode)
 
-**Core Functionality (Still Being Developed):**
+**Core Functionality:**
 1. Registration - Used forms.py to create a registration form using the Django forms import. This will provide a safer authentication process.
 
 2. Login
@@ -20,7 +18,7 @@ There are two games that the user can play:
 
 6. Two Games - User can choose between two games: Guess the Digit & Rock, Paper, Scissors.
 
-**Core Functionality of Guessing Game (Still Being Developed):**
+**Core Functionality of Guessing Game:**
 
 1. Level - User can choose between three levels: Easy, Medium, and Hard. 
 
@@ -44,7 +42,9 @@ enabled the hints for that game. This is a breakdown of the number of attempts g
 (b) Medium Level - 10 attempts if hints are DISABLED - 5 attempts if hints are ENABLED
 (c) Hard Level - 20 attempts if hints are DISABLED - 11 attempts if hints are ENABLED
 
-**Core Functionality of Rock, Paper, Scissors (Still Being Developed)**
+**Core Functionality of Rock, Paper, Scissors**
+
+SINGLE PLAYER MODE:
 
 1. Player Choice - User chooses between rock, paper, scissors
 
@@ -56,6 +56,18 @@ enabled the hints for that game. This is a breakdown of the number of attempts g
 
 4. Points - If the user wins the round, they will receive 10 points. This will be added to their total score for this game and the 
 leaderboard for this game can be found in the profile page under the sidebar heading "Leaderboard"
+
+MULTIPLAYER MODE:
+
+1. Player 1 Choice - Player 1 chooses between rock, paper, scissors
+
+2. Player 2 Choice - Player 2 chooses between rock, paper, scissors
+
+3. Attempts - There are three attempts. In order for a player to win, they must get either:
+(a) Win 3 times
+(b) Win 2 times
+
+4. Points - If one of the players win the round, they will get 10 points, which will be added to the leaderboard score.
 
 **Testing**
 
