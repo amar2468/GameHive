@@ -56,7 +56,9 @@ def testimonials_page(request):
     else:
         form = TestimonialsForm()
 
-        return render(request, 'testimonials.html', {'form' : form })
+        testimonials_model_objs = TestimonialsModel.objects.all()
+
+        return render(request, 'testimonials.html', {'form' : form, 'testimonials_model_objs' : testimonials_model_objs})
 
 # View that will present the current leaderboard for all users, as well as provide the user the option to update their personal info
 
