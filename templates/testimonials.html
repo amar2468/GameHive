@@ -6,6 +6,7 @@
     <div class="wrapper bg-light">
         <!-- Header-->
         <header class="bg-light py-5">
+            {% if user.is_authenticated %}
             <div class="container px-5 my-5 px-5">
                 <div class="text-center mb-5">
                     <h2 class="fw-bolder">Tell us your thoughts</h2>
@@ -49,6 +50,21 @@
                         </form>
                     </div>
                 </div>
+            </div>
+            {% endif %}
+
+            <div class="row">
+                {% for item in testimonials_model_objs %}
+                <div class="col-md-3 d-flex mx-auto">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.name }} {{ item.surname }}</h5>
+                            <p id="date_of_testimonial_text" class="card-text" style="font-size:13px;">{{ item.date_of_testimonial }}</p>
+                            <p class="card-text">{{ item.message }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </header>
     </div>
