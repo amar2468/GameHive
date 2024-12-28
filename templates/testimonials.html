@@ -27,16 +27,10 @@
 
                         <form id="testimonials_form" method="post" action="{% url 'testimonials_page' %}">
                             {% csrf_token %}
-                            <!-- First name -->
+                            <!-- Username -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="first_name" name="first_name" type="text" data-sb-validations="required" autocomplete="off" required/>
-                                <label for="first_name">Name</label>
-                            </div>
-
-                            <!-- Surname -->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="surname" name="last_name" type="text" data-sb-validations="required" autocomplete="off" required/>
-                                <label for="surname">Surname</label>
+                                <input class="form-control" id="testimonial_username" name="testimonial_username" value="{{ user }}" type="text" data-sb-validations="required" autocomplete="off" required readonly/>
+                                <label for="testimonial_username">Username</label>
                             </div>
 
                             <!-- Message -->
@@ -52,19 +46,29 @@
                 </div>
             </div>
             {% endif %}
+            
+            <hr>
+
+            <div class="container px-5 my-5 px-5">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bolder">Here are some testimonials from our users...</h2>
+                </div>
+            </div>
 
             <div class="row">
-                {% for item in testimonials_model_objs %}
-                <div class="col-md-3 d-flex mx-auto">
-                    <div class="card flex-fill">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ item.name }} {{ item.surname }}</h5>
-                            <p id="date_of_testimonial_text" class="card-text" style="font-size:13px;">{{ item.date_of_testimonial }}</p>
-                            <p class="card-text">{{ item.message }}</p>
+                {% if testimonials_model_objs %}
+                    {% for item in testimonials_model_objs %}
+                    <div class="col-md-3 d-flex mx-auto">
+                        <div class="card flex-fill">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ user }}</h5>
+                                <p id="date_of_testimonial_text" class="card-text" style="font-size:13px;">{{ item.date_of_testimonial }}</p>
+                                <p class="card-text">{{ item.message }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                {% endfor %}
+                    {% endfor %}
+                {% endif %}
             </div>
         </header>
     </div>
