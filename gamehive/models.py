@@ -11,7 +11,6 @@ class PersonalDetails(models.Model):
     surname = models.CharField(max_length=25)
 
 class TestimonialsModel(models.Model):
-    name = models.CharField(max_length=25)
-    surname = models.CharField(max_length=25)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_of_testimonial = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
