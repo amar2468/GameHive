@@ -32,16 +32,23 @@ def testimonials_page(request):
         # cleaned and inserted into the testimonials model which will hold all the testimonials by users
 
         if form.is_valid():
-            testimonials_message = form.cleaned_data['testimonial_message']
+            try:
+                testimonial_form_exists = TestimonialsModel.objects.get(user=request.user)
+            except TestimonialsModel.DoesNotExist:
+                testimonials_message = form.cleaned_data['testimonial_message']
 
-            new_testimonial = TestimonialsModel(
-                user=request.user,
-                message=testimonials_message,
-            )
+                new_testimonial = TestimonialsModel(
+                    user=request.user,
+                    message=testimonials_message,
+                )
 
-            new_testimonial.save()
+                new_testimonial.save()
 
-            return render(request, 'testimonials.html')
+                return render(request, 'testimonials.html')
+            else:
+                messages.error(request, "You have already submitted a testimonial. You are allowed to submit only one.")
+                return render(request, 'testimonials.html', {'form' : form})
+
         else:
             # This will iterate through the errors that have occurred (sent an empty form, etc..)
             # These errors will then be displayed in the testimonials page, so user can fix their errors and submit a valid form.
