@@ -22,8 +22,8 @@
         </div>
     </header>
     {% if user.is_authenticated %}
-        <!-- Games section-->
-        <section class="bg-light py-5 border-bottom">
+        <div class="wrapper bg-light">
+            <!-- Games section-->
             <div class="container px-5 my-5">
                 <div class="text-center mb-5">
                     <h2 class="fw-bolder">Games Available</h2>
@@ -56,12 +56,12 @@
 
                                 <div class="modal" id="rps_single_player_or_multiplayer_toggle" tabindex="-1" role="dialog">
                                     <div class="modal-dialog" role="document">
-                                      <div class="modal-content">
+                                    <div class="modal-content">
                                         <div class="modal-header">
-                                          <h5 class="modal-title">Choose Game Mode</h5>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <h5 class="modal-title">Choose Game Mode</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
-                                          </button>
+                                        </button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="card mx-sm-4 mb-4">
@@ -77,9 +77,9 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         </div>
-                                      </div>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -87,13 +87,13 @@
                     </div>
                 </div>
             </div>
-        </section>
-    {% else %}
-        <section class="bg-light py-5 border-bottom">
-            <div class="container px-5 my-5">
+        </div>
+        {% else %}
+            <div class="wrapper" style="background-color: #FFD700;">
+                <div class="container px-5 my-5">
+                </div>
             </div>
-        </section>
-    {% endif %}
+        {% endif %}
     <script>
         $(document).ready(function() {
             $('#form_rps_single_player_multiplayer').submit(function(e) {
