@@ -326,8 +326,6 @@ class LoginIntegrationTestCase(TestCase):
 class TestimonialsFormTestCase(TestCase):
     def testing_valid_testimonials_form(self):
         data = {
-            'first_name' : 'Amar',
-            'last_name' : 'Plakalo',
             'testimonial_message' : 'Hello there!'
         }
 
@@ -341,42 +339,10 @@ class TestimonialsFormTestCase(TestCase):
         form = TestimonialsForm(data=data)
 
         self.assertFalse(form.is_valid())
-    
-    def testing_empty_first_name_field(self):
-
-        data = {
-            'first_name' : '',
-            'last_name' : 'Plakalo',
-            'testimonial_message' : 'Hello there!'
-        }
-
-        form = TestimonialsForm(data=data)
-
-        self.assertFalse(form.is_valid())
-
-        self.assertIn('first_name', form.errors)
-        self.assertEqual(form.errors['first_name'], ['This field is required.'])
-    
-    def testing_empty_last_name_field(self):
-
-        data = {
-            'first_name' : 'Amar',
-            'last_name' : '',
-            'testimonial_message' : 'Hello there!'
-        }
-
-        form = TestimonialsForm(data=data)
-
-        self.assertFalse(form.is_valid())
-
-        self.assertIn('last_name', form.errors)
-        self.assertEqual(form.errors['last_name'], ['This field is required.'])
 
     def testing_empty_testimonial_message_field(self):
 
         data = {
-            'first_name' : 'Amar',
-            'last_name' : 'Plakalo',
             'testimonial_message' : ''
         }
 
@@ -390,14 +356,18 @@ class TestimonialsFormTestCase(TestCase):
 # Integration test for the "TestimonialsForm" functionality is below
 
 class TestimonialsFormIntegrationTestCase(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='Password34*')
+        self.client = Client()
     
     def test_for_testimonials_form_process(self):
+
+        self.client.login(username='testuser', password='Password34*')
 
         # Data for the testimonial form is below. This will be tested.
 
         data = {
-            'first_name' : 'Amar',
-            'last_name' : 'Plakalo',
             'testimonial_message' : 'Hello there!'
         }
 
