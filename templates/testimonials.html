@@ -29,7 +29,7 @@
                             {% csrf_token %}
                             <!-- Username -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="testimonial_username" name="testimonial_username" value="{{ user }}" type="text" data-sb-validations="required" autocomplete="off" required readonly/>
+                                <input class="form-control" id="testimonial_username" name="testimonial_username" type="text" value="{{ user }}" data-sb-validations="required" autocomplete="off" readonly/>
                                 <label for="testimonial_username">Username</label>
                             </div>
 
@@ -61,7 +61,7 @@
                     <div class="col-md-3 d-flex mx-auto">
                         <div class="card flex-fill">
                             <div class="card-body">
-                                <h5 class="card-title">{{ user }}</h5>
+                                <h5 class="card-title">{{ item.user }}</h5>
                                 <p id="date_of_testimonial_text" class="card-text" style="font-size:13px;">{{ item.date_of_testimonial }}</p>
                                 <p class="card-text">{{ item.message }}</p>
                             </div>
