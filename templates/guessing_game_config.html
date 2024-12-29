@@ -1,137 +1,123 @@
-{% load static %}
+{% extends "base.html" %}
+{% block title %}Config - Guess The Digit{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Config - Guess The Digit</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{% static 'css_stylesheet_folder/styles.css' %}" rel="stylesheet" />
-    </head>
-    <body style="background-color: #E6F7FF;">
-        <div class="wrapper" style="justify-content: center;align-items: center;display: flex;">
-
-            <form id="guessing_game_config_form" action="{% url 'play' %}" method="get">
-                {% csrf_token %}
-                Levels will bring benefits and disadvantages. Beginners may prefer the easy level
-                <div class="dropdown" aria-required="true">
-                      <select class="form-select" name="selected_level" aria-label="Pick the game difficulty" style="font-size: 20px;" required>
-                        <option selected disabled value="">Choose the game difficulty</option>
-                        <option value="easy">Easy</option>
-                        <option value="medium">Medium</option>
-                        <option value="hard">Hard</option>
-                      </select>
-                </div>
-
-                <br>
-
-                If you select "yes", it will enable the hint. If you guess the correct number, you will only get 50% of the points
-                <div class="dropdown" aria-required="true">
-                    <select class="form-select" name="hints" aria-label="Do you want hints during the game?" style="font-size: 20px;" required>
-                      <option selected disabled value="">Do you want hints during the game?</option>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                    </select>
-                </div>
-                
-                <br>
-                
-                <button type="submit" style="font-size: 20px;" class="btn btn-primary btn-lg">Start Game</button>
-            </form>
-
-            <div class="modal" id="config_modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">Guessing Game Rules</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      <p>You have picked the <span id="selected-value"></span> </p>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" id="play_game" class="btn btn-primary">Play Game</button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                  </div>
-                </div>
+<body>
+  {% load static %}
+  {% block content %}
+    <div class="wrapper" style="justify-content: center;align-items: center;display: flex;background-color: #E6F7FF;">
+        <form id="guessing_game_config_form" action="{% url 'play' %}" method="get">
+            {% csrf_token %}
+            Levels will bring benefits and disadvantages. Beginners may prefer the easy level
+            <div class="dropdown" aria-required="true">
+                  <select class="form-select" name="selected_level" aria-label="Pick the game difficulty" style="font-size: 20px;" required>
+                    <option selected disabled value="">Choose the game difficulty</option>
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
             </div>
 
+            <br>
+
+            If you select "yes", it will enable the hint. If you guess the correct number, you will only get 50% of the points
+            <div class="dropdown" aria-required="true">
+                <select class="form-select" name="hints" aria-label="Do you want hints during the game?" style="font-size: 20px;" required>
+                  <option selected disabled value="">Do you want hints during the game?</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+            </div>
+            
+            <br>
+            
+            <button type="submit" style="font-size: 20px;" class="btn btn-primary btn-lg">Start Game</button>
+        </form>
+
+        <div class="modal" id="config_modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Guessing Game Rules</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>You have picked the <span id="selected-value"></span> </p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" id="play_game" class="btn btn-primary">Play Game</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>        
-        <script>
-            $(document).ready(function () {
-                $('#guessing_game_config_form').submit(function(event) {
-                    event.preventDefault();
 
-                    var selected_level = $('select[name="selected_level"]').val();
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>        
+    <script>
+        $(document).ready(function () {
+            $('#guessing_game_config_form').submit(function(event) {
+                event.preventDefault();
 
-                    var hints = $('select[name="hints"]').val();
+                var selected_level = $('select[name="selected_level"]').val();
 
-                    if(selected_level === 'easy')
-                    {
-                      if(hints === 'yes')
-                      {
-                        $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 10. You will have 2 guesses to do so. If you guess correctly, you will receive 5 points.");
-                      }
+                var hints = $('select[name="hints"]').val();
 
-                      else
-                      {
-                        $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 10. You will have 4 guesses to do so. If you guess correctly, you will receive 10 points.");
-                      }
-                      
-                    }
+                if(selected_level === 'easy')
+                {
+                  if(hints === 'yes')
+                  {
+                    $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 10. You will have 2 guesses to do so. If you guess correctly, you will receive 5 points.");
+                  }
 
-                    else if(selected_level === 'medium')
-                    {
-                      if(hints === 'yes')
-                      {
-                        $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 50. You will have 5 guesses to do so. If you guess correctly, you will receive 25 points.");
-                      }
+                  else
+                  {
+                    $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 10. You will have 4 guesses to do so. If you guess correctly, you will receive 10 points.");
+                  }
+                  
+                }
 
-                      else
-                      {
-                        $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 50. You will have 10 guesses to do so. If you guess correctly, you will receive 50 points.");
-                      }
-                    }
+                else if(selected_level === 'medium')
+                {
+                  if(hints === 'yes')
+                  {
+                    $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 50. You will have 5 guesses to do so. If you guess correctly, you will receive 25 points.");
+                  }
 
-                    else if(selected_level === 'hard')
-                    {
-                      if(hints === 'yes')
-                      {
-                        $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 100. You will have 10 guesses to do so. If you guess correctly, you will receive 50 points.");
-                      }
+                  else
+                  {
+                    $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 50. You will have 10 guesses to do so. If you guess correctly, you will receive 50 points.");
+                  }
+                }
 
-                      else
-                      {
-                        $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 100. You will have 20 guesses to do so. If you guess correctly, you will receive 100 points.");
-                      }
-                    }
+                else if(selected_level === 'hard')
+                {
+                  if(hints === 'yes')
+                  {
+                    $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 100. You will have 10 guesses to do so. If you guess correctly, you will receive 50 points.");
+                  }
 
-                    $('#config_modal').modal('show');
-                });
+                  else
+                  {
+                    $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 100. You will have 20 guesses to do so. If you guess correctly, you will receive 100 points.");
+                  }
+                }
 
-                $('#play_game').click(function() {
-                    var form_info = $('#guessing_game_config_form').serialize();
-        
-                    var url = '{% url "play" %}?' + form_info;
-                    
-                    window.location.href = url;
-                });
-            })
-        </script>
-    </body>
-</html>
+                $('#config_modal').modal('show');
+            });
+
+            $('#play_game').click(function() {
+                var form_info = $('#guessing_game_config_form').serialize();
+    
+                var url = '{% url "play" %}?' + form_info;
+                
+                window.location.href = url;
+            });
+        })
+    </script>
+    {% endblock %}
+</body>
