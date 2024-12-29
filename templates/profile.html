@@ -1,236 +1,202 @@
-{% load static %}
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Profile</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{% static 'css_stylesheet_folder/styles.css' %}" rel="stylesheet" />
-    </head>
-    <body style="background-color: #E6F7FF;">
-        <nav class="navbar navbar-expand-lg navbar" style="background-color: #FFD700;">
-            <div class="container px-5">
-                <a class="navbar-brand" href="{% url 'homepage' %}" style="color:black;">GameHive</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'homepage' %}" style="color:black;">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}" style="color:black;">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'testimonials_page' %}" style="color:black;">Testimonials</a></li>
-                        {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'my_profile' %}" style="color:black;">Profile</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" style="color:black;">Logout</a></li>
-                        {% else %}
-                            <li class="nav-item"><a class="nav-link" href="{% url 'sign_up' %}" style="color:black;">Sign Up</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        
-        <div class="wrapper" style="justify-content: center;align-items: center;display: flex;">
+<body>
+    {% load static %}
+    {% block content %}    
+    <div class="wrapper" style="justify-content: center;align-items: center;display: flex;">
 
-            <div class="container-fluid">
-                <div class="row flex-nowrap">
-                    <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-                        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+        <div class="container-fluid">
+            <div class="row flex-nowrap">
+                <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+                    <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
 
-                            <span class="fs-5 mb-3 d-block d-sm-none" style="color:#C0C0C0;">Profile</span>
-                        
-                            <ul class="nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                                <li class="nav-item">
-                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="update_personal_info_link">
-                                        <span class="ms-1">Update Personal Information</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="change_password_link">
-                                        <span class="ms-1">Change Password</span>
-                                    </a>
-                                </li>
-                        
-                                <li class="nav-item">
-                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="leaderboard_link">
-                                        <span class="ms-1">Leaderboard</span>
-                                    </a>
-                                </li>
+                        <span class="fs-5 mb-3 d-block d-sm-none" style="color:#C0C0C0;">Profile</span>
+                    
+                        <ul class="nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="update_personal_info_link">
+                                    <span class="ms-1">Update Personal Information</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="change_password_link">
+                                    <span class="ms-1">Change Password</span>
+                                </a>
+                            </li>
+                    
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="leaderboard_link">
+                                    <span class="ms-1">Leaderboard</span>
+                                </a>
+                            </li>
 
-                                <li class="nav-item">
-                                    <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="redeem_points_link">
-                                        <span class="ms-1">Redeem Points</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="redeem_points_link">
+                                    <span class="ms-1">Redeem Points</span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="col py-3">
-                        <div id="personal_details_div">
-                            <form id="update_details_form" method="post" action="{% url 'update_personal_details' %}">
-                                {% csrf_token %}
-                                <h3 style="text-align:center;">Update Personal Information</h3>
-                                <!-- Change Email address -->
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" id="{{ form.change_email.id_for_label }}" name="change_email" value="{{ user.email }}" type="email" placeholder="name@example.com" data-sb-validations="required,email" autocomplete="off" required />
-                                    <label for="{{ form.change_email.id_for_label }}">Email Address</label>
-                                </div>
-                
-                                <!-- Change/Add First Name -->
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" id="{{ form.change_first_name.id_for_label }}" name="change_first_name" value="{{ user_details.first_name }}" type="text" data-sb-validations="required" autocomplete="off" />
-                                    <label for="{{ form.change_first_name.id_for_label }}">First Name</label>
-                                </div>
-                
-                                <!-- Change/Add Surname -->
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" id="{{ form.change_surname.id_for_label }}" name="change_surname" value="{{ user_details.surname }}" type="text" data-sb-validations="required" autocomplete="off" />
-                                    <label for="{{ form.change_surname.id_for_label }}">Surname</label>
-                                </div>
-                
-                                <div class="d-grid"><button class="btn btn-primary btn-lg" id="update_details_btn" type="submit">Update Personal Details</button></div>
-                                
-                                <br><br>
-                                
-                                <div class="alert alert-success" id="update_details_success" role="alert" style="display:none;"></div>
-                            </form>
-                        </div>
-
-                        <div id="change_password_div" style="display:none;">
-                            <form id="update_password_form" method="post">
-                                {% csrf_token %}
-                                <div class="alert alert-danger" id="form_errors" style="display:none;" role="alert"></div>
-                                <h3 style="text-align:center;">Change Password</h3>
-                                <!-- New Password -->
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" id="{{ form.change_password.id_for_label }}" name="change_password" type="password" placeholder="Enter password..." data-sb-validations="required" required />
-                                    <label for="{{ form.change_password.id_for_label }}">New Password</label>
-                                </div>
-                
-                                <!-- Confirm New Password -->
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" id="{{ form.change_password_confirm.id_for_label }}" name="change_password_confirm" type="password" placeholder="Enter password..." data-sb-validations="required" required />
-                                    <label for="{{ form.change_password_confirm.id_for_label }}">Confirm New Password</label>
-                                </div>
-                
-                                <div class="d-grid"><button class="btn btn-primary btn-lg" id="update_password_btn" type="submit">Update Password</button></div>
-
-                                <br><br>
-
-                                <div class="alert alert-success" id="update_password_success" role="alert" style="display: none;"></div>
-                                <div class="alert alert-danger" id="update_password_fail" role="alert" style="display: none;background-color: red;color:white;"></div>
-
-                            </form>
-                        </div>
-
-                        <div id="leaderboard_div" style="display:none;">
-                            <table class="table table-striped table-dark">
-                                <thead>
-                                    <th colspan="3" style="text-align: center; color: white;">Leaderboard</th>
-                                </thead>
-                                <tbody>
-                                    {% for leaderboard in leaderboard_entries %}
-                                        <tr>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>{{ leaderboard.user.username }}</td>
-                                            <td>{{ leaderboard.current_score }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                        <div id="reedem_points_div" style="text-align: center;display:none;"> 
-                            <h3 style="text-align:center;">GameHive Store</h3>
-                            
-                            <div class="row">
-                                <div class="col-sm-4 mx-auto mb-4">
-                                    <div class="card mx-sm-4 mb-4" style="display: flex;flex-direction: column;align-items: center;text-align: center;">
-                                        <img class="card-img-top" src="{% static 'assets/gamehive-keychain.png' %}" alt="Card image keychain" style="width: 180px;height: 180px;margin: 0 auto;">
-                                        <div class="card-body" style="flex: 1;display: flex;flex-direction: column;justify-content: center;">
-                                            <h5 class="card-title">GameHive Keychain</h5>
-                                            <p class="card-text">High quality keychains</p>
-                                            <form class="buy_item_link" method="post">
-                                                {% csrf_token %}
-                                                <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="1000" style="display:none;"/>
-                                                <button type="submit" class="btn btn-primary">1000 points</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 mx-auto mb-4">
-                                    <div class="card mx-sm-4 mb-4" style="display: flex;flex-direction: column;align-items: center;text-align: center;">
-                                        <img class="card-img-top" src="{% static 'assets/gamehive-mug.png' %}" alt="Card image mug" style="width: 180px;height: 180px;margin: 0 auto;">
-                                        <div class="card-body" style="flex: 1;display: flex;flex-direction: column;justify-content: center;">
-                                            <h5 class="card-title">GameHive Mug</h5>
-                                            <p class="card-text">High quality mugs</p>
-                                            <form class="buy_item_link" method="post">
-                                                {% csrf_token %}
-                                                <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="2000" style="display:none;"/>
-                                                <button type="submit" class="btn btn-primary">2000 points</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+                    
+                </div>
+                <div class="col py-3">
+                    <div id="personal_details_div">
+                        <form id="update_details_form" method="post" action="{% url 'update_personal_details' %}">
+                            {% csrf_token %}
+                            <h3 style="text-align:center;">Update Personal Information</h3>
+                            <!-- Change Email address -->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="{{ form.change_email.id_for_label }}" name="change_email" value="{{ user.email }}" type="email" placeholder="name@example.com" data-sb-validations="required,email" autocomplete="off" required />
+                                <label for="{{ form.change_email.id_for_label }}">Email Address</label>
                             </div>
+            
+                            <!-- Change/Add First Name -->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="{{ form.change_first_name.id_for_label }}" name="change_first_name" value="{{ user_details.first_name }}" type="text" data-sb-validations="required" autocomplete="off" />
+                                <label for="{{ form.change_first_name.id_for_label }}">First Name</label>
+                            </div>
+            
+                            <!-- Change/Add Surname -->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="{{ form.change_surname.id_for_label }}" name="change_surname" value="{{ user_details.surname }}" type="text" data-sb-validations="required" autocomplete="off" />
+                                <label for="{{ form.change_surname.id_for_label }}">Surname</label>
+                            </div>
+            
+                            <div class="d-grid"><button class="btn btn-primary btn-lg" id="update_details_btn" type="submit">Update Personal Details</button></div>
+                            
+                            <br><br>
+                            
+                            <div class="alert alert-success" id="update_details_success" role="alert" style="display:none;"></div>
+                        </form>
+                    </div>
+
+                    <div id="change_password_div" style="display:none;">
+                        <form id="update_password_form" method="post">
+                            {% csrf_token %}
+                            <div class="alert alert-danger" id="form_errors" style="display:none;" role="alert"></div>
+                            <h3 style="text-align:center;">Change Password</h3>
+                            <!-- New Password -->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="{{ form.change_password.id_for_label }}" name="change_password" type="password" placeholder="Enter password..." data-sb-validations="required" required />
+                                <label for="{{ form.change_password.id_for_label }}">New Password</label>
+                            </div>
+            
+                            <!-- Confirm New Password -->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="{{ form.change_password_confirm.id_for_label }}" name="change_password_confirm" type="password" placeholder="Enter password..." data-sb-validations="required" required />
+                                <label for="{{ form.change_password_confirm.id_for_label }}">Confirm New Password</label>
+                            </div>
+            
+                            <div class="d-grid"><button class="btn btn-primary btn-lg" id="update_password_btn" type="submit">Update Password</button></div>
 
                             <br><br>
 
-                            <div class="row">
-                                <div class="col-sm-4 mx-auto mb-4">
-                                    <div class="card mx-sm-4 mb-4" style="display: flex;flex-direction: column;align-items: center;text-align: center;">
-                                        <img class="card-img-top" src="{% static 'assets/gamehive-tshirt.png' %}" alt="Card image t-shirt" style="width: 180px;height: 180px;margin: 0 auto;">
-                                        <div class="card-body" style="flex: 1;display: flex;flex-direction: column;justify-content: center;">
-                                            <h5 class="card-title">GameHive T-Shirt</h5>
-                                            <p class="card-text">High quality t-shirts</p>
-                                            <form class="buy_item_link" method="post">
-                                                {% csrf_token %}
-                                                <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="5000" style="display:none;"/>
-                                                <button type="submit" class="btn btn-primary">5000 points</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 mx-auto mb-4">
-                                    <div class="card mx-sm-4 mb-4">
-                                        <img class="card-img-top" src="{% static 'assets/gamehive-backpack.png' %}" alt="Card image backpack" style="width: 180px;height: 180px;margin: 0 auto;">
-                                        <div class="card-body">
-                                            <h5 class="card-title">GameHive Backpack</h5>
-                                            <p class="card-text">High quality backpacks</p>
-                                            <form class="buy_item_link" method="post">
-                                                {% csrf_token %}
-                                                <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="10000" style="display:none;"/>
-                                                <button type="submit" class="btn btn-primary">10000 points</button>
-                                            </form>
-                                        </div>
+                            <div class="alert alert-success" id="update_password_success" role="alert" style="display: none;"></div>
+                            <div class="alert alert-danger" id="update_password_fail" role="alert" style="display: none;background-color: red;color:white;"></div>
+
+                        </form>
+                    </div>
+
+                    <div id="leaderboard_div" style="display:none;">
+                        <table class="table table-striped table-dark">
+                            <thead>
+                                <th colspan="3" style="text-align: center; color: white;">Leaderboard</th>
+                            </thead>
+                            <tbody>
+                                {% for leaderboard in leaderboard_entries %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ leaderboard.user.username }}</td>
+                                        <td>{{ leaderboard.current_score }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="reedem_points_div" style="text-align: center;display:none;"> 
+                        <h3 style="text-align:center;">GameHive Store</h3>
+                        
+                        <div class="row">
+                            <div class="col-sm-4 mx-auto mb-4">
+                                <div class="card mx-sm-4 mb-4" style="display: flex;flex-direction: column;align-items: center;text-align: center;">
+                                    <img class="card-img-top" src="{% static 'assets/gamehive-keychain.png' %}" alt="Card image keychain" style="width: 180px;height: 180px;margin: 0 auto;">
+                                    <div class="card-body" style="flex: 1;display: flex;flex-direction: column;justify-content: center;">
+                                        <h5 class="card-title">GameHive Keychain</h5>
+                                        <p class="card-text">High quality keychains</p>
+                                        <form class="buy_item_link" method="post">
+                                            {% csrf_token %}
+                                            <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="1000" style="display:none;"/>
+                                            <button type="submit" class="btn btn-primary">1000 points</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-sm-4 mx-auto mb-4">
+                                <div class="card mx-sm-4 mb-4" style="display: flex;flex-direction: column;align-items: center;text-align: center;">
+                                    <img class="card-img-top" src="{% static 'assets/gamehive-mug.png' %}" alt="Card image mug" style="width: 180px;height: 180px;margin: 0 auto;">
+                                    <div class="card-body" style="flex: 1;display: flex;flex-direction: column;justify-content: center;">
+                                        <h5 class="card-title">GameHive Mug</h5>
+                                        <p class="card-text">High quality mugs</p>
+                                        <form class="buy_item_link" method="post">
+                                            {% csrf_token %}
+                                            <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="2000" style="display:none;"/>
+                                            <button type="submit" class="btn btn-primary">2000 points</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                            <div class="modal" id="redeem_points_modal" tabindex="-1" role="dialog">
-                                <div class="modal-dialog" role="document">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title">Redeem Points</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
+                        <br><br>
+
+                        <div class="row">
+                            <div class="col-sm-4 mx-auto mb-4">
+                                <div class="card mx-sm-4 mb-4" style="display: flex;flex-direction: column;align-items: center;text-align: center;">
+                                    <img class="card-img-top" src="{% static 'assets/gamehive-tshirt.png' %}" alt="Card image t-shirt" style="width: 180px;height: 180px;margin: 0 auto;">
+                                    <div class="card-body" style="flex: 1;display: flex;flex-direction: column;justify-content: center;">
+                                        <h5 class="card-title">GameHive T-Shirt</h5>
+                                        <p class="card-text">High quality t-shirts</p>
+                                        <form class="buy_item_link" method="post">
+                                            {% csrf_token %}
+                                            <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="5000" style="display:none;"/>
+                                            <button type="submit" class="btn btn-primary">5000 points</button>
+                                        </form>
                                     </div>
-                                    <div class="modal-body">
-                                      <p><span id="selected-value"></span></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mx-auto mb-4">
+                                <div class="card mx-sm-4 mb-4">
+                                    <img class="card-img-top" src="{% static 'assets/gamehive-backpack.png' %}" alt="Card image backpack" style="width: 180px;height: 180px;margin: 0 auto;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">GameHive Backpack</h5>
+                                        <p class="card-text">High quality backpacks</p>
+                                        <form class="buy_item_link" method="post">
+                                            {% csrf_token %}
+                                            <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="10000" style="display:none;"/>
+                                            <button type="submit" class="btn btn-primary">10000 points</button>
+                                        </form>
                                     </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    </div>
-                                  </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal" id="redeem_points_modal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Redeem Points</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><span id="selected-value"></span></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -238,133 +204,134 @@
                 </div>
             </div>
         </div>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
-        <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-        <script>
-            $(document).ready(function() {
-                $('#update_personal_info_link').click(function() {
-                    $('#personal_details_div').show();
-                    $('#change_password_div').hide();
-                    $('#leaderboard_div').hide();
-                    $('#reedem_points_div').hide();
-                });
+    <script>
+        $(document).ready(function() {
+            $('#update_personal_info_link').click(function() {
+                $('#personal_details_div').show();
+                $('#change_password_div').hide();
+                $('#leaderboard_div').hide();
+                $('#reedem_points_div').hide();
+            });
 
-                $('#change_password_link').click(function(){
-                    $('#personal_details_div').hide();
-                    $('#leaderboard_div').hide();
-                    $('#reedem_points_div').hide();
-                    $('#change_password_div').show();
-                });
+            $('#change_password_link').click(function(){
+                $('#personal_details_div').hide();
+                $('#leaderboard_div').hide();
+                $('#reedem_points_div').hide();
+                $('#change_password_div').show();
+            });
 
-                $('#leaderboard_link').click(function(){
-                    $('#personal_details_div').hide();
-                    $('#change_password_div').hide();
-                    $('#reedem_points_div').hide();
-                    $('#leaderboard_div').show();
+            $('#leaderboard_link').click(function(){
+                $('#personal_details_div').hide();
+                $('#change_password_div').hide();
+                $('#reedem_points_div').hide();
+                $('#leaderboard_div').show();
 
-                });
+            });
 
-                $('#redeem_points_link').click(function(){
-                    $('#personal_details_div').hide();
-                    $('#change_password_div').hide();
-                    $('#leaderboard_div').hide();
-                    $('#reedem_points_div').show();
+            $('#redeem_points_link').click(function(){
+                $('#personal_details_div').hide();
+                $('#change_password_div').hide();
+                $('#leaderboard_div').hide();
+                $('#reedem_points_div').show();
 
-                });
+            });
 
-                $('#update_password_form').submit(function(e) {
-                    e.preventDefault();
+            $('#update_password_form').submit(function(e) {
+                e.preventDefault();
 
-                    form_data = $('#update_password_form').serialize();
+                form_data = $('#update_password_form').serialize();
 
-                    $.ajax({
-                        type: 'POST',
-                        url: "{% url 'change_password' %}",
-                        data: form_data,
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'change_password' %}",
+                    data: form_data,
 
-                        success: function(response) {
+                    success: function(response) {
 
-                            if (response.passwords_match == true)
+                        if (response.passwords_match == true)
+                        {
+                            $('#update_password_fail').hide();
+                            $('#update_password_success').text("Password has been updated successfully!");
+                            $('#update_password_success').show();
+                        }
+                        else if (response.passwords_match == false)
+                        {   
+                            $('#update_password_success').hide();
+                            $('#update_password_fail').text("Passwords don't match. Try again.");
+                            $('#update_password_fail').show();
+                        }
+
+                        else
+                        {
+                            $('#form_errors').text("");
+
+                            for(var error in response.error_messages)
                             {
-                                $('#update_password_fail').hide();
-                                $('#update_password_success').text("Password has been updated successfully!");
-                                $('#update_password_success').show();
-                            }
-                            else if (response.passwords_match == false)
-                            {   
-                                $('#update_password_success').hide();
-                                $('#update_password_fail').text("Passwords don't match. Try again.");
-                                $('#update_password_fail').show();
+                                $('#form_errors').append(response.error_messages[error] + "<br>");
                             }
 
-                            else
-                            {
-                                $('#form_errors').text("");
-
-                                for(var error in response.error_messages)
-                                {
-                                    $('#form_errors').append(response.error_messages[error] + "<br>");
-                                }
-
-                                $('#form_errors').show();
-                            }
-                        },
-
-                        error: function(error) {
-                            console.error(error);
+                            $('#form_errors').show();
                         }
-                    });
-                });
+                    },
 
-                $('#update_details_form').submit(function(e) {
-                    e.preventDefault();
-
-                    form_data = $('#update_details_form').serialize();
-                    
-                    $.ajax({
-                        type: 'POST',
-                        url: "{% url 'update_personal_details' %}",
-                        data: form_data,
-
-                        success: function(response) {
-                            $('#update_details_success').text(response.success);
-                            $('#update_details_success').show();
-                        },
-
-                        error: function(error) {
-                            console.error(error);
-                        }
-                    });
-
-                });
-
-                $('.buy_item_link').submit(function(e) {
-                    e.preventDefault();
-
-                    form_data = $(this).serialize();
-
-                    $.ajax({
-                        type: 'POST',
-                        url: "{% url 'redeeming_points' %}",
-                        data: form_data,
-
-                        success: function(response) {
-                            $('#selected-value').text(response.outcome_from_attempted_purchase);
-                            $('#redeem_points_modal').modal('show');
-                        },
-
-                        error: function(error) {
-                            console.log(error);
-                        }
-                    })
+                    error: function(error) {
+                        console.error(error);
+                    }
                 });
             });
-        </script>
-    </body>
-</html>
+
+            $('#update_details_form').submit(function(e) {
+                e.preventDefault();
+
+                form_data = $('#update_details_form').serialize();
+                
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'update_personal_details' %}",
+                    data: form_data,
+
+                    success: function(response) {
+                        $('#update_details_success').text(response.success);
+                        $('#update_details_success').show();
+                    },
+
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+
+            });
+
+            $('.buy_item_link').submit(function(e) {
+                e.preventDefault();
+
+                form_data = $(this).serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'redeeming_points' %}",
+                    data: form_data,
+
+                    success: function(response) {
+                        $('#selected-value').text(response.outcome_from_attempted_purchase);
+                        $('#redeem_points_modal').modal('show');
+                    },
+
+                    error: function(error) {
+                        console.log(error);
+                    }
+                })
+            });
+        });
+    </script>
+    {% endblock %}
+</body>
