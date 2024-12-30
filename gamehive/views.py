@@ -171,7 +171,10 @@ def redeeming_points(request):
         if form.is_valid():
             price_for_item_in_points = form.cleaned_data['price_for_item_in_points']
 
-            game_user_profile = GameUserProfile.objects.get(user=request.user)
+            try:
+                game_user_profile = GameUserProfile.objects.get(user=request.user)
+            except GameUserProfile.DoesNotExist:
+                game_user_profile = GameUserProfile(user=request.user)
 
             if price_for_item_in_points <= game_user_profile.current_score:
                 game_user_profile.current_score -= price_for_item_in_points
