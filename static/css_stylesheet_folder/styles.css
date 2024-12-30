@@ -98,6 +98,27 @@ body {
   font-size:13px;
 }
 
+table {
+  border-collapse: collapse;
+  border: 1px solid black !important;
+}
+
+table td {
+  border: 1px solid black;
+}
+
+#table_heading_leaderboard {
+  background-color: #00FFFF;
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: #F0F0F0;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #E6FFFB;
+}
+
 .wrapper {
   min-height: 95vh;
   display: flex;
