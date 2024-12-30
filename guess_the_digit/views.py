@@ -31,12 +31,20 @@ def guess_the_digit_game(request):
                 if level == "easy":
                     # No hints were enabled, so user gets the full score
                     if specific_hint == "":
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
+                        try:
+                            game_user_profile = GameUserProfile.objects.get(user=request.user)
+                        except GameUserProfile.DoesNotExist:
+                            game_user_profile = GameUserProfile(user=request.user)
+                        
                         game_user_profile.current_score += 10
                         game_user_profile.save()
                     # Hints were enabled, half the score, regardless of level
                     else:
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
+                        try:
+                            game_user_profile = GameUserProfile.objects.get(user=request.user)
+                        except GameUserProfile.DoesNotExist:
+                            game_user_profile = GameUserProfile(user=request.user)
+                        
                         game_user_profile.current_score += 5
                         game_user_profile.save()
 
@@ -44,26 +52,42 @@ def guess_the_digit_game(request):
 
                     # No hints were enabled, so user gets the full score
                     if specific_hint == "":
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
+                        try:
+                            game_user_profile = GameUserProfile.objects.get(user=request.user)
+                        except GameUserProfile.DoesNotExist:
+                            game_user_profile = GameUserProfile(user=request.user)
+
                         game_user_profile.current_score += 50      
-                        game_user_profile.save()        
+                        game_user_profile.save()   
 
                     # Hints were enabled, half the score, regardless of level
                     else:
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
+                        try:
+                            game_user_profile = GameUserProfile.objects.get(user=request.user)
+                        except GameUserProfile.DoesNotExist:
+                            game_user_profile = GameUserProfile(user=request.user)
+                        
                         game_user_profile.current_score += 25
                         game_user_profile.save()
 
                 elif level == "hard":
                     # No hints were enabled, so user gets the full score
                     if specific_hint == "":
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
+                        try:
+                            game_user_profile = GameUserProfile.objects.get(user=request.user)
+                        except GameUserProfile.DoesNotExist:
+                            game_user_profile = GameUserProfile(user=request.user)
+
                         game_user_profile.current_score += 100
                         game_user_profile.save()
 
                     # Hints were enabled, half the score, regardless of level
                     else:
-                        game_user_profile = GameUserProfile.objects.get(user=request.user)
+                        try:
+                            game_user_profile = GameUserProfile.objects.get(user=request.user)
+                        except GameUserProfile.DoesNotExist:
+                            game_user_profile = GameUserProfile(user=request.user)
+                        
                         game_user_profile.current_score += 75
                         game_user_profile.save()
 
