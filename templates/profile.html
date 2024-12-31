@@ -117,6 +117,12 @@
                     
                     <div id="reedem_points_div" style="text-align: center;display:none;"> 
                         <h3 style="text-align:center;">GameHive Store</h3>
+
+                        {% for leaderboard in leaderboard_entries %}
+                            {% if leaderboard.user.username == user_details.user|stringformat:"s" %}
+                                <h5 style="text-align: center;">Points: {{ leaderboard.current_score }}</h5>
+                            {% endif %}
+                        {% endfor %}
                         
                         <div class="row">
                             <div class="col-sm-4 mx-auto mb-4">
@@ -187,7 +193,7 @@
                                 <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Redeem Points</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -195,7 +201,7 @@
                                     <p><span id="selected-value"></span></p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 </div>
                                 </div>
                             </div>
