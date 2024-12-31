@@ -4,13 +4,13 @@
     {% load static %}
     {% block content %}
     <!-- Header-->
-    <header class="py-5" style="background-color: #FFD700;">
-        <div class="container px-5" style="background-color: #FFD700;">
+    <header class="py-5" style="background-color: #EDEDED;">
+        <div class="container px-5" style="background-color: #EDEDED;">
             <div class="row gx-5 justify-content-center">
                 <div class="col-lg-6">
                     <div class="text-center my-5">
                         <h1 class="display-5 fw-bolder text-black mb-2">Unlock Fun, One Game at a Time</h1>
-                        <p class="lead text-black-50 mb-4">Exciting games that will make you feel happy!</p>
+                        <p class="lead text-black mb-4">Exciting games that will make you feel happy!</p>
                         {% if not user.is_authenticated %}
                             <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
                                 <a class="btn btn-primary btn-lg px-4 me-sm-3" href="{% url 'sign_up' %}">Get Started</a>
@@ -26,8 +26,8 @@
             <!-- Games section-->
             <div class="container px-5 my-5">
                 <div class="text-center mb-5">
-                    <h2 class="fw-bolder">Games Available</h2>
-                    <p class="lead mb-0">Play any of the games below - for free!</p>
+                    <h2 class="fw-bolder text-black">Games Available</h2>
+                    <p class="lead text-black mb-0">Play any of the games below - for free!</p>
                 </div>
                 <div class="row gx-5 justify-content-center">
                     <!-- Guess the Digit Game-->
@@ -35,7 +35,7 @@
                         <div class="card mb-5 mb-xl-0">
                             <div class="card-body p-5">
                                 <div class="mb-3">
-                                    <span class="display-6 fw-bold">Guess the Digit</span>
+                                    <span class="display-6 fw-bold text-black">Guess the Digit</span>
                                 </div>
                                 <div class="d-grid"><a class="btn btn-outline-primary" href="{% url 'config' %}">Play</a></div>
                             </div>
@@ -46,7 +46,7 @@
                         <div class="card mb-5 mb-xl-0">
                             <div class="card-body p-5">
                                 <div class="mb-3">
-                                    <span class="display-6 fw-bold">Rock, Paper, Scissors</span>
+                                    <span class="display-6 fw-bold text-black">Rock, Paper, Scissors</span>
                                 </div>
                                 <form id="form_rps_single_player_multiplayer" method="post">
                                     {% csrf_token %}
@@ -89,7 +89,7 @@
             </div>
         </div>
         {% else %}
-            <div class="wrapper" style="background-color: #FFD700;">
+            <div class="wrapper" style="background-color: #EDEDED;">
                 <div class="container px-5 my-5">
                 </div>
             </div>
