@@ -6,7 +6,7 @@
     {% block content %}
     <div class="wrapper" style="justify-content: center;align-items: center;display: flex;background-color: #E6F7FF;">
 
-        <p style="font-size:22px;">Welcome to room {{ room_id }}. Select rock, paper, or scissors!</p>
+        <p class="text-black" style="font-size:22px;">Welcome to room {{ room_id }}. Select rock, paper, or scissors!</p>
         <input id="room_id_input" type="number" value="{{ room_id }}" style="display:none;" />
         <input id="username" type="text" value="{{ request.user }}" style="display:none;" />
         <br><br>
@@ -69,13 +69,13 @@
 
             <br><br>
 
-            <div class="alert alert-primary" id="multiplayer_rps_outcome_div" role="alert" style="display:none;">
+            <div class="alert alert-primary text-black" id="multiplayer_rps_outcome_div" role="alert" style="display:none;">
                 <p id="multiplayer_rps_outcome" style="text-align:center;"></p>
             </div>
 
             <br><br>
 
-            <div class="alert alert-warning" id="multiplayer_attempts_div" role="alert" style="display:none;">
+            <div class="alert alert-warning text-black" id="multiplayer_attempts_div" role="alert" style="display:none;">
                 <p id="multiplayer_attempts" style="text-align:center;"></p>
             </div>
 
@@ -89,7 +89,7 @@
         <br><br>
 
         <div class="spinner-border" id="multiplayer_loading_rps" role="status" style="display:none;">
-            <span class="sr-only"></span>
+            <span class="visually-hidden"></span>
         </div>
     </div>
 

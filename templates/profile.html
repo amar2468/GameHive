@@ -44,7 +44,7 @@
                     <div id="personal_details_div">
                         <form id="update_details_form" method="post" action="{% url 'update_personal_details' %}">
                             {% csrf_token %}
-                            <h3 style="text-align:center;">Update Personal Information</h3>
+                            <h3 class="text-black" style="text-align:center;">Update Personal Information</h3>
                             <!-- Change Email address -->
                             <div class="form-floating mb-3">
                                 <input class="form-control" id="{{ form.change_email.id_for_label }}" name="change_email" value="{{ user.email }}" type="email" placeholder="name@example.com" data-sb-validations="required,email" autocomplete="off" required />
@@ -75,7 +75,7 @@
                         <form id="update_password_form" method="post">
                             {% csrf_token %}
                             <div class="alert alert-danger" id="form_errors" style="display:none;" role="alert"></div>
-                            <h3 style="text-align:center;">Change Password</h3>
+                            <h3 class="text-black" style="text-align:center;">Change Password</h3>
                             <!-- New Password -->
                             <div class="form-floating mb-3">
                                 <input class="form-control" id="{{ form.change_password.id_for_label }}" name="change_password" type="password" placeholder="Enter password..." data-sb-validations="required" required />
@@ -101,14 +101,14 @@
                     <div id="leaderboard_div" style="display:none;">
                         <table class="table table-bordered;">
                             <thead id="table_heading_leaderboard">
-                                <th colspan="3" style="text-align: center;color:#00001A;">Leaderboard</th>
+                                <th colspan="3" class="text-black" style="text-align: center;">Leaderboard</th>
                             </thead>
                             <tbody>
                                 {% for leaderboard in leaderboard_entries %}
                                     <tr>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ leaderboard.user.username }}</td>
-                                        <td>{{ leaderboard.current_score }}</td>
+                                        <td class="text-black">{{ forloop.counter }}</td>
+                                        <td class="text-black">{{ leaderboard.user.username }}</td>
+                                        <td class="text-black">{{ leaderboard.current_score }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -116,11 +116,11 @@
                     </div>
                     
                     <div id="reedem_points_div" style="text-align: center;display:none;"> 
-                        <h3 style="text-align:center;">GameHive Store</h3>
+                        <h3 class="text-black" style="text-align:center;">GameHive Store</h3>
 
                         {% for leaderboard in leaderboard_entries %}
                             {% if leaderboard.user.username == user_details.user|stringformat:"s" %}
-                                <h5 style="text-align: center;">Points: {{ leaderboard.current_score }}</h5>
+                                <h5 class="text-black" style="text-align: center;">Points: {{ leaderboard.current_score }}</h5>
                             {% endif %}
                         {% endfor %}
                         
@@ -129,8 +129,8 @@
                                 <div class="card mx-sm-4 mb-4" style="display: flex;flex-direction: column;align-items: center;text-align: center;">
                                     <img class="card-img-top" src="{% static 'assets/gamehive-keychain.png' %}" alt="Card image keychain" style="width: 180px;height: 180px;margin: 0 auto;">
                                     <div class="card-body" style="flex: 1;display: flex;flex-direction: column;justify-content: center;">
-                                        <h5 class="card-title">GameHive Keychain</h5>
-                                        <p class="card-text">High quality keychains</p>
+                                        <h5 class="card-title text-black">GameHive Keychain</h5>
+                                        <p class="card-text text-black">High quality keychains</p>
                                         <form class="buy_item_link" method="post">
                                             {% csrf_token %}
                                             <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="1000" style="display:none;"/>
@@ -143,8 +143,8 @@
                                 <div class="card mx-sm-4 mb-4" style="display: flex;flex-direction: column;align-items: center;text-align: center;">
                                     <img class="card-img-top" src="{% static 'assets/gamehive-mug.png' %}" alt="Card image mug" style="width: 180px;height: 180px;margin: 0 auto;">
                                     <div class="card-body" style="flex: 1;display: flex;flex-direction: column;justify-content: center;">
-                                        <h5 class="card-title">GameHive Mug</h5>
-                                        <p class="card-text">High quality mugs</p>
+                                        <h5 class="card-title text-black">GameHive Mug</h5>
+                                        <p class="card-text text-black">High quality mugs</p>
                                         <form class="buy_item_link" method="post">
                                             {% csrf_token %}
                                             <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="2000" style="display:none;"/>
@@ -162,8 +162,8 @@
                                 <div class="card mx-sm-4 mb-4" style="display: flex;flex-direction: column;align-items: center;text-align: center;">
                                     <img class="card-img-top" src="{% static 'assets/gamehive-tshirt.png' %}" alt="Card image t-shirt" style="width: 180px;height: 180px;margin: 0 auto;">
                                     <div class="card-body" style="flex: 1;display: flex;flex-direction: column;justify-content: center;">
-                                        <h5 class="card-title">GameHive T-Shirt</h5>
-                                        <p class="card-text">High quality t-shirts</p>
+                                        <h5 class="card-title text-black">GameHive T-Shirt</h5>
+                                        <p class="card-text text-black">High quality t-shirts</p>
                                         <form class="buy_item_link" method="post">
                                             {% csrf_token %}
                                             <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="5000" style="display:none;"/>
@@ -176,8 +176,8 @@
                                 <div class="card mx-sm-4 mb-4">
                                     <img class="card-img-top" src="{% static 'assets/gamehive-backpack.png' %}" alt="Card image backpack" style="width: 180px;height: 180px;margin: 0 auto;">
                                     <div class="card-body">
-                                        <h5 class="card-title">GameHive Backpack</h5>
-                                        <p class="card-text">High quality backpacks</p>
+                                        <h5 class="card-title text-black">GameHive Backpack</h5>
+                                        <p class="card-text text-black">High quality backpacks</p>
                                         <form class="buy_item_link" method="post">
                                             {% csrf_token %}
                                             <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="10000" style="display:none;"/>
@@ -192,13 +192,13 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Redeem Points</h5>
+                                    <h5 class="modal-title text-black">Redeem Points</h5>
                                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <p><span id="selected-value"></span></p>
+                                    <p><span id="selected-value" class="text-black"></span></p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

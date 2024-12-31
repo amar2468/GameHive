@@ -3,14 +3,14 @@
 <body>
     {% load static %}
     {% block content %}
-    <div class="wrapper bg-light">
+    <div class="wrapper" style="background-color: #E6F7FF;">
         <!-- Header-->
         <header class="bg-light py-5">
             {% if user.is_authenticated %}
             <div class="container px-5 my-5 px-5">
                 <div class="text-center mb-5">
-                    <h2 class="fw-bolder">Tell us your thoughts</h2>
-                    <p class="lead mb-0">Leave your review using this form below...</p>
+                    <h2 class="fw-bolder text-black">Tell us your thoughts</h2>
+                    <p class="lead text-black mb-0">Leave your review using this form below...</p>
                 </div>
                 <div class="row gx-5 justify-content-center">
                     <div class="col-lg-6">
@@ -51,7 +51,7 @@
 
             <div class="container px-5 my-5 px-5">
                 <div class="text-center mb-5">
-                    <h2 class="fw-bolder">Here are some testimonials from our users...</h2>
+                    <h2 class="fw-bolder text-black">Here are some testimonials from our users...</h2>
                 </div>
             </div>
 
@@ -61,9 +61,9 @@
                     <div class="col-md-3 d-flex mx-auto">
                         <div class="card flex-fill">
                             <div class="card-body">
-                                <h5 class="card-title">{{ item.user }}</h5>
-                                <p id="date_of_testimonial_text" class="card-text">{{ item.date_of_testimonial }}</p>
-                                <p class="card-text">{{ item.message }}</p>
+                                <h5 class="card-title text-black">{{ item.user }}</h5>
+                                <p id="date_of_testimonial_text" class="card-text text-black">{{ item.date_of_testimonial }}</p>
+                                <p class="card-text text-black">{{ item.message }}</p>
                             </div>
                         </div>
                     </div>

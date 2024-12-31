@@ -6,7 +6,7 @@
     {% block content %}
     <div class="wrapper" style="justify-content: center;align-items: center;display: flex;background-color: #E6F7FF;">
 
-        <p style="font-size:22px;">Select rock, paper, or scissors!</p>
+        <p class="text-black" style="font-size:22px;">Select rock, paper, or scissors!</p>
         <br><br>
 
         <form id="rps_form" method="POST" action="{% url 'rock_paper_scissors:rps_form_submitted' %}">
@@ -67,13 +67,13 @@
 
             <br><br>
 
-            <div class="alert alert-primary" id="rps_outcome_div" role="alert" style="display:none;">
+            <div class="alert alert-primary text-black" id="rps_outcome_div" role="alert" style="display:none;">
                 <p id="rps_outcome" style="text-align:center;"></p>
             </div>
 
             <br><br>
 
-            <div class="alert alert-warning" id="attempts_div" role="alert" style="display:none;">
+            <div class="alert alert-warning text-black" id="attempts_div" role="alert" style="display:none;">
                 <p id="attempts" style="text-align:center;"></p>
             </div>
 
@@ -87,7 +87,7 @@
         <br><br>
 
         <div class="spinner-border" id="loading_rps" role="status" style="display:none;">
-            <span class="sr-only">Loading...</span>
+            <span class="visually-hidden">Loading...</span>
         </div>
     </div>
 

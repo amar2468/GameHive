@@ -5,11 +5,11 @@
   {% load static %}
   {% block content %}
     <div class="wrapper" style="justify-content: center;align-items: center;display: flex;background-color: #E6F7FF;">
-        <form id="guessing_game_config_form" action="{% url 'play' %}" method="get">
+        <form class="text-black" id="guessing_game_config_form" action="{% url 'play' %}" method="get">
             {% csrf_token %}
             Levels will bring benefits and disadvantages. Beginners may prefer the easy level
             <div class="dropdown" aria-required="true">
-                  <select class="form-select" name="selected_level" aria-label="Pick the game difficulty" style="font-size: 20px;" required>
+                  <select class="form-select text-black" name="selected_level" aria-label="Pick the game difficulty" style="font-size: 20px;" required>
                     <option selected disabled value="">Choose the game difficulty</option>
                     <option value="easy">Easy</option>
                     <option value="medium">Medium</option>
@@ -21,7 +21,7 @@
 
             If you select "yes", it will enable the hint. If you guess the correct number, you will only get 50% of the points
             <div class="dropdown" aria-required="true">
-                <select class="form-select" name="hints" aria-label="Do you want hints during the game?" style="font-size: 20px;" required>
+                <select class="form-select text-black" name="hints" aria-label="Do you want hints during the game?" style="font-size: 20px;" required>
                   <option selected disabled value="">Do you want hints during the game?</option>
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
@@ -33,7 +33,7 @@
             <button type="submit" style="font-size: 20px;" class="btn btn-primary btn-lg">Start Game</button>
         </form>
 
-        <div class="modal" id="config_modal" tabindex="-1" role="dialog">
+        <div class="modal text-black" id="config_modal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
