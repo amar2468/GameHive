@@ -84,115 +84,124 @@ def my_profile(request):
 # have a one-to-one relationship with the built-in User model. It updates the personal information of the user.
 
 def update_personal_details(request):
-    if request.method == "POST":
+    if request.user.is_authenticated:
+        if request.method == "POST":
 
-        form = UpdatePersonalDetails(request.POST)
+            form = UpdatePersonalDetails(request.POST)
 
-        change_email = request.POST.get('change_email')
+            change_email = request.POST.get('change_email')
 
-        if form.is_valid():
-            change_first_name = form.cleaned_data['change_first_name']
-            change_surname = form.cleaned_data['change_surname']
+            if form.is_valid():
+                change_first_name = form.cleaned_data['change_first_name']
+                change_surname = form.cleaned_data['change_surname']
 
-        try:
-            user_details = PersonalDetails.objects.get(user=request.user)
-        except PersonalDetails.DoesNotExist:
-            user_details = PersonalDetails(user=request.user, first_name = change_first_name, surname = change_surname)
+            try:
+                user_details = PersonalDetails.objects.get(user=request.user)
+            except PersonalDetails.DoesNotExist:
+                user_details = PersonalDetails(user=request.user, first_name = change_first_name, surname = change_surname)
+                user_details.save()
+
+            user_details.first_name = change_first_name
+
+            user_details.surname = change_surname
+
+            user_details.user.email = change_email
+
             user_details.save()
 
-        user_details.first_name = change_first_name
+            user_details.user.save()
+                
+            response_info_update_personal_details = {
+                'success' : "Personal details updated successfully."
+            }
 
-        user_details.surname = change_surname
-
-        user_details.user.email = change_email
-
-        user_details.save()
-
-        user_details.user.save()
-            
-        response_info_update_personal_details = {
-            'success' : "Personal details updated successfully."
-        }
-
-        return JsonResponse(response_info_update_personal_details)
+            return JsonResponse(response_info_update_personal_details)
+        else:
+            return render(request, 'profile.html')
     else:
-        return render(request, 'profile.html')
+        return render(request, '403.html')
 
 # This view will update the passsword of the user. The password will be validated, to see if it matches the requirements for a password
 # If it does, a value of True will be returned back to jQuery. Otherwise, false will be returned and the user will be told what they
 # need to improve for the password to be considered "strong"
 
 def change_password(request):
-    if request.method == "POST":
-        form = ChangePasswordForm(request.POST)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = ChangePasswordForm(request.POST)
 
-        if form.is_valid():
-            change_password = form.cleaned_data['change_password']
-            change_password_confirm = form.cleaned_data['change_password_confirm']
+            if form.is_valid():
+                change_password = form.cleaned_data['change_password']
+                change_password_confirm = form.cleaned_data['change_password_confirm']
 
-            if change_password != change_password_confirm:
-                response_info_for_password = {
-                    'passwords_match' : False
-                }
-
-            else:
-                try:
-                    password_validation.validate_password(change_password)
-                except ValidationError as e:
-                    
+                if change_password != change_password_confirm:
                     response_info_for_password = {
-                        'error_messages' : e.messages
+                        'passwords_match' : False
                     }
 
-                    return JsonResponse(response_info_for_password)
                 else:
+                    try:
+                        password_validation.validate_password(change_password)
+                    except ValidationError as e:
+                        
+                        response_info_for_password = {
+                            'error_messages' : e.messages
+                        }
 
-                    user = User.objects.get(username=request.user)
+                        return JsonResponse(response_info_for_password)
+                    else:
 
-                    user.set_password(change_password)
+                        user = User.objects.get(username=request.user)
 
-                    user.save()
+                        user.set_password(change_password)
 
-                    response_info_for_password = {
-                        'passwords_match' : True
-                    }
+                        user.save()
 
-            return JsonResponse(response_info_for_password)
-            
-    return render(request, 'profile.html')
+                        response_info_for_password = {
+                            'passwords_match' : True
+                        }
+
+                return JsonResponse(response_info_for_password)
+                
+        return render(request, 'profile.html')
+    else:
+        return render(request, '403.html')
 
 # View that deals with redeeming points. When a user redeems a certain number of points, they will be able to buy useful things using
 # those points. 
 
 def redeeming_points(request):
-    if request.method == "POST":
-        form = BuyItemForm(request.POST)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = BuyItemForm(request.POST)
 
-        if form.is_valid():
-            price_for_item_in_points = form.cleaned_data['price_for_item_in_points']
+            if form.is_valid():
+                price_for_item_in_points = form.cleaned_data['price_for_item_in_points']
 
-            try:
-                game_user_profile = GameUserProfile.objects.get(user=request.user)
-            except GameUserProfile.DoesNotExist:
-                game_user_profile = GameUserProfile(user=request.user)
+                try:
+                    game_user_profile = GameUserProfile.objects.get(user=request.user)
+                except GameUserProfile.DoesNotExist:
+                    game_user_profile = GameUserProfile(user=request.user)
 
-            if price_for_item_in_points <= game_user_profile.current_score:
-                game_user_profile.current_score -= price_for_item_in_points
-                game_user_profile.save()
+                if price_for_item_in_points <= game_user_profile.current_score:
+                    game_user_profile.current_score -= price_for_item_in_points
+                    game_user_profile.save()
+
+                    response_info_redeeming_points = {
+                        'outcome_from_attempted_purchase' : "Purchase completed successfully!"
+                    }
+
+                    return JsonResponse(response_info_redeeming_points)
 
                 response_info_redeeming_points = {
-                    'outcome_from_attempted_purchase' : "Purchase completed successfully!"
+                    'outcome_from_attempted_purchase' : "Not enough points to complete the purchase!"
                 }
 
                 return JsonResponse(response_info_redeeming_points)
-
-            response_info_redeeming_points = {
-                'outcome_from_attempted_purchase' : "Not enough points to complete the purchase!"
-            }
-
-            return JsonResponse(response_info_redeeming_points)
+        else:
+            return render(request, 'profile.html')
     else:
-        return render(request, 'profile.html')
+        return render(request, '403.html')
 
 # View has the POST part, which will take the user registration details and check if they are valid, after which the password will
 # be validated. Finally, the user will be added to the user model and the current score will be set to 0 as the user has only been
