@@ -29,13 +29,13 @@
                             {% csrf_token %}
                             <!-- Username -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="testimonial_username" name="testimonial_username" type="text" value="{{ user }}" data-sb-validations="required" autocomplete="off" readonly/>
+                                <input class="form-control" id="testimonial_username" name="testimonial_username" type="text" value="{{ user }}" autocomplete="off" readonly/>
                                 <label for="testimonial_username">Username</label>
                             </div>
 
                             <!-- Message -->
                             <div class="form-floating mb-3">
-                                <textarea class="form-control" id="message" name="testimonial_message" type="text" style="height: 10rem" data-sb-validations="required" autocomplete="off" required></textarea>
+                                <textarea class="form-control" id="message" name="testimonial_message" type="text" style="height: 10rem" autocomplete="off" required></textarea>
                                 <label for="message">Message</label>
                             </div>
 

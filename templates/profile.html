@@ -47,19 +47,19 @@
                             <h3 class="text-black" style="text-align:center;">Update Personal Information</h3>
                             <!-- Change Email address -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.change_email.id_for_label }}" name="change_email" value="{{ user.email }}" type="email" placeholder="name@example.com" data-sb-validations="required,email" autocomplete="off" required />
+                                <input class="form-control" id="{{ form.change_email.id_for_label }}" name="change_email" value="{{ user.email }}" type="email" placeholder="name@example.com" autocomplete="off" required />
                                 <label for="{{ form.change_email.id_for_label }}">Email Address</label>
                             </div>
             
                             <!-- Change/Add First Name -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.change_first_name.id_for_label }}" name="change_first_name" value="{{ user_details.first_name }}" type="text" data-sb-validations="required" autocomplete="off" />
+                                <input class="form-control" id="{{ form.change_first_name.id_for_label }}" name="change_first_name" value="{{ user_details.first_name }}" type="text" autocomplete="off" />
                                 <label for="{{ form.change_first_name.id_for_label }}">First Name</label>
                             </div>
             
                             <!-- Change/Add Surname -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.change_surname.id_for_label }}" name="change_surname" value="{{ user_details.surname }}" type="text" data-sb-validations="required" autocomplete="off" />
+                                <input class="form-control" id="{{ form.change_surname.id_for_label }}" name="change_surname" value="{{ user_details.surname }}" type="text" autocomplete="off" />
                                 <label for="{{ form.change_surname.id_for_label }}">Surname</label>
                             </div>
             
@@ -78,13 +78,13 @@
                             <h3 class="text-black" style="text-align:center;">Change Password</h3>
                             <!-- New Password -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.change_password.id_for_label }}" name="change_password" type="password" placeholder="Enter password..." data-sb-validations="required" required />
+                                <input class="form-control" id="{{ form.change_password.id_for_label }}" name="change_password" type="password" placeholder="Enter password..." required />
                                 <label for="{{ form.change_password.id_for_label }}">New Password</label>
                             </div>
             
                             <!-- Confirm New Password -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.change_password_confirm.id_for_label }}" name="change_password_confirm" type="password" placeholder="Enter password..." data-sb-validations="required" required />
+                                <input class="form-control" id="{{ form.change_password_confirm.id_for_label }}" name="change_password_confirm" type="password" placeholder="Enter password..." required />
                                 <label for="{{ form.change_password_confirm.id_for_label }}">Confirm New Password</label>
                             </div>
             

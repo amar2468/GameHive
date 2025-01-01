@@ -33,17 +33,17 @@
                             {% csrf_token %}
                             <!-- Username input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.username.id_for_label }}" name="username" type="text" placeholder="Enter your name..." data-sb-validations="required" autocomplete="off" />
+                                <input class="form-control" id="{{ form.username.id_for_label }}" name="username" type="text" placeholder="Enter your name..." autocomplete="off" />
                                 <label for="{{ form.username.id_for_label }}">Username</label>
                             </div>
                             <!-- Email address input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.email.id_for_label }}" name="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" autocomplete="off" />
+                                <input class="form-control" id="{{ form.email.id_for_label }}" name="email" type="email" placeholder="name@example.com" autocomplete="off" />
                                 <label for="{{ form.email.id_for_label }}">Email address</label>
                             </div>
                             <!-- Password input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.password.id_for_label }}" name="password" type="password" placeholder="Enter password..." data-sb-validations="required" />
+                                <input class="form-control" id="{{ form.password.id_for_label }}" name="password" type="password" placeholder="Enter password..." />
                                 <label for="{{ form.password.id_for_label }}">Password</label>
                             </div>
 
