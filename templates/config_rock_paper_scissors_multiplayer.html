@@ -5,21 +5,24 @@
     {% load static %}
     {% block content %}
     <div class="wrapper bg-light" style="justify-content: center;align-items: center;display: flex;">
+        <div class="card">
+            <div class="card-body">
 
-        <form id="config_rps_multiplayer_form" action="{% url 'rock_paper_scissors:multiplayer_rps_start_game' %}" method="post">
-            {% csrf_token %}
-            <div class="form-floating mb-3">
+                <form id="config_rps_multiplayer_form" action="{% url 'rock_paper_scissors:multiplayer_rps_start_game' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-floating mb-3">
 
-                <input class="form-control" id="room_id" name="room_id" type="number" autocomplete="off" required/>
-                
-                <label for="room_id">Room ID</label>
+                        <input class="form-control" id="room_id" name="room_id" type="number" autocomplete="off" required/>
+                        
+                        <label for="room_id">Room ID</label>
 
-                <br>
+                        <br>
+                    </div>
+                    
+                    <button type="submit" style="font-size: 20px;" class="btn btn-primary btn-lg">Start Game</button>
+                </form>
             </div>
-            
-            <button type="submit" style="font-size: 20px;" class="btn btn-primary btn-lg">Start Game</button>
-        </form>
-
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

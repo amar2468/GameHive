@@ -5,54 +5,57 @@
   {% load static %}
   {% block content %}
     <div class="wrapper bg-light" style="justify-content: center;align-items: center;display: flex;">
-        <form class="text-black" id="guessing_game_config_form" action="{% url 'play' %}" method="get">
-            {% csrf_token %}
-            Levels will bring benefits and disadvantages. Beginners may prefer the easy level
-            <div class="dropdown" aria-required="true">
-                  <select class="form-select text-black" name="selected_level" aria-label="Pick the game difficulty" style="font-size: 20px;" required>
-                    <option selected disabled value="">Choose the game difficulty</option>
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">Hard</option>
+      <div class="card">
+        <div class="card-body">
+          <form class="text-black" id="guessing_game_config_form" action="{% url 'play' %}" method="get">
+              {% csrf_token %}
+              Levels will bring benefits and disadvantages. Beginners may prefer the easy level
+              <div class="dropdown" aria-required="true">
+                    <select class="form-select text-black" name="selected_level" aria-label="Pick the game difficulty" style="font-size: 20px;" required>
+                      <option selected disabled value="">Choose the game difficulty</option>
+                      <option value="easy">Easy</option>
+                      <option value="medium">Medium</option>
+                      <option value="hard">Hard</option>
+                    </select>
+              </div>
+
+              <br>
+
+              If you select "yes", it will enable the hint. If you guess the correct number, you will only get 50% of the points
+              <div class="dropdown" aria-required="true">
+                  <select class="form-select text-black" name="hints" aria-label="Do you want hints during the game?" style="font-size: 20px;" required>
+                    <option selected disabled value="">Do you want hints during the game?</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
                   </select>
-            </div>
+              </div>
+              
+              <br>
+              
+              <button type="submit" style="font-size: 20px;" class="btn btn-primary btn-lg">Start Game</button>
+          </form>
 
-            <br>
-
-            If you select "yes", it will enable the hint. If you guess the correct number, you will only get 50% of the points
-            <div class="dropdown" aria-required="true">
-                <select class="form-select text-black" name="hints" aria-label="Do you want hints during the game?" style="font-size: 20px;" required>
-                  <option selected disabled value="">Do you want hints during the game?</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </select>
-            </div>
-            
-            <br>
-            
-            <button type="submit" style="font-size: 20px;" class="btn btn-primary btn-lg">Start Game</button>
-        </form>
-
-        <div class="modal text-black" id="config_modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Guessing Game Rules</h5>
-                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <p>You have picked the <span id="selected-value"></span> </p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" id="play_game" class="btn btn-primary">Play Game</button>
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <div class="modal text-black" id="config_modal" tabindex="-1" role="dialog">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Guessing Game Rules</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>You have picked the <span id="selected-value"></span> </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" id="play_game" class="btn btn-primary">Play Game</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
                 </div>
               </div>
-            </div>
+          </div>
         </div>
-
+      </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
