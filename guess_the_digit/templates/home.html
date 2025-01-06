@@ -10,15 +10,15 @@
             <div class="card-body">
 
                 {% if level == "easy" %}
-                    <div class="alert alert-warning text-black" role="alert">
+                    <div id="easy_level_div" class="alert alert-warning text-black" role="alert">
                         Guess a number in the range from 1-10
                     </div>
                 {% elif level == "medium" %}
-                    <div class="alert alert-warning text-black" role="alert">
+                    <div id="medium_level_div" class="alert alert-warning text-black" role="alert">
                         Guess a number in the range from 1-50
                     </div>
                 {% elif level == "hard" %}
-                    <div class="alert alert-warning text-black" role="alert">
+                    <div id="hard_level_div" class="alert alert-warning text-black" role="alert">
                         Guess a number in the range from 1-100
                     </div>
                 {% endif %}
@@ -27,7 +27,7 @@
 
                 {% if specific_hint != "" %}
 
-                    <div class="alert alert-info text-black" role="alert">
+                    <div id="hint_div" class="alert alert-info text-black" role="alert">
                         {{ specific_hint }}
                     </div>
 
@@ -47,15 +47,15 @@
 
                 {% if result == 'Wrong guess! Try again!'%}
                     <div class="alert alert-dark text-black" role="alert">
-                        {{ result }}
+                        <p id="try_again_div_guess_the_digit">{{ result }}</p>
                     </div>
                 {% elif result == 'Correct guess! Well done!' %}
                     <div class="alert alert-success text-black" role="alert">
-                        {{ result }}
+                        <p id="correct_guess_div_guess_the_digit">{{ result }}</p>
                     </div>
                 {% elif 'Game over! The correct number was' in result %}
                     <div class="alert alert-primary text-black" role="alert">
-                        {{ result }}
+                        <p id="game_over_div_guess_the_digit">{{ result }}</p>
                     </div>
                 {% endif %}
 
@@ -75,5 +75,62 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let correct_guess_div_guess_the_digit = document.getElementById("correct_guess_div_guess_the_digit");
+        let game_over_div_guess_the_digit = document.getElementById("game_over_div_guess_the_digit");
+
+        // Extracting the text from the objects above. We are checking whether the objects are null and if they are, they will be an empty string.
+        
+        let correct_guess_div_guess_the_digit_text = "";
+        let game_over_div_guess_the_digit_text = "";
+
+        if (correct_guess_div_guess_the_digit != null)
+        {
+            correct_guess_div_guess_the_digit_text = correct_guess_div_guess_the_digit.textContent;
+        }
+        
+        if (game_over_div_guess_the_digit != null)
+        {
+            game_over_div_guess_the_digit_text = game_over_div_guess_the_digit.textContent;
+        }
+
+        // Checking if the game is over. If it is, we want to hide some elements from the game, which are no longer relevant.
+        if (correct_guess_div_guess_the_digit_text === 'Correct guess! Well done!' || game_over_div_guess_the_digit_text.includes('Game over! The correct number was'))
+        {
+            let easy_level_div = document.getElementById("easy_level_div");
+            let medium_level_div = document.getElementById("medium_level_div");
+            let hard_level_div = document.getElementById("hard_level_div");
+
+            // Hiding the divs that shows what range of numbers the user can guess, if the game is over
+            if (easy_level_div != null)
+            {
+                easy_level_div.style.display = "none";
+            }
+
+            else if (medium_level_div != null) 
+            {
+                medium_level_div.style.display = "none";
+            }
+
+            else if (hard_level_div != null)
+            {
+                hard_level_div.style.display = "none";
+            }
+
+            // Hiding the hint for the user, if the game is over
+            let hint_div = document.getElementById("hint_div");
+
+            if (hint_div != null)
+            {
+                hint_div.style.display = "none";
+            }
+
+            // Hiding the guessing form (where user can choose the number that they want to guess), if the game is over
+            let guessing_game_form = document.getElementById("guessing_game_form");
+            guessing_game_form.style.display = "none";
+        }
+    </script>
+
     {% endblock %}
 </body>
