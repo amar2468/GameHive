@@ -8,7 +8,7 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
         self.browser = webdriver.Chrome(ChromeDriverManager().install())
         
         # Navigate to the page where the user can fill the form, which will allow them to create a new account
-        self.browser.get(f"{self.live_server_url}")
+        self.browser.get(f"{self.live_server_url}/sign_up")
 
         # Find the form elements that will allow a user to create a new account
         username_field_sign_up = self.browser.find_element(By.NAME, "username")
@@ -53,6 +53,4 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
     # We are checking to see if the required divs are hidden after the game is complete. This is because these divs are no longer necessary
     # as the user has finished the round.
     def test_easy_level_hints_enabled_div_visibility_after_attempts(self):
-        #self.browser.get(f"{self.live_server_url}/guess_the_digit/config")
-        #self.browser.get(f"{self.live_server_url}")
-        print("Hello world")
+        self.browser.get(f"{self.live_server_url}/guess_the_digit/config")
