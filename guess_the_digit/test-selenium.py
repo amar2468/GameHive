@@ -53,4 +53,37 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
     # We are checking to see if the required divs are hidden after the game is complete. This is because these divs are no longer necessary
     # as the user has finished the round.
     def test_easy_level_hints_enabled_div_visibility_after_attempts(self):
+        # Opens the config page for the "Guess the Digit" game, where the user can choose their level and whether hints are enabled
         self.browser.get(f"{self.live_server_url}/guess_the_digit/config")
+
+        # Find the form elements that will allow the user to play the game using the information that the user supplied
+        game_difficulty = self.browser.find_element(By.NAME, "selected_level")
+        are_hints_enabled = self.browser.find_element(By.NAME, "hints")
+        start_guess_the_digit_game = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
+
+        # We will clear the fields and then fill them in using the information below.
+        game_difficulty.clear()
+        game_difficulty.send_keys("easy")
+        are_hints_enabled.clear()
+        are_hints_enabled.send_keys("yes")
+
+        # Submit the form, so that the game can commence.
+        start_guess_the_digit_game.click()
+    
+    def test_easy_level_hints_disabled_div_visibility_after_attempts(self):
+        # Opens the config page for the "Guess the Digit" game, where the user can choose their level and whether hints are enabled
+        self.browser.get(f"{self.live_server_url}/guess_the_digit/config")
+
+        # Find the form elements that will allow the user to play the game using the information that the user supplied
+        game_difficulty = self.browser.find_element(By.NAME, "selected_level")
+        are_hints_enabled = self.browser.find_element(By.NAME, "hints")
+        start_guess_the_digit_game = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
+
+        # We will clear the fields and then fill them in using the information below.
+        game_difficulty.clear()
+        game_difficulty.send_keys("easy")
+        are_hints_enabled.clear()
+        are_hints_enabled.send_keys("no")
+
+        # Submit the form, so that the game can commence.
+        start_guess_the_digit_game.click()
