@@ -110,7 +110,8 @@ def guess_the_digit_game(request):
                     'result': result,
                     'latest_score': game_user_profile.current_score,
                     'specific_hint' : specific_hint,
-                    'level' : level
+                    'level' : level,
+                    'correct_number' : correct_number
                 }
 
 
@@ -119,6 +120,8 @@ def guess_the_digit_game(request):
         level = request.GET.get('selected_level')
 
         hints = request.GET.get('hints')
+
+        correct_number = request.session.get('correct_number')
 
         # Generate the hint (if number is odd or even) depending on the current_score condition
         def create_hint(odd_or_even):
@@ -207,7 +210,8 @@ def guess_the_digit_game(request):
         
         context = {
             'specific_hint' : specific_hint,
-            'level' : level
+            'level' : level,
+            'correct_number' : correct_number
         }
 
         return render(request, 'home.html', context)
