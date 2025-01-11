@@ -2,6 +2,8 @@ from django.test import LiveServerTestCase
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+import time
+import random
 
 class SeleniumTestGuessTheDigit(LiveServerTestCase):
     def setUp(self):
@@ -49,41 +51,84 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
         if hasattr(self, 'browser'):
             if self.browser:
                 self.browser.quit()
+    
+    # This is a private helper function which will check if the divs are hidden at the end of the game. The level, number of rounds, and
+    # whether the hints are enabled/disabled is passed to it and it verifies whether the divs are hidden, as they should be, at the end of the game.
+    def _assert_divs_hidden(self, level, hints, no_of_rounds, level_guess_range, hidden_div_level):
+        # Opens the config page for the "Guess the Digit" game, where the user can choose their level and whether hints are enabled
+        self.browser.get(f"{self.live_server_url}/guess_the_digit/config")
+
+        # Find the form elements that will allow the user to play the game using the information that the user supplied
+        game_difficulty = self.browser.find_element(By.NAME, "selected_level")
+        are_hints_enabled = self.browser.find_element(By.NAME, "hints")
+        start_guess_the_digit_game = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
+        
+        # Locate the button to play the game, which will appear in the modal that pops up when user clicks on the submit button on the form. This is sort of a confirmation button before the game commences.
+        modal_play_game_button = self.browser.find_element(By.ID, "play_game")
+
+        # Fill them in using the information below.
+        game_difficulty.send_keys(level)
+        are_hints_enabled.send_keys(hints)
+        time.sleep(3)
+
+        # Submit the form, so that the game can commence.
+        start_guess_the_digit_game.click()
+        modal_play_game_button.click()
+
+        number_of_rounds = no_of_rounds
+        guess_range = level_guess_range
+
+        for i in range(0, number_of_rounds):
+            # Find the form elements which will simulate the game
+            user_guess_field = self.browser.find_element(By.NAME, "guess_number_input_field")
+            submit_guess_button = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
+
+            # We are generating a random number (from 1-10) which will represent the user's guess & submitting the user guess
+            guess_from_user = random.randint(1,guess_range)
+            user_guess_field.clear()
+            user_guess_field.send_keys(guess_from_user)
+            submit_guess_button.click()
+
+            # For the first round, we will take what the correct number is and store it in a variable
+            if i == 0:
+                # Extract the correct number for this game, so that it can be compared against the user guess
+                correct_number = self.browser.find_element(By.ID, "correct_number")
+                correct_number = correct_number.get_attribute("value")
+                correct_number = int(correct_number)
+
+            if guess_from_user == correct_number:
+                break
+        
+        guess_range_div = self.browser.find_element(By.ID, hidden_div_level)
+
+        if guess_range_div.is_displayed():
+            raise Exception("The guess range div is visible, but should be hidden when the user ends the game.")
+        else:
+            print("Hidden")
 
     # We are checking to see if the required divs are hidden after the game is complete. This is because these divs are no longer necessary
-    # as the user has finished the round.
-    def test_easy_level_hints_enabled_div_visibility_after_attempts(self):
-        # Opens the config page for the "Guess the Digit" game, where the user can choose their level and whether hints are enabled
-        self.browser.get(f"{self.live_server_url}/guess_the_digit/config")
-
-        # Find the form elements that will allow the user to play the game using the information that the user supplied
-        game_difficulty = self.browser.find_element(By.NAME, "selected_level")
-        are_hints_enabled = self.browser.find_element(By.NAME, "hints")
-        start_guess_the_digit_game = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
-
-        # We will clear the fields and then fill them in using the information below.
-        game_difficulty.clear()
-        game_difficulty.send_keys("easy")
-        are_hints_enabled.clear()
-        are_hints_enabled.send_keys("yes")
-
-        # Submit the form, so that the game can commence.
-        start_guess_the_digit_game.click()
+    # as the user has finished the game. Below are individual tests that verify this, based on factors such as different levels, hints enabled, etc...
     
+    # Testing for easy level and hints enabled. We are calling the function which will test if the divs are hidden at the end of the game.
+    def test_easy_level_hints_enabled_div_visibility_after_attempts(self):
+        self._assert_divs_hidden("easy", "yes", 2, 10, "easy_level_div")
+
+    # Testing for easy level and hints disabled. We are calling the function which will test if the divs are hidden at the end of the game.
     def test_easy_level_hints_disabled_div_visibility_after_attempts(self):
-        # Opens the config page for the "Guess the Digit" game, where the user can choose their level and whether hints are enabled
-        self.browser.get(f"{self.live_server_url}/guess_the_digit/config")
+        self._assert_divs_hidden("easy", "no", 4, 10, "easy_level_div")
 
-        # Find the form elements that will allow the user to play the game using the information that the user supplied
-        game_difficulty = self.browser.find_element(By.NAME, "selected_level")
-        are_hints_enabled = self.browser.find_element(By.NAME, "hints")
-        start_guess_the_digit_game = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
+    # Testing for medium level and hints enabled. We are calling the function which will test if the divs are hidden at the end of the game.
+    def test_medium_level_hints_enabled_div_visibility_after_attempts(self):
+        self._assert_divs_hidden("medium", "yes", 5, 50, "medium_level_div")
 
-        # We will clear the fields and then fill them in using the information below.
-        game_difficulty.clear()
-        game_difficulty.send_keys("easy")
-        are_hints_enabled.clear()
-        are_hints_enabled.send_keys("no")
-
-        # Submit the form, so that the game can commence.
-        start_guess_the_digit_game.click()
+    # Testing for medium level and hints disabled. We are calling the function which will test if the divs are hidden at the end of the game.
+    def test_medium_level_hints_disabled_div_visibility_after_attempts(self):
+        self._assert_divs_hidden("medium", "no", 10, 50, "medium_level_div")
+    
+    # Testing for hard level and hints enabled. We are calling the function which will test if the divs are hidden at the end of the game.
+    def test_hard_level_hints_enabled_div_visibility_after_attempts(self):
+        self._assert_divs_hidden("hard", "yes", 11, 100, "hard_level_div")
+    
+    # Testing for hard level and hints disabled. We are calling the function which will test if the divs are hidden at the end of the game.
+    def test_hard_level_hints_disabled_div_visibility_after_attempts(self):
+        self._assert_divs_hidden("hard", "no", 20, 100, "hard_level_div")
