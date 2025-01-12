@@ -96,15 +96,51 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
                 correct_number = correct_number.get_attribute("value")
                 correct_number = int(correct_number)
 
+            # If the user guess is correct, we want to break out of the for loop, as there is no need to continue tracking the guesses
             if guess_from_user == correct_number:
                 break
         
+        # Divs that will be tested, to see whether they are hidden after the game is done.
         guess_range_div = self.browser.find_element(By.ID, hidden_div_level)
+        guess_number_input_field = self.browser.find_element(By.ID, "guess_number_input_field")
+        guess_number_button = self.browser.find_element(By.ID, "guess_number_button")
 
+        # If the div, that shows the range that the user can guess, is still visible, an error will be raised.
         if guess_range_div.is_displayed():
             raise Exception("The guess range div is visible, but should be hidden when the user ends the game.")
+        
+        # If it is hidden, no need to do anything as this is what we want.
         else:
             print("Hidden")
+        
+        # If the div, that allows the user to input a number, is still visible, an error will be raised.
+        if guess_number_input_field.is_displayed():
+            raise Exception("The input field is visible, but should be hidden when the user ends the game.")
+        
+        # If it is hidden, no need to do anything as this is what we want.
+        else:
+            print("Hidden")
+
+        # If the div, that allows the user to submit their guess, is still visible, an error will be raised.
+        if guess_number_button.is_displayed():
+            raise Exception("The submit button is visible, but should be hidden when the user ends the game.")
+        
+        # If it is hidden, no need to do anything as this is what we want.
+        else:
+            print("Hidden")
+        
+        # If the hints were enabled, we want to check if the div that shows the hint is hidden at the end of the game.
+        if hints == "yes":
+            # We are extracting the div that shows the hint from the HTML template, to see whether it is visible or hidden.
+            hint_div = self.browser.find_element(By.ID, "hint_div")
+
+            # If the div the shows the hint is visible, it will raise an exception and the test will fail.
+            if hint_div.is_displayed():
+                raise Exception("The hint div is visible, but should be hidden when the user ends the game.")
+            
+            # If it is hidden, no need to do anything as this is what we want.
+            else:
+                print("Hidden")
 
     # We are checking to see if the required divs are hidden after the game is complete. This is because these divs are no longer necessary
     # as the user has finished the game. Below are individual tests that verify this, based on factors such as different levels, hints enabled, etc...
