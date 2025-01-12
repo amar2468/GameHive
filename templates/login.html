@@ -25,6 +25,12 @@
                         </div>
                         {% endif %}
 
+                        {% if error_message %}
+                            <div style="background-color:red;">
+                                <p style="color: white;text-align: center;">{{ error_message }}</p>
+                            </div>
+                        {% endif %}
+
                         <form method="post" action="{% url 'login' %}">
                             {% csrf_token %}
                             <!-- Username input-->
