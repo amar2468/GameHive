@@ -270,12 +270,14 @@ def sign_in(request):
                 login(request, user)
                 return render(request, 'index.html')
             else:
-                return render(request, 'login.html')
+                messages.error(request, "Incorrect username or password.")
+                return render(request, 'login.html', {'form':form})
         
         else:
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f"{field.capitalize()}: {error}")
+            return render(request, 'login.html', {'form':form})
     else:
         form = LoginForm()
 
