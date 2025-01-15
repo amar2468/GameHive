@@ -109,29 +109,38 @@
             let medium_level_div = document.getElementById("medium_level_div");
             let hard_level_div = document.getElementById("hard_level_div");
             let div_for_replay_game_button = document.getElementById("div_for_replay_game_button");
+            
+            // Identifies the level of the game, which will be used as a parameter in the URL, if the user "replays" the game
+            let level_identifier = ""
 
             // Hiding the divs that shows what range of numbers the user can guess, if the game is over
             if (easy_level_div != null)
             {
                 easy_level_div.style.display = "none";
+                level_identifier = "easy"
             }
 
             else if (medium_level_div != null) 
             {
                 medium_level_div.style.display = "none";
+                level_identifier = "medium"
             }
 
             else if (hard_level_div != null)
             {
                 hard_level_div.style.display = "none";
+                level_identifier = "hard"
             }
 
             // Hiding the hint for the user, if the game is over
             let hint_div = document.getElementById("hint_div");
+            let hint_enabled = "no"
 
             if (hint_div != null)
             {
                 hint_div.style.display = "none";
+                // Tracking whether the hint was enabled, which will be used as a parameter in the URL, if the user "replays" the game
+                hint_enabled = "yes"
             }
 
             div_for_replay_game_button.style.display = "block"
@@ -144,7 +153,7 @@
             let replay_game_button = document.getElementById("replay_game_button")
 
             replay_game_button.addEventListener("click", function() {
-                    let url = '{% url "config" %}';
+                    let url = '{% url "play" %}' + "?selected_level=" + level_identifier + "&hints=" + hint_enabled;
                     
                     window.location.href = url;
             });
