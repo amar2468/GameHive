@@ -23,19 +23,18 @@
                     </div>
                 {% endif %}
 
-                <br>
-
                 {% if specific_hint != "" %}
-
+                    <br>
                     <div id="hint_div" class="alert alert-info text-black" role="alert">
                         {{ specific_hint }}
                     </div>
 
                 {% endif %}
-
-                <p id="correct_number" value="{{ correct_number }}" hidden>{{ correct_number }}</p>
-
-                <br>
+                
+                <div id="div_containing_correct_guess" hidden>
+                    <br>
+                    <p id="correct_number" value="{{ correct_number }}">{{ correct_number }}</p>
+                </div>
 
                 <form id="guessing_game_form" method="post">
                     {% csrf_token %}
@@ -45,9 +44,8 @@
                     <button type="submit" id="guess_number_button" class="btn btn-primary">Guess</button>
                 </form>
 
-                <br>
-
                 {% if result == 'Wrong guess! Try again!'%}
+                    <br>
                     <div class="alert alert-dark text-black" role="alert">
                         <p id="try_again_div_guess_the_digit">{{ result }}</p>
                     </div>
@@ -63,6 +61,7 @@
 
 
                 {% if request.method == 'POST' %}
+                    <br>
                     <div class="card">
                         <div class="card-body mb-0">
                         <h5 class="card-title text-black mb-0">Player Score</h5>
