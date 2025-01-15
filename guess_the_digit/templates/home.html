@@ -70,6 +70,11 @@
                         </div>
                     </div>
                 {% endif %}
+                
+                <div id="div_for_replay_game_button" style="display:none;">
+                    <br>
+                    <button id="replay_game_button" class="btn btn-primary">Replay?</button>
+                </div>
             </div>
         </div>
 
@@ -103,6 +108,7 @@
             let easy_level_div = document.getElementById("easy_level_div");
             let medium_level_div = document.getElementById("medium_level_div");
             let hard_level_div = document.getElementById("hard_level_div");
+            let div_for_replay_game_button = document.getElementById("div_for_replay_game_button");
 
             // Hiding the divs that shows what range of numbers the user can guess, if the game is over
             if (easy_level_div != null)
@@ -128,9 +134,20 @@
                 hint_div.style.display = "none";
             }
 
+            div_for_replay_game_button.style.display = "block"
+
             // Hiding the guessing form (where user can choose the number that they want to guess), if the game is over
             let guessing_game_form = document.getElementById("guessing_game_form");
             guessing_game_form.style.display = "none";
+
+            
+            let replay_game_button = document.getElementById("replay_game_button")
+
+            replay_game_button.addEventListener("click", function() {
+                    let url = '{% url "config" %}';
+                    
+                    window.location.href = url;
+            });
         }
     </script>
 
