@@ -20,15 +20,15 @@
                                 <div class="carousel-inner">
 
                                     <div class="carousel-item active" data-value="paper">
-                                        <img src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
+                                        <a class="selected_rps" href="#"><img src="{% static 'assets/paper.png' %}" alt="Picture of a paper"></a>
                                     </div>
 
                                     <div class="carousel-item" data-value="rock">
-                                        <img src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
+                                        <a class="selected_rps" href="#"><img src="{% static 'assets/rock.png' %}" alt="Picture of a rock"></a>
                                     </div>
 
                                     <div class="carousel-item" data-value="scissors">
-                                        <img src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
+                                        <a class="selected_rps" href="#"><img src="{% static 'assets/scissors.png' %}" alt="Picture of scissors"></a>
                                     </div>
 
                                 </div>
@@ -87,7 +87,6 @@
 
                     <input type="hidden" id="carousel_value" name="carousel_value" value="">
 
-                    <button type="submit" id="selected_rps" style="font-size: 20px;" class="btn btn-primary btn-lg">Make your choice</button>
                 </form>
             </div>
         </div>
@@ -109,7 +108,7 @@
                 $('#carousel_rps_player').carousel('next');
             });
 
-            $('#selected_rps').click(function(e){
+            $('.selected_rps').click(function(e){
                 e.preventDefault();
                 $('#loading_rps').show();
 
@@ -169,7 +168,6 @@
                             $('#rock_computer').hide();
                             $('#paper_computer').hide();
                             $('#scissors_computer').hide();
-                            $('#selected_rps').text("Try Again");
                             $('#attempts').text("Attempts Left : 0");
 
                             $('#rps_outcome_div').show();
@@ -183,15 +181,6 @@
 
                             $('#rps_outcome_div').show();
                             $('#attempts_div').show();
-
-                            if (response.attempts != 0)
-                            {
-                                $('#selected_rps').text("Select");
-                            }
-                            else
-                            {
-                                $('#selected_rps').text("End Round");
-                            }
                         }
 
                     },
