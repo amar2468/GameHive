@@ -45,6 +45,8 @@ def rps_form_submitted(request):
 
             attempts = request.session.get('attempts', 3)
 
+            rounds = request.session.get('rounds', 0)
+
             total_wins = request.session.get('total_wins', 0)
 
             user_rps_choice = request.POST.get('carousel_value', '')
@@ -72,18 +74,26 @@ def rps_form_submitted(request):
                 if rps_outcome == "win":
                     total_wins += 1
                     request.session['total_wins'] = total_wins
+                
+                # Increasing the round number
+                rounds += 1
+                request.session['rounds'] = rounds
 
                 # Adding the user's choice, computer's choice, and the outcome of the round back to the user so they are informed
                 response_info = {
                     'computer_rps_choice' : computer_rps_choice,
                     'user_rps_choice' : user_rps_choice,
                     'rps_outcome': rps_outcome,
-                    'attempts' : attempts
+                    'attempts' : attempts,
+                    'round_number' : rounds
                 }
             else:
-                # Remove the "attempts" session variable as the round has finished so it should be reset back to 3 attempts for the new one
+                # Remove the "attempts" session variable as the game has finished so it should be reset back to 3 attempts for the new one
 
                 del request.session['attempts']
+
+                # Remove the "rounds" session variable as the game has finished and it should be reset for the new game
+                del request.session['rounds']
 
                 # In every round, the user has three attempts. If they get 2 or more attempts correct, they won that round. Hence 10
                 # points would be added to their total score
