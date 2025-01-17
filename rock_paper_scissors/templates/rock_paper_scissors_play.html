@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-body">
 
-                <p class="text-black" style="font-size:22px;">Select rock, paper, or scissors!</p>
+                <p id="rps_game_heading" class="text-black" style="font-size:22px;text-align: center;"></p>
                 <br><br>
 
                 <form id="rps_form" method="POST" action="{% url 'rock_paper_scissors:rps_form_submitted' %}">
@@ -164,6 +164,7 @@
 
                         if (response.rps_outcome == "Game Over! You failed to win this round! Good luck next time!" || response.rps_outcome == "Game Over! You won this round! You have received 10 points!")
                         {
+                            $('#rps_game_heading').hide();
                             $('#rps_outcome').text(response.rps_outcome);
                             $('#rock_computer').hide();
                             $('#paper_computer').hide();
@@ -176,6 +177,9 @@
                         
                         else
                         {
+                            let round_number = response.round_number;
+                            $('#rps_game_heading').text("Round " + round_number);
+
                             $('#rps_outcome').text("You " + response.rps_outcome);
                             $('#attempts').text("Attempts Left : " + response.attempts);
 
