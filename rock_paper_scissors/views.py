@@ -7,7 +7,15 @@ import random
 # This view allows a user to play single player mode, which will load the relevant template
 
 def single_player_rps(request):
+    # If the user is logged in, this block will be run.
     if request.user.is_authenticated:
+        # Try to remove "attempts" session variable, which tracks how many attempts a user has until the game is finished.
+        try:
+            del request.session['attempts']
+        # If the session variable "attempts" does not exist, we will just move on with the code (when user starts the game, it will start off with 3 attempts, as it should be)
+        except KeyError:
+            pass
+        
         return render(request, 'rock_paper_scissors_play.html')
     else:
         return render(request, '403.html')
@@ -108,6 +116,7 @@ def rps_form_submitted(request):
 
             # Returning the dictionary in JSON format to jQuery, which will then be inserted into the HTML template
             return JsonResponse(response_info)
-        return render(request, 'rock_paper_scissors_play.html')
+        else:
+            return render(request, 'rock_paper_scissors_play.html')
     else:
         return render(request, '403.html')
