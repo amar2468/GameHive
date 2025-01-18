@@ -4,91 +4,112 @@
 <body>
     {% load static %}
     {% block content %}
-    <div class="wrapper bg-light" style="justify-content: center;align-items: center;display: flex;">
-        <div class="card">
-            <div class="card-body">
+    <div class="wrapper bg-light d-flex" style="justify-content: center;align-items: center;">
+        <div class="container-fluid text-center  rounded shadow my-5">
 
-                <p id="rps_game_heading" class="text-black" style="font-size:22px;text-align: center;"></p>
-                <br><br>
+            <p id="rps_game_heading" class="text-black" style="font-size:22px;text-align: center;"></p>
+            <br><br>
 
-                <form id="rps_form" method="POST" action="{% url 'rock_paper_scissors:rps_form_submitted' %}">
-                    {% csrf_token %}
-                    <div class="flex_container_rps" style="display:flex;">
-                        <div id="carousel_container_player" style="flex:1;margin-right: 60px;">
-                            <div id="carousel_rps_player" class="carousel slide" data-bs-interval="false">
+            <form id="rps_form" method="POST" action="{% url 'rock_paper_scissors:rps_form_submitted' %}">
+                {% csrf_token %}
+                <div class="flex_container_rps d-flex">
+                    <div class="col-md-6" id="carousel_container_player">
+                        <div id="carousel_rps_player" class="carousel slide" data-bs-interval="false">
 
-                                <div class="carousel-inner">
+                            <div class="carousel-inner">
 
-                                    <div class="carousel-item active" data-value="paper">
-                                        <a class="selected_rps" href="#"><img src="{% static 'assets/paper.png' %}" alt="Picture of a paper"></a>
-                                    </div>
-
-                                    <div class="carousel-item" data-value="rock">
-                                        <a class="selected_rps" href="#"><img src="{% static 'assets/rock.png' %}" alt="Picture of a rock"></a>
-                                    </div>
-
-                                    <div class="carousel-item" data-value="scissors">
-                                        <a class="selected_rps" href="#"><img src="{% static 'assets/scissors.png' %}" alt="Picture of scissors"></a>
-                                    </div>
-
+                                <div class="carousel-item active" data-value="paper">
+                                    <a class="selected_rps" href="#"><img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper"></a>
                                 </div>
 
-                                <a class="carousel-control-prev" id="carousel_control_prev_player" href="#carousel_rps_player" style="background-color: blue;" role="button" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </a>
-                                <a class="carousel-control-next" id="carousel_control_next_player" href="#carousel_rps_player" style="background-color: blue;" role="button" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </a>
-                            </div>
-                        </div>
+                                <div class="carousel-item" data-value="rock">
+                                    <a class="selected_rps" href="#"><img class="img-fluid" src="{% static 'assets/rock.png' %}" alt="Picture of a rock"></a>
+                                </div>
 
+                                <div class="carousel-item" data-value="scissors">
+                                    <a class="selected_rps" href="#"><img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors"></a>
+                                </div>
+
+                            </div>
+
+                            <a class="carousel-control-prev" id="carousel_control_prev_player" href="#carousel_rps_player" style="background-color: blue;" role="button" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" id="carousel_control_next_player" href="#carousel_rps_player" style="background-color: blue;" role="button" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center align-items-center">
                         <div class="spinner-border" id="loading_rps" role="status" style="display:none;">
                             <span class="visually-hidden">Loading...</span>
                         </div>
+                    </div>
 
-                        <div id="carousel_container_computer" style="flex:1;margin-left: 60px;">
-                            <div id="carousel_rps_computer" style="display:none;" class="carousel slide" data-bs-interval="false">
+                    <div class="col-md-6" id="carousel_container_computer">
+                        <div id="carousel_rps_computer" style="display:none;" class="carousel slide" data-bs-interval="false">
 
-                                <div class="carousel-inner">
+                            <div class="carousel-inner">
 
-                                    <div id="paper_computer" class="carousel-item active" style="display: none;">
-                                        <img src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
-                                    </div>
-
-                                    <div id="rock_computer" class="carousel-item" style="display: none;">
-                                        <img src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
-                                    </div>
-
-                                    <div id="scissors_computer" class="carousel-item" style="display: none;">
-                                        <img src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
-                                    </div>
-
+                                <div id="paper_computer" class="carousel-item active" style="display: none;">
+                                    <img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
                                 </div>
+
+                                <div id="rock_computer" class="carousel-item" style="display: none;">
+                                    <img class="img-fluid" src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
+                                </div>
+
+                                <div id="scissors_computer" class="carousel-item" style="display: none;">
+                                    <img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
+                                </div>
+
                             </div>
                         </div>
-
                     </div>
 
-                    <br><br>
+                </div>
 
-                    <div class="alert alert-primary text-black" id="rps_outcome_div" role="alert" style="display:none;">
-                        <p id="rps_outcome" style="text-align:center;"></p>
+                <br><br>
+
+                <div class="alert alert-primary text-black" id="rps_outcome_div" role="alert" style="display:none;">
+                    <p class="rps_outcome" style="text-align:center;"></p>
+                </div>
+
+                <br><br>
+
+                <div class="alert alert-warning text-black" id="attempts_div" role="alert" style="display:none;">
+                    <p id="attempts" style="text-align:center;"></p>
+                </div>
+
+                <br><br>
+
+                <input type="hidden" id="carousel_value" name="carousel_value" value="">
+
+                <div class="modal" id="rps_end_of_game_info_modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card mx-sm-4 mb-4">
+                                    <div id="display_end_result_of_rps_game" role="alert">
+                                        <p class="rps_outcome" style="text-align:center;"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
                     </div>
-
-                    <br><br>
-
-                    <div class="alert alert-warning text-black" id="attempts_div" role="alert" style="display:none;">
-                        <p id="attempts" style="text-align:center;"></p>
-                    </div>
-
-                    <br><br>
-
-                    <input type="hidden" id="carousel_value" name="carousel_value" value="">
-
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -165,11 +186,13 @@
                         if (response.rps_outcome == "Game Over! You failed to win this round! Good luck next time!" || response.rps_outcome == "Game Over! You won this round! You have received 10 points!")
                         {
                             $('#rps_game_heading').hide();
-                            $('#rps_outcome').text(response.rps_outcome);
+                            $('.rps_outcome').text(response.rps_outcome);
                             $('#rock_computer').hide();
                             $('#paper_computer').hide();
                             $('#scissors_computer').hide();
                             $('#attempts').text("Attempts Left : 0");
+                            
+                            $('#rps_end_of_game_info_modal').modal('show');
 
                             $('#rps_outcome_div').show();
                             $('#attempts_div').show();
@@ -180,7 +203,7 @@
                             let round_number = response.round_number;
                             $('#rps_game_heading').text("Round " + round_number);
 
-                            $('#rps_outcome').text("You " + response.rps_outcome);
+                            $('.rps_outcome').text("You " + response.rps_outcome);
                             $('#attempts').text("Attempts Left : " + response.attempts);
 
                             $('#rps_outcome_div').show();
