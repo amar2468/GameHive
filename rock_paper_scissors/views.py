@@ -9,9 +9,10 @@ import random
 def single_player_rps(request):
     # If the user is logged in, this block will be run.
     if request.user.is_authenticated:
-        # Try to remove "attempts" session variable, which tracks how many attempts a user has until the game is finished.
+        # Try to remove "attempts" & "rounds" session variables, as these should be reset after every game.
         try:
             del request.session['attempts']
+            del request.session['rounds']
         # If the session variable "attempts" does not exist, we will just move on with the code (when user starts the game, it will start off with 3 attempts, as it should be)
         except KeyError:
             pass
