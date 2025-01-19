@@ -74,8 +74,8 @@
 
                 <br><br>
 
-                <div class="alert alert-primary text-black" id="rps_outcome_div" role="alert" style="display:none;">
-                    <p class="rps_outcome" style="text-align:center;"></p>
+                <div class="alert alert-primary text-black" id="rps_round_outcome_div" role="alert" style="display:none;">
+                    <p class="rps_round_outcome" style="text-align:center;"></p>
                 </div>
 
                 <br><br>
@@ -87,24 +87,20 @@
                 <br><br>
 
                 <input type="hidden" id="carousel_value" name="carousel_value" value="">
-
+                
                 <div class="modal" id="rps_end_of_game_info_modal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
                             <div class="modal-body">
-                                <div class="card mx-sm-4 mb-4">
+                                <div class="card mx-sm-5 mb-5">
                                     <div id="display_end_result_of_rps_game" role="alert">
-                                        <p class="rps_outcome" style="text-align:center;"></p>
+                                        <p class="rps_end_of_game_info" style="text-align:center;"></p>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                
+                                <button type="button" id="rps_replay_game" class="btn btn-primary">Replay?</button>
+
+                                <button type="button" id="back_to_homepage_button" class="btn btn-primary">Back to home page?</button>
                             </div>
                         </div>
                     </div>
@@ -127,6 +123,16 @@
     
             $('#carousel_control_next_player').click(function(){
                 $('#carousel_rps_player').carousel('next');
+            });
+
+            // If the user wants to replay the rps game, this button will make a get request and load the new game
+            $('#rps_replay_game').on("click", function() {
+                window.location.href = "{% url 'rock_paper_scissors:single_player_rps' %}";
+            });
+
+            // If the user wants to go back to the homepage after playing the rps game, this function will redirect them to the homepage.
+            $('#back_to_homepage_button').on("click", function() {
+                window.location.href = "{% url 'homepage' %}";
             });
 
             $('.selected_rps').click(function(e){
@@ -183,19 +189,29 @@
 
                         $('#carousel_rps_computer').show();
 
-                        if (response.rps_outcome == "Game Over! You failed to win this round! Good luck next time!" || response.rps_outcome == "Game Over! You won this round! You have received 10 points!")
+                        if (response.rps_end_of_game == "Game Over! You failed to win this round! Good luck next time!" || response.rps_end_of_game == "Game Over! You won this round! You have received 10 points!")
                         {
-                            $('#rps_game_heading').hide();
-                            $('.rps_outcome').text(response.rps_outcome);
-                            $('#rock_computer').hide();
-                            $('#paper_computer').hide();
-                            $('#scissors_computer').hide();
+                            $('.selected_rps').css({
+                                'pointer-events' : 'none',
+                                'cursor' : 'default'
+                            });
+
+                            let round_number = response.round_number;
+                            $('#rps_game_heading').text("Round " + round_number);
+
+                            $('.rps_round_outcome').text("You " + response.rps_round_outcome);
+
                             $('#attempts').text("Attempts Left : 0");
                             
-                            $('#rps_end_of_game_info_modal').modal('show');
+                            $('.rps_end_of_game_info').text(response.rps_end_of_game);
 
-                            $('#rps_outcome_div').show();
+                            setTimeout(function() {
+                                $('#rps_end_of_game_info_modal').modal('show');
+                            }, 1000);
+
+                            $('#rps_round_outcome_div').show();
                             $('#attempts_div').show();
+
                         }
                         
                         else
@@ -203,10 +219,10 @@
                             let round_number = response.round_number;
                             $('#rps_game_heading').text("Round " + round_number);
 
-                            $('.rps_outcome').text("You " + response.rps_outcome);
+                            $('.rps_round_outcome').text("You " + response.rps_round_outcome);
                             $('#attempts').text("Attempts Left : " + response.attempts);
 
-                            $('#rps_outcome_div').show();
+                            $('#rps_round_outcome_div').show();
                             $('#attempts_div').show();
                         }
 
