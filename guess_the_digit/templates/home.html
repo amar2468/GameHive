@@ -74,6 +74,11 @@
                     <br>
                     <button id="replay_game_button" class="btn btn-primary">Replay?</button>
                 </div>
+
+                <div id="div_for_going_back_to_homepage_button" style="display:none;">
+                    <br>
+                    <button id="back_to_homepage_btn" class="btn btn-primary">Back to the homepage?</button>
+                </div>
             </div>
         </div>
 
@@ -143,6 +148,7 @@
             }
 
             div_for_replay_game_button.style.display = "block"
+            div_for_going_back_to_homepage_button.style.display = "block"
 
             // Hiding the guessing form (where user can choose the number that they want to guess), if the game is over
             let guessing_game_form = document.getElementById("guessing_game_form");
@@ -151,10 +157,17 @@
             
             let replay_game_button = document.getElementById("replay_game_button")
 
+            let back_to_homepage_btn = document.getElementById("back_to_homepage_btn");
+
             replay_game_button.addEventListener("click", function() {
                     let url = '{% url "play" %}' + "?selected_level=" + level_identifier + "&hints=" + hint_enabled;
                     
                     window.location.href = url;
+            });
+
+            back_to_homepage_btn.addEventListener("click", function() {
+                let url = '{% url "homepage" %}';
+                window.location.href = url;
             });
         }
     </script>
