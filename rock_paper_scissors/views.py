@@ -94,7 +94,7 @@ def rps_form_submitted(request):
 
                     if 'total_wins' in request.session:
                         if request.session['total_wins'] >= 2:
-                                rps_end_of_game = "Game Over! You won this round! You have received 10 points!"
+                                rps_end_of_game = "Game Over! You won this game! You have received 10 points!"
                                 try:
                                     game_user_profile = GameUserProfile.objects.get(user=request.user)
                                 except GameUserProfile.DoesNotExist:
@@ -102,14 +102,14 @@ def rps_form_submitted(request):
                                 game_user_profile.current_score += 10
                                 game_user_profile.save()
                         else:
-                            rps_end_of_game = "Game Over! You failed to win this round! Good luck next time!"
+                            rps_end_of_game = "Game Over! You failed to win this game! Good luck next time!"
 
                         # Remove the "total_score" session variable as the score has been saved in the GameUserProfile custom model
                     
                         del request.session['total_wins']
                     
                     else:
-                        rps_end_of_game = "Game Over! You failed to win this round! Good luck next time!"
+                        rps_end_of_game = "Game Over! You failed to win this game! Good luck next time!"
 
                     # Adding the user's choice, computer's choice, and informing user that the round is over
                     response_info = {
