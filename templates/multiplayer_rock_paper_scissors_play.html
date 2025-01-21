@@ -8,8 +8,7 @@
         <div class="card">
             <div class="card-body">
 
-                <p class="text-black" style="font-size:22px;">Welcome to room {{ room_id }}. Select rock, paper, or scissors!</p>
-                <input id="room_id_input" type="number" value="{{ room_id }}" style="display:none;" />
+                <p id="multiplayer_rps_game_heading" class="text-black" style="font-size:22px;"></p>
                 <input id="username" type="text" value="{{ request.user }}" style="display:none;" />
                 <br><br>
 
@@ -99,12 +98,11 @@
 
     <script>
 
-        let roomcode = document.getElementById("room_id_input").value;
         let username = document.getElementById("username").value;
 
         const gameSocket = new WebSocket(
             'ws://' + window.location.host +
-            '/ws/multiplayer_rps/' + roomcode + '/'
+            '/ws/multiplayer_rps/'
         );
 
         const message = {
@@ -117,6 +115,11 @@
             console.log('WebSocket connection opened:', event);
             gameSocket.send(JSON.stringify(message));
         });
+
+        gameSocket.onmessage = function(event) {
+            let data = JSON.parse(event.data);
+            $('#multiplayer_rps_game_heading').text("Room Number: " + data.rps_room_name);
+        };
 
         gameSocket.addEventListener("message", (event) => {
             const message = JSON.parse(event.data);
