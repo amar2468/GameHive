@@ -3,11 +3,29 @@ import json
 from django.contrib.auth.models import User
 from gamehive.models import GameUserProfile
 from asgiref.sync import sync_to_async
+import random
 
 class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
+    # Creating a global list to hold all the available rooms (Rooms that have one player waiting)
+    global available_rooms
+    available_rooms = []
+
     async def connect(self):
-        self.multiplayer_rps_room_name = self.scope["url_route"]["kwargs"]["room_id"]
-        self.rps_room_name = "multiplayer_rps_%s" % self.multiplayer_rps_room_name
+        # If there are no players in any room, then generate a random room for the user to enter in.
+        if not available_rooms:
+            rps_room_name = random.randint(1,100)
+
+            rps_room_name = str(rps_room_name)
+
+            self.rps_room_name = rps_room_name
+
+            available_rooms.append(self.rps_room_name)
+        
+        # If there are available rooms (Rooms that have one player waiting), add the user to the first available one.
+        else:
+            self.rps_room_name = available_rooms.pop(0)
+        
+        print(self.rps_room_name)
 
         self.room_state = {}
 
@@ -17,7 +35,14 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
+        await self.send(text_data=json.dumps({
+            'rps_room_name' : self.rps_room_name,
+        }))
+
     async def disconnect(self, close_code):
+        if self.rps_room_name:
+            if self.rps_room_name in available_rooms:
+                available_rooms.remove(self.rps_room_name)
         print(f"WebSocket Disconnected with code: {close_code}")
         await self.channel_layer.group_discard(self.rps_room_name, self.channel_name)
 
@@ -36,7 +61,8 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                     "type" : "rps_move",
                     "message" : message,
                     "user_option" : user_option,
-                    "username" : username
+                    "username" : username,
+                    "rps_room_name" : self.rps_room_name
                 },
             )
 
@@ -138,7 +164,8 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                             {
                                 "user_list" : [user1_name, user2_name],
                                 "rps_options": self.room_state['rps_options'],
-                                "attempts" : self.attempts
+                                "attempts" : self.attempts,
+                                "rps_room_name" : self.rps_room_name
                             }
                         )
                     )
