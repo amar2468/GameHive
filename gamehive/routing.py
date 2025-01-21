@@ -5,7 +5,7 @@ from rock_paper_scissors import consumers
 
 websocket_urlpatterns=[
                     re_path(
-                        r"ws/multiplayer_rps/(?P<room_id>\w+)/$", consumers.RockPaperScissorsConsumer.as_asgi()
+                        r"ws/multiplayer_rps/$", consumers.RockPaperScissorsConsumer.as_asgi()
                     ),
                 ]
 
