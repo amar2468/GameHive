@@ -31,9 +31,7 @@ def multiplayer_rps_config(request):
 # This view sends the user to the multiplayer game page
 def multiplayer_rps_start_game(request):
     if request.user.is_authenticated:
-        room_id = request.POST.get('room_id', '1')
-
-        return render(request, "multiplayer_rock_paper_scissors_play.html", {"room_id": room_id})
+        return render(request, "multiplayer_rock_paper_scissors_play.html")
     else:
         return render(request, '403.html')
 
