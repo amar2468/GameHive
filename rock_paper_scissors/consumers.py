@@ -61,8 +61,7 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                     "type" : "rps_move",
                     "message" : message,
                     "user_option" : user_option,
-                    "username" : username,
-                    "rps_room_name" : self.rps_room_name
+                    "username" : username
                 },
             )
 
@@ -77,8 +76,8 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
 
         self.room_state['rps_options'].setdefault(username, {
             "user_option": user_option,
-            "outcome_of_attempt": "",
-            "outcome_of_round" : "",
+            "outcome_of_round": "",
+            "outcome_of_game" : "",
             "total_wins": 0
         })
         self.room_state['rps_options'][username]["user_option"] = user_option
@@ -114,8 +113,8 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                     
                     if self.attempts == 0:
                         if self.room_state['rps_options'][user1_name]['total_wins'] > self.room_state['rps_options'][user2_name]['total_wins']:
-                            self.room_state['rps_options'][user1_name]["outcome_of_round"] = "Game Over! You won this round! You have received 10 points!"
-                            self.room_state['rps_options'][user2_name]["outcome_of_round"] = "Game Over! You failed to win this game! Good luck next time!"
+                            self.room_state['rps_options'][user1_name]["outcome_of_game"] = "Game Over! You won this round! You have received 10 points!"
+                            self.room_state['rps_options'][user2_name]["outcome_of_game"] = "Game Over! You failed to win this game! Good luck next time!"
                             
                             try:
                                 user_instance = await sync_to_async(User.objects.get)(username=user1_name)
@@ -129,8 +128,8 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                                 await sync_to_async(game_user_profile.save)()
                             
                         elif self.room_state['rps_options'][user2_name]['total_wins'] > self.room_state['rps_options'][user1_name]['total_wins']:
-                            self.room_state['rps_options'][user1_name]["outcome_of_round"] = "Game Over! You failed to win this game! Good luck next time!"
-                            self.room_state['rps_options'][user2_name]["outcome_of_round"] = "Game Over! You won this round! You have received 10 points!"
+                            self.room_state['rps_options'][user1_name]["outcome_of_game"] = "Game Over! You failed to win this game! Good luck next time!"
+                            self.room_state['rps_options'][user2_name]["outcome_of_game"] = "Game Over! You won this round! You have received 10 points!"
 
                             try:
                                 user_instance_2 = await sync_to_async(User.objects.get)(username=user2_name)
@@ -145,15 +144,15 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
 
                     self.room_state['rps_options'][user1_name] = {
                         "user_option" : user1_choice,
-                        "outcome_of_attempt": rps_outcome_user_1,
-                        "outcome_of_round" : self.room_state['rps_options'][user1_name]["outcome_of_round"],
+                        "outcome_of_round": rps_outcome_user_1,
+                        "outcome_of_game" : self.room_state['rps_options'][user1_name]["outcome_of_game"],
                         "total_wins" : self.room_state['rps_options'][user1_name]['total_wins']
                     }
 
                     self.room_state['rps_options'][user2_name] = {
                         "user_option" : user2_choice,
-                        "outcome_of_attempt": rps_outcome_user_2,
-                        "outcome_of_round" : self.room_state['rps_options'][user2_name]["outcome_of_round"],
+                        "outcome_of_round": rps_outcome_user_2,
+                        "outcome_of_game" : self.room_state['rps_options'][user2_name]["outcome_of_game"],
                         "total_wins" : self.room_state['rps_options'][user2_name]['total_wins']
                     }
 
@@ -164,8 +163,7 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                             {
                                 "user_list" : [user1_name, user2_name],
                                 "rps_options": self.room_state['rps_options'],
-                                "attempts" : self.attempts,
-                                "rps_room_name" : self.rps_room_name
+                                "attempts" : self.attempts
                             }
                         )
                     )
@@ -173,5 +171,5 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                     self.room_state['rps_options'][user1_name]["user_option"] = ""
                     self.room_state['rps_options'][user2_name]["user_option"] = ""
                     
-                    self.room_state['rps_options'][user1_name]["outcome_of_attempt"] = ""
-                    self.room_state['rps_options'][user2_name]["outcome_of_attempt"] = ""
+                    self.room_state['rps_options'][user1_name]["outcome_of_round"] = ""
+                    self.room_state['rps_options'][user2_name]["outcome_of_round"] = ""

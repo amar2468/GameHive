@@ -139,7 +139,7 @@
                     }
                 }
 
-                if (rps_options[opponent_username]["outcome_of_attempt"] != "")
+                if (rps_options[opponent_username]["outcome_of_round"] != "")
                 {
                     
                     if (rps_options[opponent_username]["user_option"] === "rock")
@@ -163,9 +163,9 @@
                         $('#scissors_opponent').show();
                     }
 
-                    if (rps_options[username]["outcome_of_round"] == "Game Over! You failed to win this game! Good luck next time!" || rps_options[username]["outcome_of_round"] == "Game Over! You won this round! You have received 10 points!")
+                    if (rps_options[username]["outcome_of_game"] == "Game Over! You failed to win this game! Good luck next time!" || rps_options[username]["outcome_of_game"] == "Game Over! You won this round! You have received 10 points!")
                     {
-                        $('#multiplayer_rps_outcome').text(rps_options[username]["outcome_of_round"]);
+                        $('#multiplayer_rps_outcome').text(rps_options[username]["outcome_of_game"]);
 
                         $('#rock_opponent').hide();
                         $('#paper_opponent').hide();
@@ -182,7 +182,7 @@
                     {
                         $('#carousel_rps_opponent').show();
 
-                        $('#multiplayer_rps_outcome').text("You " + rps_options[username]["outcome_of_attempt"]);
+                        $('#multiplayer_rps_outcome').text("You " + rps_options[username]["outcome_of_round"]);
                         $('#multiplayer_rps_outcome_div').show();
 
                         $('#multiplayer_attempts').text("Attempts Left : " + attempts);
