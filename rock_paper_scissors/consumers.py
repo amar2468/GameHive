@@ -24,8 +24,6 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
         # If there are available rooms (Rooms that have one player waiting), add the user to the first available one.
         else:
             self.rps_room_name = available_rooms.pop(0)
-        
-        print(self.rps_room_name)
 
         self.room_state = {}
 
@@ -69,41 +67,57 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
             print(f"Error decoding JSON: {e}")
     
     async def rps_move(self, event):
+        # Extracting the rps option (rock,paper, or scissors) & username from client-side.
         user_option = event["user_option"]
         username = event["username"]
 
+        # If "rps_options" dictionary (which holds the rps option, outcome of round, and outcome of game for each user) doesn't exist,
+        # it will create an empty dictionary. Otherwise, it will move to the next block of code.
         self.room_state.setdefault('rps_options', {})
 
+        # As in the case above, if the current user does not have a record in rps_options, it will populate it with the info below.
         self.room_state['rps_options'].setdefault(username, {
             "user_option": user_option,
             "outcome_of_round": "",
             "outcome_of_game" : "",
             "total_wins": 0
         })
+
+        # Storing the variable that stores the rps choice from the user in the rps_options dictionary.
         self.room_state['rps_options'][username]["user_option"] = user_option
 
+        # Setting the attempts to 3. The attempts will only be decremented, if either user wins.
         self.room_state.setdefault('attempts', 3)
 
+        # If two users have made a move (chosen between rock,paper,scissors), this "if" statement will be executed.
         if len(self.room_state['rps_options']) == 2:
             
+            # From the "rps_options" dictionary, we are extracting the usernames of the two users
             user1_name, user2_name = list(self.room_state['rps_options'].keys())
 
+            # Storing both user choices in variables, so that they can be used in the "if" statement below
             user1_choice = self.room_state['rps_options'][user1_name]['user_option']
             user2_choice = self.room_state['rps_options'][user2_name]['user_option']
 
+            # If both users made a move, it will start to compare their choices and decide the outcome of the round or game.
             if user1_choice != "" and user2_choice != "":
-
+                
+                # If we have not run out of attempts, we can then compare the user choices
                 if self.attempts > 0:
 
+                    # Created a dictionary which will identify what the outcome of a round should be, relative to the user choice
                     rps_outcomes = {
                         'rock' : {'paper' : 'lose', 'scissors' : 'win'},
                         'paper' : {'rock' : 'win', 'scissors' : 'lose'},
                         'scissors' : {'rock' : 'lose', 'paper' : 'win'}
                     }
 
+                    # Here, we are comparing the choices of the users. It will result in either "win", "lose", or "draw"
                     rps_outcome_user_1 = rps_outcomes[user1_choice].get(user2_choice, 'draw')
                     rps_outcome_user_2 = rps_outcomes[user2_choice].get(user1_choice, 'draw')
 
+                    # In the if..elif block below, we are checking whether either user "won" the round. If so, their total win record
+                    # will be incremented and the number of attempts left for both users will reduce by 1
                     if rps_outcome_user_1 == "win":
                         self.room_state['rps_options'][user1_name]['total_wins'] += 1
                         self.attempts -= 1 # only reduce the number of attempts left if either user won
@@ -111,9 +125,12 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                         self.room_state['rps_options'][user2_name]['total_wins'] += 1
                         self.attempts -= 1
                     
+                    # If we have no attempts left, then we know that we have a winner.
                     if self.attempts == 0:
+                        # If any user won, the user that won will get a message indicating that they won the game, while the user that
+                        # lost will get a message that they lost the game.
                         if self.room_state['rps_options'][user1_name]['total_wins'] > self.room_state['rps_options'][user2_name]['total_wins']:
-                            self.room_state['rps_options'][user1_name]["outcome_of_game"] = "Game Over! You won this round! You have received 10 points!"
+                            self.room_state['rps_options'][user1_name]["outcome_of_game"] = "Game Over! You won this game! You have received 10 points!"
                             self.room_state['rps_options'][user2_name]["outcome_of_game"] = "Game Over! You failed to win this game! Good luck next time!"
                             
                             try:
@@ -129,7 +146,7 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                             
                         elif self.room_state['rps_options'][user2_name]['total_wins'] > self.room_state['rps_options'][user1_name]['total_wins']:
                             self.room_state['rps_options'][user1_name]["outcome_of_game"] = "Game Over! You failed to win this game! Good luck next time!"
-                            self.room_state['rps_options'][user2_name]["outcome_of_game"] = "Game Over! You won this round! You have received 10 points!"
+                            self.room_state['rps_options'][user2_name]["outcome_of_game"] = "Game Over! You won this game! You have received 10 points!"
 
                             try:
                                 user_instance_2 = await sync_to_async(User.objects.get)(username=user2_name)
@@ -155,8 +172,6 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                         "outcome_of_game" : self.room_state['rps_options'][user2_name]["outcome_of_game"],
                         "total_wins" : self.room_state['rps_options'][user2_name]['total_wins']
                     }
-
-                    print(self.room_state['rps_options'][user1_name])
 
                     await self.send(
                         text_data=json.dumps(
