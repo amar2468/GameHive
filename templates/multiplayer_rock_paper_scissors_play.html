@@ -4,95 +4,93 @@
 <body>
     {% load static %}
     {% block content %}
-    <div class="wrapper bg-light" style="justify-content: center;align-items: center;display: flex;">
-        <div class="card">
-            <div class="card-body">
+    <div class="d-flex wrapper bg-light justify-content-center align-items-center">
+        <div class="container-fluid text-center rounded shadow my-5">
 
-                <p id="multiplayer_rps_game_heading" class="text-black" style="font-size:22px;"></p>
-                <input id="username" type="text" value="{{ request.user }}" style="display:none;" />
-                <br><br>
+            <p id="multiplayer_rps_game_heading" class="text-black text-center" style="font-size:22px;"></p>
+            <input id="username" type="text" value="{{ request.user }}" style="display:none;" />
+            <br><br>
 
-                <form id="multiplayer_rps_game">
-                    {% csrf_token %}
-                    <div class="flex_container_rps" style="display:flex;">
-                        <div id="carousel_container_user" style="flex:1;margin-right: 60px;">
-                            <div id="carousel_rps_user" class="carousel slide" data-bs-interval="false">
+            <form id="multiplayer_rps_game">
+                {% csrf_token %}
+                <div class="flex_container_rps" style="display:flex;">
+                    <div class="col-md-6" id="carousel_container_user">
+                        <div id="carousel_rps_user" class="carousel slide" data-bs-interval="false">
 
-                                <div class="carousel-inner">
+                            <div class="carousel-inner">
 
-                                    <div class="carousel-item active" data-value="paper">
-                                        <img src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
-                                    </div>
-
-                                    <div class="carousel-item" data-value="rock">
-                                        <img src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
-                                    </div>
-
-                                    <div class="carousel-item" data-value="scissors">
-                                        <img src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
-                                    </div>
-
+                                <div class="carousel-item active" data-value="paper">
+                                    <img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
                                 </div>
 
-                                <a class="carousel-control-prev" id="carousel_control_prev_for_user" href="#carousel_rps_user" style="background-color: blue;" role="button" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </a>
-                                <a class="carousel-control-next" id="carousel_control_next_for_user" href="#carousel_rps_user" style="background-color: blue;" role="button" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div id="carousel_container_opponent" style="flex:1;margin-left: 60px;">
-                            <div id="carousel_rps_opponent" style="display:none;" class="carousel slide" data-bs-interval="false">
-
-                                <div class="carousel-inner">
-
-                                    <div id="paper_opponent" class="carousel-item active" style="display: none;">
-                                        <img src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
-                                    </div>
-
-                                    <div id="rock_opponent" class="carousel-item" style="display: none;">
-                                        <img src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
-                                    </div>
-
-                                    <div id="scissors_opponent" class="carousel-item" style="display: none;">
-                                        <img src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
-                                    </div>
-
+                                <div class="carousel-item" data-value="rock">
+                                    <img class="img-fluid" src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
                                 </div>
+
+                                <div class="carousel-item" data-value="scissors">
+                                    <img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
+                                </div>
+
+                            </div>
+
+                            <a class="carousel-control-prev" id="carousel_control_prev_for_user" href="#carousel_rps_user" style="background-color: blue;" role="button" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" id="carousel_control_next_for_user" href="#carousel_rps_user" style="background-color: blue;" role="button" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="spinner-border" id="multiplayer_loading_rps" role="status" style="display:none;">
+                            <span class="visually-hidden"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6" id="carousel_container_opponent">
+                        <div id="carousel_rps_opponent" style="display:none;" class="carousel slide" data-bs-interval="false">
+
+                            <div class="carousel-inner">
+
+                                <div id="paper_opponent" class="carousel-item active" style="display: none;">
+                                    <img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
+                                </div>
+
+                                <div id="rock_opponent" class="carousel-item" style="display: none;">
+                                    <img class="img-fluid" src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
+                                </div>
+
+                                <div id="scissors_opponent" class="carousel-item" style="display: none;">
+                                    <img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
+                                </div>
+
                             </div>
                         </div>
-
                     </div>
 
-                    <br><br>
-
-                    <div class="alert alert-primary text-black" id="multiplayer_rps_outcome_div" role="alert" style="display:none;">
-                        <p id="multiplayer_rps_outcome" style="text-align:center;"></p>
-                    </div>
-
-                    <br><br>
-
-                    <div class="alert alert-warning text-black" id="multiplayer_attempts_div" role="alert" style="display:none;">
-                        <p id="multiplayer_attempts" style="text-align:center;"></p>
-                    </div>
-
-                    <br><br>
-
-                    <input type="hidden" id="multiplayer_carousel_value" name="multiplayer_carousel_value" value="">
-
-                    <button type="button" id="multiplayer_selected_rps" style="font-size: 20px;" class="btn btn-primary btn-lg">Select</button>
-                </form>
-
-                <br><br>
-
-                <div class="spinner-border" id="multiplayer_loading_rps" role="status" style="display:none;">
-                    <span class="visually-hidden"></span>
                 </div>
-            </div>
+
+                <br><br>
+
+                <div class="alert alert-primary text-black" id="multiplayer_rps_outcome_div" role="alert" style="display:none;">
+                    <p id="multiplayer_rps_outcome" style="text-align:center;"></p>
+                </div>
+
+                <br><br>
+
+                <div class="alert alert-warning text-black" id="multiplayer_attempts_div" role="alert" style="display:none;">
+                    <p id="multiplayer_attempts" style="text-align:center;"></p>
+                </div>
+
+                <br><br>
+
+                <input type="hidden" id="multiplayer_carousel_value" name="multiplayer_carousel_value" value="">
+
+                <button type="button" id="multiplayer_selected_rps" style="font-size: 20px;" class="btn btn-primary btn-lg">Select</button>
+            </form>
         </div>
     </div>
 
