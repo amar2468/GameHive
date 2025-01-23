@@ -4,10 +4,10 @@
 <body>
     {% load static %}
     {% block content %}
-    <div class="wrapper bg-light d-flex" style="justify-content: center;align-items: center;">
-        <div class="container-fluid text-center  rounded shadow my-5">
+    <div class="wrapper bg-light d-flex justify-content-center align-items-center">
+        <div class="container-fluid text-center rounded shadow my-5">
 
-            <p id="rps_game_heading" class="text-black" style="font-size:22px;text-align: center;"></p>
+            <p id="rps_game_heading" class="text-black text-center" style="font-size:22px;"></p>
             <br><br>
 
             <form id="rps_form" method="POST" action="{% url 'rock_paper_scissors:rps_form_submitted' %}">
