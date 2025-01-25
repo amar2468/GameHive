@@ -110,6 +110,25 @@
                         </div>
                     </div>
                 </div>
+
+
+                <div class="modal" id="session_disconnected_modal" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="card mx-sm-5 mb-5">
+                                    <div id="div_session_disconnected" role="alert">
+                                        <p class="inform_user_session_disconnect lead" style="text-align:center;">Your opponent has left the game. What would you like to do next?</p>
+                                    </div>
+                                </div>
+                                
+                                <button type="button" class="btn btn-primary">Replay?</button>
+
+                                <button type="button" class="btn btn-primary">Back to home page?</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -159,6 +178,10 @@
             if (message.type === 'start_rps_game') {
                 $('#start_multiplayer_game').show();
                 $('#loading_screen_waiting_for_opponent_div').hide();
+            }
+
+            else if(message.type === 'end_game') {
+                $('#session_disconnected_modal').modal('show');
             }
 
             if (message.hasOwnProperty('rps_options')) {
