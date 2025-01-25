@@ -4,99 +4,135 @@
 <body>
     {% load static %}
     {% block content %}
-    <div class="d-flex wrapper bg-light justify-content-center align-items-center">
-        <div class="container-fluid text-center rounded shadow my-5">
+    <div id="start_multiplayer_game" style="display:none;">
+        <div class="d-flex wrapper bg-light justify-content-center align-items-center">
+            <div class="container-fluid text-center rounded shadow my-5">
+                {{ rps_room_name }}
+                <p id="multiplayer_rps_game_heading" class="text-black text-center" style="font-size:22px;"></p>
+                <input id="username" type="text" value="{{ request.user }}" style="display:none;" />
+                <br><br>
 
-            <p id="multiplayer_rps_game_heading" class="text-black text-center" style="font-size:22px;"></p>
-            <input id="username" type="text" value="{{ request.user }}" style="display:none;" />
-            <br><br>
+                <form id="multiplayer_rps_game">
+                    {% csrf_token %}
+                    <div class="flex_container_rps" style="display:flex;">
+                        <div class="col-md-6" id="carousel_container_user">
+                            <div id="carousel_rps_user" class="carousel slide" data-bs-interval="false">
 
-            <form id="multiplayer_rps_game">
-                {% csrf_token %}
-                <div class="flex_container_rps" style="display:flex;">
-                    <div class="col-md-6" id="carousel_container_user">
-                        <div id="carousel_rps_user" class="carousel slide" data-bs-interval="false">
+                                <div class="carousel-inner">
 
-                            <div class="carousel-inner">
+                                    <div class="carousel-item active" data-value="paper">
+                                        <img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
+                                    </div>
 
-                                <div class="carousel-item active" data-value="paper">
-                                    <img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
+                                    <div class="carousel-item" data-value="rock">
+                                        <img class="img-fluid" src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
+                                    </div>
+
+                                    <div class="carousel-item" data-value="scissors">
+                                        <img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
+                                    </div>
+
                                 </div>
 
-                                <div class="carousel-item" data-value="rock">
-                                    <img class="img-fluid" src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
-                                </div>
-
-                                <div class="carousel-item" data-value="scissors">
-                                    <img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
-                                </div>
-
-                            </div>
-
-                            <a class="carousel-control-prev" id="carousel_control_prev_for_user" href="#carousel_rps_user" style="background-color: blue;" role="button" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" id="carousel_control_next_for_user" href="#carousel_rps_user" style="background-color: blue;" role="button" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-center align-items-center">
-                        <div class="spinner-border" id="multiplayer_loading_rps" role="status" style="display:none;">
-                            <span class="visually-hidden"></span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6" id="carousel_container_opponent">
-                        <div id="carousel_rps_opponent" style="display:none;" class="carousel slide" data-bs-interval="false">
-
-                            <div class="carousel-inner">
-
-                                <div id="paper_opponent" class="carousel-item active" style="display: none;">
-                                    <img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
-                                </div>
-
-                                <div id="rock_opponent" class="carousel-item" style="display: none;">
-                                    <img class="img-fluid" src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
-                                </div>
-
-                                <div id="scissors_opponent" class="carousel-item" style="display: none;">
-                                    <img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
-                                </div>
-
+                                <a class="carousel-control-prev" id="carousel_control_prev_for_user" href="#carousel_rps_user" style="background-color: blue;" role="button" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" id="carousel_control_next_for_user" href="#carousel_rps_user" style="background-color: blue;" role="button" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </a>
                             </div>
                         </div>
+
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="spinner-border" id="multiplayer_loading_rps" role="status" style="display:none;">
+                                <span class="visually-hidden"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6" id="carousel_container_opponent">
+                            <div id="carousel_rps_opponent" style="display:none;" class="carousel slide" data-bs-interval="false">
+
+                                <div class="carousel-inner">
+
+                                    <div id="paper_opponent" class="carousel-item active" style="display: none;">
+                                        <img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
+                                    </div>
+
+                                    <div id="rock_opponent" class="carousel-item" style="display: none;">
+                                        <img class="img-fluid" src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
+                                    </div>
+
+                                    <div id="scissors_opponent" class="carousel-item" style="display: none;">
+                                        <img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
+                    <br><br>
+
+                    <div class="alert alert-primary text-black" id="multiplayer_rps_outcome_div" role="alert" style="display:none;">
+                        <p id="multiplayer_rps_outcome" style="text-align:center;"></p>
+                    </div>
+
+                    <br><br>
+
+                    <div class="alert alert-warning text-black" id="multiplayer_attempts_div" role="alert">
+                        <p id="multiplayer_attempts" style="text-align:center;">Quickest player to win 3 games wins!</p>
+                    </div>
+
+                    <br><br>
+
+                    <input type="hidden" id="multiplayer_carousel_value" name="multiplayer_carousel_value" value="">
+
+                    <button type="button" id="multiplayer_selected_rps" style="font-size: 20px;" class="btn btn-primary btn-lg">Select</button>
+                </form>
+
+                <div class="modal" id="multiplayer_rps_end_of_game_info_modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="card mx-sm-5 mb-5">
+                                    <div id="multiplayer_display_end_result_of_rps_game" role="alert">
+                                        <p class="multiplayer_rps_end_of_game_info lead" style="text-align:center;"></p>
+                                    </div>
+                                </div>
+                                
+                                <button type="button" id="multiplayer_rps_replay_game" class="btn btn-primary">Replay?</button>
+
+                                <button type="button" id="multiplayer_back_to_homepage_button" class="btn btn-primary">Back to home page?</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <br><br>
-
-                <div class="alert alert-primary text-black" id="multiplayer_rps_outcome_div" role="alert" style="display:none;">
-                    <p id="multiplayer_rps_outcome" style="text-align:center;"></p>
-                </div>
-
-                <br><br>
-
-                <div class="alert alert-warning text-black" id="multiplayer_attempts_div" role="alert" style="display:none;">
-                    <p id="multiplayer_attempts" style="text-align:center;"></p>
-                </div>
-
-                <br><br>
-
-                <input type="hidden" id="multiplayer_carousel_value" name="multiplayer_carousel_value" value="">
-
-                <button type="button" id="multiplayer_selected_rps" style="font-size: 20px;" class="btn btn-primary btn-lg">Select</button>
-            </form>
+            </div>
         </div>
+    </div>
+    
+    <div class="d-flex justify-content-center align-items-center vh-100" id="loading_screen_waiting_for_opponent_div">
+        <p id="waiting_for_oppponent_msg" class="lead text-black text-center" style="font-size: 40px;">Waiting for opponent to join</p>&nbsp;&nbsp;
+        <div class="spinner-grow text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <br><br>
     </div>
 
     <script>
 
         let username = document.getElementById("username").value;
+
+        $('#multiplayer_back_to_homepage_button').click(function() {
+            window.location.href = "{% url 'homepage' %}";
+        });
+
+        $('#multiplayer_rps_replay_game').click(function () {
+            window.location.href = "{% url 'rock_paper_scissors:multiplayer_rps_start_game' %}"
+        });
 
         const gameSocket = new WebSocket(
             'ws://' + window.location.host +
@@ -114,18 +150,19 @@
             gameSocket.send(JSON.stringify(message));
         });
 
-        gameSocket.onmessage = function(event) {
-            let data = JSON.parse(event.data);
-            $('#multiplayer_rps_game_heading').text("Room Number: " + data.rps_room_name);
-        };
-
         gameSocket.addEventListener("message", (event) => {
             const message = JSON.parse(event.data);
             console.log('Received message from server:', message);
 
+            $('#multiplayer_rps_game_heading').text("Room Number: " + message.rps_room_name);
+
+            if (message.type === 'start_rps_game') {
+                $('#start_multiplayer_game').show();
+                $('#loading_screen_waiting_for_opponent_div').hide();
+            }
+
             if (message.hasOwnProperty('rps_options')) {
                 let rps_options = message.rps_options;
-                let attempts = message.attempts;
                 let user_list = message.user_list;
 
                 for(let i = 0; i < user_list.length; i++)
@@ -138,8 +175,7 @@
                 }
 
                 if (rps_options[opponent_username]["outcome_of_round"] != "")
-                {
-                    
+                {                    
                     if (rps_options[opponent_username]["user_option"] === "rock")
                     {
                         $('#paper_opponent').hide();
@@ -161,7 +197,7 @@
                         $('#scissors_opponent').show();
                     }
 
-                    if (rps_options[username]["outcome_of_game"] == "Game Over! You failed to win this game! Good luck next time!" || rps_options[username]["outcome_of_game"] == "Game Over! You won this round! You have received 10 points!")
+                    if (rps_options[username]["outcome_of_game"] == "Game Over! You failed to win this game! Good luck next time!" || rps_options[username]["outcome_of_game"] == "Game Over! You won this game! You have received 10 points!")
                     {
                         $('#multiplayer_rps_outcome').text(rps_options[username]["outcome_of_game"]);
 
@@ -170,10 +206,18 @@
                         $('#scissors_opponent').hide();
 
                         $('#multiplayer_selected_rps').text("Try Again");
-                        $('#multiplayer_attempts').text("Attempts Left : 0");
+
+                        $('#multiplayer_attempts_div').hide();
 
                         $('#multiplayer_rps_outcome_div').show();
-                        $('#multiplayer_attempts_div').show();
+
+                        $('#multiplayer_loading_rps').hide();
+
+                        $('#multiplayer_rps_end_of_game_info').text(rps_options[username]["outcome_of_game"]);
+
+                        setTimeout(function() {
+                            $('#multiplayer_rps_end_of_game_info_modal').modal('show');
+                        }, 1000);
                     }
                     
                     else
@@ -182,9 +226,6 @@
 
                         $('#multiplayer_rps_outcome').text("You " + rps_options[username]["outcome_of_round"]);
                         $('#multiplayer_rps_outcome_div').show();
-
-                        $('#multiplayer_attempts').text("Attempts Left : " + attempts);
-                        $('#multiplayer_attempts_div').show();
 
                         $('#multiplayer_loading_rps').hide();
                     }
