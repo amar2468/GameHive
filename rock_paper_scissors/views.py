@@ -21,13 +21,6 @@ def single_player_rps(request):
     else:
         return render(request, '403.html')
 
-# This view allows a user to open the config page, so that they can select the room id, in order to set up the game
-def multiplayer_rps_config(request):
-    if request.user.is_authenticated:
-        return render(request, 'config_rock_paper_scissors_multiplayer.html')
-    else:
-        return render(request, '403.html')
-
 # This view sends the user to the multiplayer game page
 def multiplayer_rps_start_game(request):
     if request.user.is_authenticated:
