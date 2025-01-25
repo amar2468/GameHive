@@ -10,7 +10,21 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
     global available_rooms
     available_rooms = []
 
+    # Creating a global dictionary to hold the current users in the session
+    global users_in_session
+    users_in_session = {}
+
+    # Creating a global variable that stores the total number of wins required to win the game
+    global wins_required_to_win
+    wins_required_to_win = 3
+
+    # This variable will be used when checking if both users have joined the session
+    global REQUIRED_NUMBER_OF_USERS
+    REQUIRED_NUMBER_OF_USERS = 2
+
     async def connect(self):
+        current_user = self.scope['user']
+
         # If there are no players in any room, then generate a random room for the user to enter in.
         if not available_rooms:
             rps_room_name = random.randint(1,100)
@@ -20,29 +34,47 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
             self.rps_room_name = rps_room_name
 
             available_rooms.append(self.rps_room_name)
+
+            users_in_session[self.rps_room_name] = [current_user.username]
         
         # If there are available rooms (Rooms that have one player waiting), add the user to the first available one.
         else:
             self.rps_room_name = available_rooms.pop(0)
 
-        self.room_state = {}
+            users_in_session[self.rps_room_name].append(current_user.username)
 
-        self.attempts = 3 # initialise the number of attempts for this round
+        self.room_state = {}
 
         await self.channel_layer.group_add(self.rps_room_name, self.channel_name)
 
         await self.accept()
 
-        await self.send(text_data=json.dumps({
-            'rps_room_name' : self.rps_room_name,
-        }))
+        # If two people are in the mentioned room, we will inform the client side that both users are in the room and the game can commence.
+        if len(users_in_session[self.rps_room_name]) == REQUIRED_NUMBER_OF_USERS:
+            await self.channel_layer.group_send(
+                self.rps_room_name,
+                {
+                    'type' : 'start_rps_game',
+                    'rps_room_name' : self.rps_room_name,
+                }
+            )
+        # If the room does not have 2 users, we will just send the room name back to the client-side.
+        else:
+            await self.send(text_data=json.dumps({
+                'rps_room_name' : self.rps_room_name,
+            }))
 
     async def disconnect(self, close_code):
         if self.rps_room_name:
             if self.rps_room_name in available_rooms:
                 available_rooms.remove(self.rps_room_name)
+            if self.rps_room_name in users_in_session.keys():
+                del users_in_session[self.rps_room_name]
         print(f"WebSocket Disconnected with code: {close_code}")
         await self.channel_layer.group_discard(self.rps_room_name, self.channel_name)
+    
+    async def start_rps_game(self, event):
+        await self.send(text_data=json.dumps({'type' : 'start_rps_game', 'rps_room_name' : self.rps_room_name}))
 
     async def receive(self, text_data):
         print(f"Received raw data: {text_data}")
@@ -86,9 +118,6 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
         # Storing the variable that stores the rps choice from the user in the rps_options dictionary.
         self.room_state['rps_options'][username]["user_option"] = user_option
 
-        # Setting the attempts to 3. The attempts will only be decremented, if either user wins.
-        self.room_state.setdefault('attempts', 3)
-
         # If two users have made a move (chosen between rock,paper,scissors), this "if" statement will be executed.
         if len(self.room_state['rps_options']) == 2:
             
@@ -101,116 +130,108 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
 
             # If both users made a move, it will start to compare their choices and decide the outcome of the round or game.
             if user1_choice != "" and user2_choice != "":
+
+                # Created a dictionary which will identify what the outcome of a round should be, relative to the user choice
+                rps_outcomes = {
+                    'rock' : {'paper' : 'lose', 'scissors' : 'win'},
+                    'paper' : {'rock' : 'win', 'scissors' : 'lose'},
+                    'scissors' : {'rock' : 'lose', 'paper' : 'win'}
+                }
+
+                # Here, we are comparing the choices of the users. It will result in either "win", "lose", or "draw"
+                rps_outcome_user_1 = rps_outcomes[user1_choice].get(user2_choice, 'draw')
+                rps_outcome_user_2 = rps_outcomes[user2_choice].get(user1_choice, 'draw')
+
+                # In the if..elif block below, we are checking whether either user "won" the round. If so, their total win record
+                # will be incremented and the number of attempts left for both users will reduce by 1
+                if rps_outcome_user_1 == "win":
+                    self.room_state['rps_options'][user1_name]['total_wins'] += 1
+                elif rps_outcome_user_2 == "win":
+                    self.room_state['rps_options'][user2_name]['total_wins'] += 1
                 
-                # If we have not run out of attempts, we can then compare the user choices
-                if self.attempts > 0:
-
-                    # Created a dictionary which will identify what the outcome of a round should be, relative to the user choice
-                    rps_outcomes = {
-                        'rock' : {'paper' : 'lose', 'scissors' : 'win'},
-                        'paper' : {'rock' : 'win', 'scissors' : 'lose'},
-                        'scissors' : {'rock' : 'lose', 'paper' : 'win'}
-                    }
-
-                    # Here, we are comparing the choices of the users. It will result in either "win", "lose", or "draw"
-                    rps_outcome_user_1 = rps_outcomes[user1_choice].get(user2_choice, 'draw')
-                    rps_outcome_user_2 = rps_outcomes[user2_choice].get(user1_choice, 'draw')
-
-                    # In the if..elif block below, we are checking whether either user "won" the round. If so, their total win record
-                    # will be incremented and the number of attempts left for both users will reduce by 1
-                    if rps_outcome_user_1 == "win":
-                        self.room_state['rps_options'][user1_name]['total_wins'] += 1
-                        self.attempts -= 1 # only reduce the number of attempts left if either user won
-                    elif rps_outcome_user_2 == "win":
-                        self.room_state['rps_options'][user2_name]['total_wins'] += 1
-                        self.attempts -= 1
+                # If any user won, the user that won will get a message indicating that they won the game, while the user that
+                # lost will get a message that they lost the game.
+                if self.room_state['rps_options'][user1_name]['total_wins'] == wins_required_to_win:
+                    self.room_state['rps_options'][user1_name]["outcome_of_game"] = "Game Over! You won this game! You have received 10 points!"
+                    self.room_state['rps_options'][user2_name]["outcome_of_game"] = "Game Over! You failed to win this game! Good luck next time!"
                     
-                    # If we have no attempts left, then we know that we have a winner.
-                    if self.attempts == 0:
-                        # If any user won, the user that won will get a message indicating that they won the game, while the user that
-                        # lost will get a message that they lost the game.
-                        if self.room_state['rps_options'][user1_name]['total_wins'] > self.room_state['rps_options'][user2_name]['total_wins']:
-                            self.room_state['rps_options'][user1_name]["outcome_of_game"] = "Game Over! You won this game! You have received 10 points!"
-                            self.room_state['rps_options'][user2_name]["outcome_of_game"] = "Game Over! You failed to win this game! Good luck next time!"
-                            
-                            # Attempt to update the user score by 10, if they won. Except part will run if this is the user's first ever game
-                            try:
-                                # Retrieving the username
-                                user_instance = await sync_to_async(User.objects.get)(username=user1_name)
-                                # Based on the username, we are trying to find the game record that goes with the username
-                                game_user_profile = await sync_to_async(GameUserProfile.objects.get)(user=user_instance)
-                                # Increase the user score by 10, as they won
-                                game_user_profile.current_score += 10
-                                # Save the record
-                                await sync_to_async(game_user_profile.save)()
-                            except GameUserProfile.DoesNotExist:
-                                # Retrieving the username
-                                user_instance = await sync_to_async(User.objects.get)(username=user1_name)
-                                # Create the user profile that will keep track of the points won. Set the score to be 10, as they won.
-                                game_user_profile = await sync_to_async(GameUserProfile.objects.create) (
-                                    user = user_instance,
-                                    current_score = 10,
-                                )
-                        
-                        # If any user won, the user that won will get a message indicating that they won the game, while the user that
-                        # lost will get a message that they lost the game.
-                        elif self.room_state['rps_options'][user2_name]['total_wins'] > self.room_state['rps_options'][user1_name]['total_wins']:
-                            self.room_state['rps_options'][user1_name]["outcome_of_game"] = "Game Over! You failed to win this game! Good luck next time!"
-                            self.room_state['rps_options'][user2_name]["outcome_of_game"] = "Game Over! You won this game! You have received 10 points!"
-
-                            # Attempt to update the user score by 10, if they won. Except part will run if this is the user's first ever game
-                            try:
-                                # Retrieving the username
-                                user_instance_2 = await sync_to_async(User.objects.get)(username=user2_name)
-                                # Based on the username, we are trying to find the game record that goes with the username
-                                game_user_profile = await sync_to_async(GameUserProfile.objects.get)(user=user_instance_2)
-                                # Increase the user score by 10, as they won
-                                game_user_profile.current_score += 10
-                                # Save the record
-                                await sync_to_async(game_user_profile.save)()
-                            except GameUserProfile.DoesNotExist:
-                                # Retrieving the username
-                                user_instance_2 = await sync_to_async(User.objects.get)(username=user2_name)
-                                # Create the user profile that will keep track of the points won. Set the score to be 10, as they won.
-                                game_user_profile = await sync_to_async(GameUserProfile.objects.create) (
-                                    user = user_instance_2,
-                                    current_score = 10,
-                                )
-                    # Updating the rps_options dictionary with the latest information from the game, so that it can be sent back to client-side
-                    self.room_state['rps_options'][user1_name] = {
-                        "user_option" : user1_choice,
-                        "outcome_of_round": rps_outcome_user_1,
-                        "outcome_of_game" : self.room_state['rps_options'][user1_name]["outcome_of_game"],
-                        "total_wins" : self.room_state['rps_options'][user1_name]['total_wins']
-                    }
-
-                    # Updating the rps_options dictionary with the latest information from the game, so that it can be sent back to client-side
-                    self.room_state['rps_options'][user2_name] = {
-                        "user_option" : user2_choice,
-                        "outcome_of_round": rps_outcome_user_2,
-                        "outcome_of_game" : self.room_state['rps_options'][user2_name]["outcome_of_game"],
-                        "total_wins" : self.room_state['rps_options'][user2_name]['total_wins']
-                    }
-
-                    # Sending back the list that contains both usernames, the outcome of the round or game, and the number of attempts left.
-                    # This will be sent back to the client-side part. It will be sent in the form of JSON.
-                    await self.send(
-                        text_data=json.dumps(
-                            {
-                                "user_list" : [user1_name, user2_name],
-                                "rps_options": self.room_state['rps_options'],
-                                "attempts" : self.attempts,
-                                "rps_room_name" : self.rps_room_name
-                            }
+                    # Attempt to update the user score by 10, if they won. Except part will run if this is the user's first ever game
+                    try:
+                        # Retrieving the username
+                        user_instance = await sync_to_async(User.objects.get)(username=user1_name)
+                        # Based on the username, we are trying to find the game record that goes with the username
+                        game_user_profile = await sync_to_async(GameUserProfile.objects.get)(user=user_instance)
+                        # Increase the user score by 10, as they won
+                        game_user_profile.current_score += 10
+                        # Save the record
+                        await sync_to_async(game_user_profile.save)()
+                    except GameUserProfile.DoesNotExist:
+                        # Retrieving the username
+                        user_instance = await sync_to_async(User.objects.get)(username=user1_name)
+                        # Create the user profile that will keep track of the points won. Set the score to be 10, as they won.
+                        game_user_profile = await sync_to_async(GameUserProfile.objects.create) (
+                            user = user_instance,
+                            current_score = 10,
                         )
-                    )
+                
+                # If any user won, the user that won will get a message indicating that they won the game, while the user that
+                # lost will get a message that they lost the game.
+                elif self.room_state['rps_options'][user2_name]['total_wins'] == wins_required_to_win:
+                    self.room_state['rps_options'][user1_name]["outcome_of_game"] = "Game Over! You failed to win this game! Good luck next time!"
+                    self.room_state['rps_options'][user2_name]["outcome_of_game"] = "Game Over! You won this game! You have received 10 points!"
 
-                    # After the information is sent to the client-side, we want to clear the options that the users chose
-                    # This is done so that their options are not remembered in the next round, which would lead to inaccuracies in the result
-                    self.room_state['rps_options'][user1_name]["user_option"] = ""
-                    self.room_state['rps_options'][user2_name]["user_option"] = ""
-                    
-                    # After the information is sent to the client-side, we want to clear the outcome of that particular round.
-                    # This is done so that the outcome of the round is not remembered in the next round.
-                    self.room_state['rps_options'][user1_name]["outcome_of_round"] = ""
-                    self.room_state['rps_options'][user2_name]["outcome_of_round"] = ""
+                    # Attempt to update the user score by 10, if they won. Except part will run if this is the user's first ever game
+                    try:
+                        # Retrieving the username
+                        user_instance_2 = await sync_to_async(User.objects.get)(username=user2_name)
+                        # Based on the username, we are trying to find the game record that goes with the username
+                        game_user_profile = await sync_to_async(GameUserProfile.objects.get)(user=user_instance_2)
+                        # Increase the user score by 10, as they won
+                        game_user_profile.current_score += 10
+                        # Save the record
+                        await sync_to_async(game_user_profile.save)()
+                    except GameUserProfile.DoesNotExist:
+                        # Retrieving the username
+                        user_instance_2 = await sync_to_async(User.objects.get)(username=user2_name)
+                        # Create the user profile that will keep track of the points won. Set the score to be 10, as they won.
+                        game_user_profile = await sync_to_async(GameUserProfile.objects.create) (
+                            user = user_instance_2,
+                            current_score = 10,
+                        )
+                # Updating the rps_options dictionary with the latest information from the game, so that it can be sent back to client-side
+                self.room_state['rps_options'][user1_name] = {
+                    "user_option" : user1_choice,
+                    "outcome_of_round": rps_outcome_user_1,
+                    "outcome_of_game" : self.room_state['rps_options'][user1_name]["outcome_of_game"],
+                    "total_wins" : self.room_state['rps_options'][user1_name]['total_wins']
+                }
+
+                # Updating the rps_options dictionary with the latest information from the game, so that it can be sent back to client-side
+                self.room_state['rps_options'][user2_name] = {
+                    "user_option" : user2_choice,
+                    "outcome_of_round": rps_outcome_user_2,
+                    "outcome_of_game" : self.room_state['rps_options'][user2_name]["outcome_of_game"],
+                    "total_wins" : self.room_state['rps_options'][user2_name]['total_wins']
+                }
+
+                # Sending back the list that contains both usernames, the outcome of the round or game, and the number of attempts left.
+                # This will be sent back to the client-side part. It will be sent in the form of JSON.
+                await self.send(
+                    text_data=json.dumps(
+                        {
+                            "user_list" : [user1_name, user2_name],
+                            "rps_options": self.room_state['rps_options'],
+                            "rps_room_name" : self.rps_room_name
+                        }
+                    )
+                )
+
+                # After the information is sent to the client-side, we want to clear the options that the users chose
+                # This is done so that their options are not remembered in the next round, which would lead to inaccuracies in the result
+                self.room_state['rps_options'][user1_name]["user_option"] = ""
+                self.room_state['rps_options'][user2_name]["user_option"] = ""
+                
+                # After the information is sent to the client-side, we want to clear the outcome of that particular round.
+                # This is done so that the outcome of the round is not remembered in the next round.
+                self.room_state['rps_options'][user1_name]["outcome_of_round"] = ""
+                self.room_state['rps_options'][user2_name]["outcome_of_round"] = ""
