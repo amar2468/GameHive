@@ -71,10 +71,32 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
             if self.rps_room_name in users_in_session.keys():
                 del users_in_session[self.rps_room_name]
         print(f"WebSocket Disconnected with code: {close_code}")
+
+        await self.channel_layer.group_send(
+            self.rps_room_name,
+            {
+                'type' : 'end_game',
+                'rps_room_name' : self.rps_room_name,
+            }
+        )
+
         await self.channel_layer.group_discard(self.rps_room_name, self.channel_name)
     
     async def start_rps_game(self, event):
-        await self.send(text_data=json.dumps({'type' : 'start_rps_game', 'rps_room_name' : self.rps_room_name}))
+        await self.send(text_data=json.dumps(
+            {
+                'type' : 'start_rps_game', 
+                'rps_room_name' : self.rps_room_name
+            }
+        ))
+    
+    async def end_game(self, event):
+        await self.send(text_data=json.dumps(
+            {
+                'type' : 'end_game',
+                'rps_room_name' : self.rps_room_name,
+            }
+        ))
 
     async def receive(self, text_data):
         print(f"Received raw data: {text_data}")
