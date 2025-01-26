@@ -45,18 +45,12 @@
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="spinner-border" id="multiplayer_loading_rps" role="status" style="display:none;">
-                                <span class="visually-hidden"></span>
-                            </div>
-                        </div>
-
                         <div class="col-md-6" id="carousel_container_opponent">
-                            <div id="carousel_rps_opponent" style="display:none;" class="carousel slide" data-bs-interval="false">
+                            <div id="carousel_rps_opponent" class="carousel slide" data-bs-interval="false">
 
                                 <div class="carousel-inner">
 
-                                    <div id="paper_opponent" class="carousel-item active" style="display: none;">
+                                    <div id="paper_opponent" class="carousel-item" style="display: none;">
                                         <img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
                                     </div>
 
@@ -66,6 +60,15 @@
 
                                     <div id="scissors_opponent" class="carousel-item" style="display: none;">
                                         <img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
+                                    </div>
+                                    
+                                    <div id="waiting_for_opponent_choice" class="carousel-item active justify-content-center align-items-center">
+                                        <div class="spinner-border" id="multiplayer_loading_rps" role="status">
+                                            <span class="visually-hidden"></span>
+                                        </div>
+
+                                        <br>
+                                        <p class="lead text-black text-center">Waiting for opponent to choose their option</p>
                                     </div>
 
                                 </div>
@@ -182,7 +185,9 @@
             }
 
             else if(message.type === 'end_game') {
-                $('#session_disconnected_modal').modal('show');
+                if ($('#multiplayer_rps_end_of_game_info_modal').is(':hidden')) {
+                    $('#session_disconnected_modal').modal('show');
+                }
             }
 
             if (message.hasOwnProperty('rps_options')) {
@@ -205,6 +210,7 @@
                         $('#paper_opponent').hide();
                         $('#scissors_opponent').hide();
                         $('#rock_opponent').show();
+                        $('#waiting_for_opponent_choice').hide();
                     }
 
                     else if (rps_options[opponent_username]["user_option"] === "paper")
@@ -212,6 +218,7 @@
                         $('#rock_opponent').hide();
                         $('#scissors_opponent').hide();
                         $('#paper_opponent').show();
+                        $('#waiting_for_opponent_choice').hide();
                     }
 
                     else if (rps_options[opponent_username]["user_option"] === "scissors")
@@ -219,6 +226,7 @@
                         $('#rock_opponent').hide();
                         $('#paper_opponent').hide();
                         $('#scissors_opponent').show();
+                        $('#waiting_for_opponent_choice').hide();
                     }
 
                     if (rps_options[username]["outcome_of_game"] == "Game Over! You failed to win this game! Good luck next time!" || rps_options[username]["outcome_of_game"] == "Game Over! You won this game! You have received 10 points!")
@@ -228,6 +236,7 @@
                         $('#rock_opponent').hide();
                         $('#paper_opponent').hide();
                         $('#scissors_opponent').hide();
+                        $('#waiting_for_opponent_choice').hide();
 
                         $('#multiplayer_selected_rps').text("Try Again");
 
@@ -251,7 +260,12 @@
                         $('#multiplayer_rps_outcome').text("You " + rps_options[username]["outcome_of_round"]);
                         $('#multiplayer_rps_outcome_div').show();
 
-                        $('#multiplayer_loading_rps').hide();
+                        setTimeout(function() {
+                            $('#paper_opponent').hide();
+                            $('#scissors_opponent').hide();
+                            $('#rock_opponent').hide();
+                            $('#waiting_for_opponent_choice').show();
+                        }, 2000);
                     }
                 }
 
@@ -269,7 +283,6 @@
 
         document.querySelector('#multiplayer_selected_rps').onclick = function (e) {
             var selected_rps_user = $('#carousel_rps_user .carousel-item.active').data('value');
-            document.getElementById('multiplayer_loading_rps').style.display = 'block';
 
 
             gameSocket.send(JSON.stringify({
