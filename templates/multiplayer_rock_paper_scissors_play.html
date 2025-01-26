@@ -43,6 +43,10 @@
                                     <span class="visually-hidden">Next</span>
                                 </a>
                             </div>
+
+                            <div>
+                                <p id="user_selection_prompt" class="lead">Make your choice!</p>
+                            </div>
                         </div>
 
                         <div class="col-md-6" id="carousel_container_opponent">
@@ -257,14 +261,25 @@
                     {
                         $('#carousel_rps_opponent').show();
 
+                        $('#user_selection_prompt').text("You chose " + rps_options[username]["user_option"] + "!");
+
                         $('#multiplayer_rps_outcome').text("You " + rps_options[username]["outcome_of_round"]);
                         $('#multiplayer_rps_outcome_div').show();
 
                         setTimeout(function() {
+                            // After waiting for 2 seconds, we will reset the opponent options and bring back the loading spinner
+                            // which indicates that we are waiting for the opponent to make their choice.
                             $('#paper_opponent').hide();
                             $('#scissors_opponent').hide();
                             $('#rock_opponent').hide();
                             $('#waiting_for_opponent_choice').show();
+
+                            // We are hiding the div that displays whether the user won/lost/drew in the current round. This is because
+                            // we want to start the new round, so this is being reset for that purpose.
+                            $('#multiplayer_rps_outcome_div').hide();
+
+                            // Reset the text that informs what choice the user picked.
+                            $('#user_selection_prompt').text("Make your choice!");
                         }, 2000);
                     }
                 }
@@ -283,6 +298,7 @@
 
         document.querySelector('#multiplayer_selected_rps').onclick = function (e) {
             var selected_rps_user = $('#carousel_rps_user .carousel-item.active').data('value');
+            $('#user_selection_prompt').text("You chose " + selected_rps_user + "!");
 
 
             gameSocket.send(JSON.stringify({
