@@ -261,6 +261,11 @@
                     {
                         $('#carousel_rps_opponent').show();
 
+                        // Removing next/previous buttons from carousel as we don't want user to change this when they already
+                        // made their choice
+                        $('#carousel_control_prev_for_user').hide();
+                        $('#carousel_control_next_for_user').hide();
+
                         $('#user_selection_prompt').text("You chose " + rps_options[username]["user_option"] + "!");
 
                         $('#multiplayer_rps_outcome').text("You " + rps_options[username]["outcome_of_round"]);
@@ -280,6 +285,11 @@
 
                             // Reset the text that informs what choice the user picked.
                             $('#user_selection_prompt').text("Make your choice!");
+                            
+                            // After removing the next/previous option from the carousel, we are bringing it back so the user
+                            // can pick their next option.
+                            $('#carousel_control_prev_for_user').show();
+                            $('#carousel_control_next_for_user').show();
                         }, 2000);
                     }
                 }
@@ -296,9 +306,15 @@
             console.log('WebSocket connection closed:', event);
         });
 
+        // When the user clicks the button to submit their choice, this will be run.
         document.querySelector('#multiplayer_selected_rps').onclick = function (e) {
             var selected_rps_user = $('#carousel_rps_user .carousel-item.active').data('value');
             $('#user_selection_prompt').text("You chose " + selected_rps_user + "!");
+
+            // Removing next/previous buttons from carousel as we don't want user to change this when they already
+            // made their choice.
+            $('#carousel_control_prev_for_user').hide();
+            $('#carousel_control_next_for_user').hide();
 
 
             gameSocket.send(JSON.stringify({
