@@ -133,7 +133,7 @@
         </div>
     </div>
     
-    <div class="d-flex justify-content-center align-items-center vh-100" id="loading_screen_waiting_for_opponent_div">
+    <div id="loading_screen_waiting_for_opponent_div" class="d-flex justify-content-center align-items-center vh-100">
         <p id="waiting_for_oppponent_msg" class="lead text-black text-center" style="font-size: 40px;">Waiting for opponent to join</p>&nbsp;&nbsp;
         <div class="spinner-grow text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -177,6 +177,7 @@
 
             if (message.type === 'start_rps_game') {
                 $('#start_multiplayer_game').show();
+                $('#loading_screen_waiting_for_opponent_div').removeClass('d-flex').hide();
                 $('#loading_screen_waiting_for_opponent_div').hide();
             }
 
