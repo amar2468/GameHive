@@ -103,9 +103,9 @@
                                     </div>
                                 </div>
                                 
-                                <button type="button" id="multiplayer_rps_replay_game" class="btn btn-primary">Replay?</button>
+                                <button type="button" class="multiplayer_rps_play_again btn btn-primary">Play again?</button>
 
-                                <button type="button" id="multiplayer_back_to_homepage_button" class="btn btn-primary">Back to home page?</button>
+                                <button type="button" class="multiplayer_back_to_homepage_button btn btn-primary">Back to home page?</button>
                             </div>
                         </div>
                     </div>
@@ -122,9 +122,9 @@
                                     </div>
                                 </div>
                                 
-                                <button type="button" class="btn btn-primary">Replay?</button>
+                                <button type="button" class="multiplayer_rps_play_again btn btn-primary">Play again?</button>
 
-                                <button type="button" class="btn btn-primary">Back to home page?</button>
+                                <button type="button" class="multiplayer_back_to_homepage_button btn btn-primary">Back to home page?</button>
                             </div>
                         </div>
                     </div>
@@ -145,11 +145,11 @@
 
         let username = document.getElementById("username").value;
 
-        $('#multiplayer_back_to_homepage_button').click(function() {
+        $('.multiplayer_back_to_homepage_button').click(function() {
             window.location.href = "{% url 'homepage' %}";
         });
 
-        $('#multiplayer_rps_replay_game').click(function () {
+        $('.multiplayer_rps_play_again').click(function () {
             window.location.href = "{% url 'rock_paper_scissors:multiplayer_rps_start_game' %}"
         });
 
