@@ -9,6 +9,8 @@
             <div class="container-fluid text-center rounded shadow my-5">
                 {{ rps_room_name }}
                 <p id="multiplayer_rps_game_heading" class="text-black text-center" style="font-size:22px;"></p>
+
+                <p id="current_round_number" class="text-black text-center" style="font-size:22px;">Round 1</p>
                 <input id="username" type="text" value="{{ request.user }}" style="display:none;" />
                 <br><br>
 
@@ -150,6 +152,8 @@
 
     <script>
 
+        let round_number = 1;
+
         let username = document.getElementById("username").value;
 
         $('.multiplayer_back_to_homepage_button').click(function() {
@@ -290,6 +294,11 @@
                             // can pick their next option.
                             $('#carousel_control_prev_for_user').show();
                             $('#carousel_control_next_for_user').show();
+
+                            // As we are moving to the next round, we are increasing the round number by 1 and updating the text to
+                            // display the correct round number.
+                            round_number += 1;
+                            $('#current_round_number').text("Round " + round_number);
                         }, 2000);
                     }
                 }
