@@ -18,8 +18,9 @@
                     {% csrf_token %}
                     <div class="flex_container_rps" style="display:flex;">
                         <div class="col-md-6" id="carousel_container_user">
-                            <div id="carousel_rps_user" class="carousel slide" data-bs-interval="false">
+                            <p id="user_wins" class="lead text-black text-center">0</p>
 
+                            <div id="carousel_rps_user" class="carousel slide" data-bs-interval="false">
                                 <div class="carousel-inner">
 
                                     <div class="carousel-item active" data-value="paper">
@@ -52,8 +53,10 @@
                         </div>
 
                         <div class="col-md-6" id="carousel_container_opponent">
-                            <div id="carousel_rps_opponent" class="carousel slide" data-bs-interval="false">
 
+                            <p id="opponent_wins" class="lead text-black text-center">0</p>
+
+                            <div id="carousel_rps_opponent" class="carousel slide" data-bs-interval="false">
                                 <div class="carousel-inner">
 
                                     <div id="paper_opponent" class="carousel-item" style="display: none;">
@@ -194,6 +197,7 @@
 
             else if(message.type === 'end_game') {
                 if ($('#multiplayer_rps_end_of_game_info_modal').is(':hidden')) {
+                    $('#waiting_for_opponent_choice').hide();
                     $('#session_disconnected_modal').modal('show');
                 }
             }
@@ -239,6 +243,12 @@
 
                     if (rps_options[username]["outcome_of_game"] == "Game Over! You failed to win this game! Good luck next time!" || rps_options[username]["outcome_of_game"] == "Game Over! You won this game! You have received 10 points!")
                     {
+                        $('#user_wins').text("");
+                        $('#opponent_wins').text("");
+                        
+                        $('#user_wins').text(rps_options[username]["total_wins"]);
+                        $('#opponent_wins').text(rps_options[opponent_username]["total_wins"]);
+
                         $('#multiplayer_rps_outcome').text(rps_options[username]["outcome_of_game"]);
 
                         $('#rock_opponent').hide();
@@ -299,6 +309,12 @@
                             // display the correct round number.
                             round_number += 1;
                             $('#current_round_number').text("Round " + round_number);
+                            
+                            $('#user_wins').text("");
+                            $('#opponent_wins').text("");
+
+                            $('#user_wins').text(rps_options[username]["total_wins"]);
+                            $('#opponent_wins').text(rps_options[opponent_username]["total_wins"]);
                         }, 2000);
                     }
                 }
