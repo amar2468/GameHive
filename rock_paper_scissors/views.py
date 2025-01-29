@@ -41,6 +41,8 @@ def rps_form_submitted(request):
 
             total_wins = request.session.get('total_wins', 0)
 
+            computer_wins = request.session.get('computer_wins', 0)
+
             user_rps_choice = request.POST.get('carousel_value', '')
 
             # Determine all the possible outcomes for the rock, paper, scissors game
@@ -68,6 +70,9 @@ def rps_form_submitted(request):
                     if rps_round_outcome == "win":
                         total_wins += 1
                         request.session['total_wins'] = total_wins
+                    elif rps_round_outcome == "lose":
+                        computer_wins += 1
+                        request.session['computer_wins'] = computer_wins
                     
                     # Increasing the round number
                     rounds += 1
@@ -98,15 +103,20 @@ def rps_form_submitted(request):
                         # Remove the "total_score" session variable as the score has been saved in the GameUserProfile custom model
                     
                         del request.session['total_wins']
-                    
+                                        
                     else:
                         rps_end_of_game = "Game Over! You failed to win this game! Good luck next time!"
+                    
+                    if 'computer_wins' in request.session:
+                        del request.session['computer_wins']
 
                     # Adding the user's choice, computer's choice, and informing user that the round is over
                     response_info = {
                         'round_number' : rounds,
                         'computer_rps_choice' : computer_rps_choice,
                         'user_rps_choice' : user_rps_choice,
+                        'user_total_wins' : total_wins,
+                        'computer_wins' : computer_wins,
                         'rps_round_outcome': rps_round_outcome,
                         'rps_end_of_game': rps_end_of_game
                     }
@@ -122,6 +132,9 @@ def rps_form_submitted(request):
                     if rps_round_outcome == "win":
                         total_wins += 1
                         request.session['total_wins'] = total_wins
+                    elif rps_round_outcome == "lose":
+                        computer_wins += 1
+                        request.session['computer_wins'] = computer_wins
                     
                     # Increasing the round number
                     rounds += 1
@@ -132,6 +145,8 @@ def rps_form_submitted(request):
                         'computer_rps_choice' : computer_rps_choice,
                         'user_rps_choice' : user_rps_choice,
                         'rps_round_outcome': rps_round_outcome,
+                        'user_total_wins' : total_wins,
+                        'computer_wins' : computer_wins,
                         'attempts' : attempts,
                         'round_number' : rounds,
                         'rps_end_of_game' : ""
