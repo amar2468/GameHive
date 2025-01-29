@@ -4,18 +4,14 @@
     {% load static %}
     {% block content %}
     <div class="bg-light">
-        <div style="display: flex; justify-content: center; align-items: center; height: 80vh;">
+        <div class="d-flex justify-content-center align-items-center" style="height: 80vh;">
             <h1 class="display-5 fw-bolder text-black mb-2">403 - Forbidden Access</h1>
         </div>
 
-        <div style="display: flex; justify-content: center; align-items: center;">
+        <div class="d-flex justify-content-center align-items-center">
             <a href="{% url 'homepage' %}" class="btn btn-secondary">Back to Homepage</a>
         </div>
     </div>
-    <!-- Footer-->
-    <footer style="position: fixed;left: 0;bottom: 0;width: 100%;background-color: #191970;text-align: center;">
-        <div><p class="m-0 text-center text-white">Copyright &copy; GameHive 2023</p></div>
-    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
