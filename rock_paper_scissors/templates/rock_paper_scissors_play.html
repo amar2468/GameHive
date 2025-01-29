@@ -14,6 +14,8 @@
                 {% csrf_token %}
                 <div class="flex_container_rps d-flex">
                     <div class="col-md-6" id="carousel_container_player">
+                        <p id="user_wins" class="lead text-black text-center">0</p>
+                        
                         <div id="carousel_rps_player" class="carousel slide" data-bs-interval="false">
 
                             <div class="carousel-inner">
@@ -55,6 +57,8 @@
                     </div>
 
                     <div class="col-md-6" id="carousel_container_computer">
+                        <p id="computer_wins" class="lead text-black text-center">0</p>
+
                         <div id="carousel_rps_computer" style="display:none;" class="carousel slide" data-bs-interval="false">
 
                             <div class="carousel-inner">
@@ -93,7 +97,7 @@
 
                 <input type="hidden" id="carousel_value" name="carousel_value" value="">
                 
-                <div class="modal" id="rps_end_of_game_info_modal" tabindex="-1" role="dialog">
+                <div class="modal" id="rps_end_of_game_info_modal" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-body">
@@ -142,6 +146,11 @@
 
             $('.selected_rps').click(function(e){
                 e.preventDefault();
+
+                // Hide the carousel next and previous buttons, as we don't want the user to change their choice mid game.
+                $('#carousel_control_prev_player').hide();
+                $('#carousel_control_next_player').hide();
+
                 $('#loading_rps').show();
 
                 setTimeout(function() {
@@ -201,6 +210,14 @@
                                 'cursor' : 'default'
                             });
 
+                            // Update the total wins counter for the user
+                            $('#user_wins').text("");
+                            $('#user_wins').text(response.user_total_wins);
+
+                            // Update the total wins counter for the computer
+                            $('#computer_wins').text("");
+                            $('#computer_wins').text(response.computer_wins);
+
                             let round_number = response.round_number;
                             $('#rps_game_heading').text("Round " + round_number);
 
@@ -221,6 +238,9 @@
                         
                         else
                         {
+                            $('#carousel_control_prev_player').hide();
+                            $('#carousel_control_next_player').hide();
+
                             let round_number = response.round_number;
                             $('#rps_game_heading').text("Round " + round_number);
 
@@ -229,6 +249,31 @@
 
                             $('#rps_round_outcome_div').show();
                             $('#attempts_div').show();
+
+                            setTimeout(function () {
+                                // After waiting for 2 seconds, we will reset the opponent options and bring back the loading spinner
+                                // which indicates that we are waiting for the opponent to make their choice.
+                                $('#rock_computer').hide();
+                                $('#paper_computer').hide();
+                                $('#scissors_computer').hide();
+
+                                // Hiding the outcome of the current round, as we load the new round.
+                                $('#rps_round_outcome_div').hide();
+
+                                // After removing the next/previous option from the carousel, we are bringing it back so the user
+                                // can pick their next option.
+                                $('#carousel_control_prev_player').show();
+                                $('#carousel_control_next_player').show();
+
+                                // Update the total wins counter for the user
+                                $('#user_wins').text("");
+                                $('#user_wins').text(response.user_total_wins);
+
+                                // Update the total wins counter for the computer
+                                $('#computer_wins').text("");
+                                $('#computer_wins').text(response.computer_wins);
+
+                            }, 2000);
                         }
 
                     },
