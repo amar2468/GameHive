@@ -50,20 +50,14 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-center align-items-center">
-                        <div class="spinner-border" id="loading_rps" role="status" style="display:none;">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-
                     <div class="col-md-6" id="carousel_container_computer">
                         <p id="computer_wins" class="lead text-black text-center">0</p>
 
-                        <div id="carousel_rps_computer" style="display:none;" class="carousel slide" data-bs-interval="false">
+                        <div id="carousel_rps_computer" class="carousel slide" data-bs-interval="false">
 
                             <div class="carousel-inner">
 
-                                <div id="paper_computer" class="carousel-item active" style="display: none;">
+                                <div id="paper_computer" class="carousel-item" style="display: none;">
                                     <img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
                                 </div>
 
@@ -73,6 +67,14 @@
 
                                 <div id="scissors_computer" class="carousel-item" style="display: none;">
                                     <img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
+                                </div>
+
+                                <div id="waiting_for_computer_choice" class="carousel-item active justify-content-center align-items-center">
+                                    <div class="spinner-border" id="loading_rps" role="status">
+                                        <span class="visually-hidden"></span>
+                                    </div>
+                                    <br>
+                                    <p class="lead text-black text-center">Waiting for computer to choose an option</p>
                                 </div>
 
                             </div>
@@ -151,7 +153,7 @@
                 $('#carousel_control_prev_player').hide();
                 $('#carousel_control_next_player').hide();
 
-                $('#loading_rps').show();
+                $('#waiting_for_computer_choice').show();
 
                 setTimeout(function() {
 
@@ -176,7 +178,6 @@
                     data: form_data,
 
                     success: function(response) {
-                        $('#loading_rps').hide();
 
                         let computer_rps_choice = response.computer_rps_choice;
 
@@ -185,6 +186,8 @@
                             $('#paper_computer').hide();
                             $('#scissors_computer').hide();
                             $('#rock_computer').show();
+                            // Hide the loading spinner
+                            $('#waiting_for_computer_choice').hide();
                         }
 
                         else if (computer_rps_choice === "paper")
@@ -192,6 +195,8 @@
                             $('#rock_computer').hide();
                             $('#scissors_computer').hide();
                             $('#paper_computer').show();
+                            // Hide the loading spinner
+                            $('#waiting_for_computer_choice').hide();
                         }
 
                         else if (computer_rps_choice === "scissors")
@@ -199,6 +204,8 @@
                             $('#rock_computer').hide();
                             $('#paper_computer').hide();
                             $('#scissors_computer').show();
+                            // Hide the loading spinner
+                            $('#waiting_for_computer_choice').hide();
                         }
 
                         $('#carousel_rps_computer').show();
@@ -256,6 +263,8 @@
                                 $('#rock_computer').hide();
                                 $('#paper_computer').hide();
                                 $('#scissors_computer').hide();
+                                // Show the loading spinner again, as the new round will be played.
+                                $('#waiting_for_computer_choice').show();
 
                                 // Hiding the outcome of the current round, as we load the new round.
                                 $('#rps_round_outcome_div').hide();
