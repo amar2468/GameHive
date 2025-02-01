@@ -3,17 +3,19 @@ from django.http import JsonResponse
 from gamehive.models import GameUserProfile
 import random
 
+# Creating a global variable that stores the total number of wins required to win the game
+global wins_required_to_win_game
+wins_required_to_win_game = 3
 
 # This view allows a user to play single player mode, which will load the relevant template
 
 def single_player_rps(request):
     # If the user is logged in, this block will be run.
     if request.user.is_authenticated:
-        # Try to remove "attempts" & "rounds" session variables, as these should be reset after every game.
+        # Try to remove "rounds" session variable, as it should be reset after every game.
         try:
-            del request.session['attempts']
             del request.session['rounds']
-        # If the session variable "attempts" does not exist, we will just move on with the code (when user starts the game, it will start off with 3 attempts, as it should be)
+        # If the session variable "rounds" does not exist, we will just move on with the code
         except KeyError:
             pass
         
@@ -35,11 +37,9 @@ def rps_form_submitted(request):
     if request.user.is_authenticated:
         if request.method == "POST":
 
-            attempts = request.session.get('attempts', 3)
-
             rounds = request.session.get('rounds', 0)
 
-            total_wins = request.session.get('total_wins', 0)
+            user_total_wins = request.session.get('user_total_wins', 0)
 
             computer_wins = request.session.get('computer_wins', 0)
 
@@ -57,103 +57,90 @@ def rps_form_submitted(request):
             # Pick a random item from the rock,paper,scissors list (presented as computer's choice)
             computer_rps_choice = random.choice(computer_choice_between_rps)
 
-            if attempts >= 1:
-                if attempts == 1:
-                    rps_end_of_game = ""
-                    attempts -= 1
-                    request.session['attempts'] = attempts
+            # Using the rps_outcomes dictionary, the key (user's choice) will be found and the value (the computer's choice)
+            # will be the value in the dictionary. If it is a draw, a draw will be returned
+            rps_round_outcome = rps_outcomes[user_rps_choice].get(computer_rps_choice, 'draw')
 
-                    # Using the rps_outcomes dictionary, the key (user's choice) will be found and the value (the computer's choice)
-                    # will be the value in the dictionary. If it is a draw, a draw will be returned
-                    rps_round_outcome = rps_outcomes[user_rps_choice].get(computer_rps_choice, 'draw')
+            if rps_round_outcome == "win":
+                user_total_wins += 1
+                request.session['user_total_wins'] = user_total_wins
+            elif rps_round_outcome == "lose":
+                computer_wins += 1
+                request.session['computer_wins'] = computer_wins
+            
+            # Increasing the round number
+            rounds += 1
+            request.session['rounds'] = rounds
 
-                    if rps_round_outcome == "win":
-                        total_wins += 1
-                        request.session['total_wins'] = total_wins
-                    elif rps_round_outcome == "lose":
-                        computer_wins += 1
-                        request.session['computer_wins'] = computer_wins
-                    
-                    # Increasing the round number
-                    rounds += 1
-                    request.session['rounds'] = rounds
-                
-                    # Remove the "attempts" session variable as the game has finished so it should be reset back to 3 attempts for the new one
+            # If the user has managed to win 3 rounds first, the points will be added to their account.
+            if 'user_total_wins' in request.session and request.session['user_total_wins'] == wins_required_to_win_game:
+                rps_end_of_game = ""
+                rps_end_of_game = "Game Over! You won this game! You have received 10 points!"
+                try:
+                    game_user_profile = GameUserProfile.objects.get(user=request.user)
+                except GameUserProfile.DoesNotExist:
+                    game_user_profile = GameUserProfile(user=request.user)
+                game_user_profile.current_score += 10
+                game_user_profile.save()
 
-                    del request.session['attempts']
+                # Remove the "user_total_wins" session variable as the score has been saved in the GameUserProfile custom model
+                # and we don't want the number of wins to be remembered in the new game that gets loaded.
+                del request.session['user_total_wins']
 
-                    # Remove the "rounds" session variable as the game has finished and it should be reset for the new game
-                    del request.session['rounds']
+                if 'computer_wins' in request.session:
+                    # Remove the "computer_wins" session variable as we don't want the number of wins to be remembered
+                    # in the new game that gets loaded.
+                    del request.session['computer_wins']
 
-                    # In every round, the user has three attempts. If they get 2 or more attempts correct, they won that round. Hence 10
-                    # points would be added to their total score
+                response_info = {
+                    'round_number' : rounds,
+                    'computer_rps_choice' : computer_rps_choice,
+                    'user_rps_choice' : user_rps_choice,
+                    'user_total_wins' : user_total_wins,
+                    'computer_wins' : computer_wins,
+                    'rps_round_outcome': rps_round_outcome,
+                    'rps_end_of_game': rps_end_of_game
+                }
+            
+            # If the computer won three rounds before the user, the user will get a message that they lost.
+            elif 'computer_wins' in request.session and request.session['computer_wins'] == wins_required_to_win_game:
+                rps_end_of_game = ""        
+                rps_end_of_game = "Game Over! You failed to win this game! Good luck next time!"
 
-                    if 'total_wins' in request.session:
-                        if request.session['total_wins'] >= 2:
-                                rps_end_of_game = "Game Over! You won this game! You have received 10 points!"
-                                try:
-                                    game_user_profile = GameUserProfile.objects.get(user=request.user)
-                                except GameUserProfile.DoesNotExist:
-                                    game_user_profile = GameUserProfile(user=request.user)
-                                game_user_profile.current_score += 10
-                                game_user_profile.save()
-                        else:
-                            rps_end_of_game = "Game Over! You failed to win this game! Good luck next time!"
+                if 'user_total_wins' in request.session:
+                    # Remove the "user_total_wins" session variable as the score has been saved in the GameUserProfile custom model
+                    # and we don't want the number of wins to be remembered in the new game that gets loaded.
+                    del request.session['user_total_wins']
 
-                        # Remove the "total_score" session variable as the score has been saved in the GameUserProfile custom model
-                    
-                        del request.session['total_wins']
-                                        
-                    else:
-                        rps_end_of_game = "Game Over! You failed to win this game! Good luck next time!"
-                    
-                    if 'computer_wins' in request.session:
-                        del request.session['computer_wins']
+                # Remove the "computer_wins" session variable as we don't want the number of wins to be remembered
+                # in the new game that gets loaded.
+                del request.session['computer_wins']
 
-                    # Adding the user's choice, computer's choice, and informing user that the round is over
-                    response_info = {
-                        'round_number' : rounds,
-                        'computer_rps_choice' : computer_rps_choice,
-                        'user_rps_choice' : user_rps_choice,
-                        'user_total_wins' : total_wins,
-                        'computer_wins' : computer_wins,
-                        'rps_round_outcome': rps_round_outcome,
-                        'rps_end_of_game': rps_end_of_game
-                    }
-                
-                else:
-                    attempts -= 1
-                    request.session['attempts'] = attempts
-
-                    # Using the rps_outcomes dictionary, the key (user's choice) will be found and the value (the computer's choice)
-                    # will be the value in the dictionary. If it is a draw, a draw will be returned
-                    rps_round_outcome = rps_outcomes[user_rps_choice].get(computer_rps_choice, 'draw')
-
-                    if rps_round_outcome == "win":
-                        total_wins += 1
-                        request.session['total_wins'] = total_wins
-                    elif rps_round_outcome == "lose":
-                        computer_wins += 1
-                        request.session['computer_wins'] = computer_wins
-                    
-                    # Increasing the round number
-                    rounds += 1
-                    request.session['rounds'] = rounds
-
-                    # Adding the user's choice, computer's choice, and the outcome of the round back to the user so they are informed
-                    response_info = {
-                        'computer_rps_choice' : computer_rps_choice,
-                        'user_rps_choice' : user_rps_choice,
-                        'rps_round_outcome': rps_round_outcome,
-                        'user_total_wins' : total_wins,
-                        'computer_wins' : computer_wins,
-                        'attempts' : attempts,
-                        'round_number' : rounds,
-                        'rps_end_of_game' : ""
-                    }
-
+                response_info = {
+                    'round_number' : rounds,
+                    'computer_rps_choice' : computer_rps_choice,
+                    'user_rps_choice' : user_rps_choice,
+                    'user_total_wins' : user_total_wins,
+                    'computer_wins' : computer_wins,
+                    'rps_round_outcome': rps_round_outcome,
+                    'rps_end_of_game': rps_end_of_game
+                }
+            
+            else:
+                # Sending multiple variables back to the front-end, so that they can be displayed on the screen.
+                response_info = {
+                    'computer_rps_choice' : computer_rps_choice,
+                    'user_rps_choice' : user_rps_choice,
+                    'rps_round_outcome': rps_round_outcome,
+                    'user_total_wins' : user_total_wins,
+                    'computer_wins' : computer_wins,
+                    'round_number' : rounds,
+                    'rps_end_of_game' : ""
+                }
+            
             # Returning the dictionary in JSON format to jQuery, which will then be inserted into the HTML template
             return JsonResponse(response_info)
+
         else:
             return render(request, 'rock_paper_scissors_play.html')
     else:
