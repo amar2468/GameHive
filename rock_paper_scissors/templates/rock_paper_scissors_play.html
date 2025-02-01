@@ -91,8 +91,8 @@
 
                 <br><br>
 
-                <div class="alert alert-warning text-black" id="attempts_div" role="alert" style="display:none;">
-                    <p id="attempts" style="text-align:center;"></p>
+                <div class="alert alert-warning text-black" id="attempts_div" role="alert">
+                    <p id="attempts" style="text-align:center;">Quickest player to win 3 games wins!</p>
                 </div>
 
                 <br><br>
@@ -229,8 +229,6 @@
                             $('#rps_game_heading').text("Round " + round_number);
 
                             $('.rps_round_outcome').text("You " + response.rps_round_outcome);
-
-                            $('#attempts').text("Attempts Left : 0");
                             
                             $('.rps_end_of_game_info').text(response.rps_end_of_game);
 
@@ -239,8 +237,6 @@
                             }, 1000);
 
                             $('#rps_round_outcome_div').show();
-                            $('#attempts_div').show();
-
                         }
                         
                         else
@@ -254,10 +250,8 @@
                             $('#rps_game_heading').text("Round " + round_number);
 
                             $('.rps_round_outcome').text("You " + response.rps_round_outcome);
-                            $('#attempts').text("Attempts Left : " + response.attempts);
 
                             $('#rps_round_outcome_div').show();
-                            $('#attempts_div').show();
 
                             setTimeout(function () {
                                 // After waiting for 2 seconds, we will reset the opponent options and bring back the loading spinner
