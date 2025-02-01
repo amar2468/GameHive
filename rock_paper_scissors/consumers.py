@@ -15,8 +15,8 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
     users_in_session = {}
 
     # Creating a global variable that stores the total number of wins required to win the game
-    global wins_required_to_win
-    wins_required_to_win = 3
+    global wins_required_to_win_game
+    wins_required_to_win_game = 3
 
     # This variable will be used when checking if both users have joined the session
     global REQUIRED_NUMBER_OF_USERS
@@ -103,7 +103,6 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
 
         try:
             data = json.loads(text_data)
-            message = data['message']
             username = data["username"]
             user_option = data["user_option"]
             
@@ -111,7 +110,6 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                 self.rps_room_name,
                 {
                     "type" : "rps_move",
-                    "message" : message,
                     "user_option" : user_option,
                     "username" : username
                 },
@@ -164,16 +162,15 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                 rps_outcome_user_1 = rps_outcomes[user1_choice].get(user2_choice, 'draw')
                 rps_outcome_user_2 = rps_outcomes[user2_choice].get(user1_choice, 'draw')
 
-                # In the if..elif block below, we are checking whether either user "won" the round. If so, their total win record
-                # will be incremented and the number of attempts left for both users will reduce by 1
+                # In the if..elif block below, we are checking whether either user "won" the round. If any of them did, their "total_win"
+                # record will be increased by 1
                 if rps_outcome_user_1 == "win":
                     self.room_state['rps_options'][user1_name]['total_wins'] += 1
                 elif rps_outcome_user_2 == "win":
                     self.room_state['rps_options'][user2_name]['total_wins'] += 1
                 
-                # If any user won, the user that won will get a message indicating that they won the game, while the user that
-                # lost will get a message that they lost the game.
-                if self.room_state['rps_options'][user1_name]['total_wins'] == wins_required_to_win:
+                # The user that gets 3 wins first wins the game, while the user that lost will get a message that they lost the game.
+                if self.room_state['rps_options'][user1_name]['total_wins'] == wins_required_to_win_game:
                     self.room_state['rps_options'][user1_name]["outcome_of_game"] = "Game Over! You won this game! You have received 10 points!"
                     self.room_state['rps_options'][user2_name]["outcome_of_game"] = "Game Over! You failed to win this game! Good luck next time!"
                     
@@ -196,9 +193,8 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                             current_score = 10,
                         )
                 
-                # If any user won, the user that won will get a message indicating that they won the game, while the user that
-                # lost will get a message that they lost the game.
-                elif self.room_state['rps_options'][user2_name]['total_wins'] == wins_required_to_win:
+                # The user that gets 3 wins first wins the game, while the user that lost will get a message that they lost the game.
+                elif self.room_state['rps_options'][user2_name]['total_wins'] == wins_required_to_win_game:
                     self.room_state['rps_options'][user1_name]["outcome_of_game"] = "Game Over! You failed to win this game! Good luck next time!"
                     self.room_state['rps_options'][user2_name]["outcome_of_game"] = "Game Over! You won this game! You have received 10 points!"
 
@@ -236,7 +232,7 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                     "total_wins" : self.room_state['rps_options'][user2_name]['total_wins']
                 }
 
-                # Sending back the list that contains both usernames, the outcome of the round or game, and the number of attempts left.
+                # Sending back the list that contains both usernames, the outcome of the round or game, and the room number.
                 # This will be sent back to the client-side part. It will be sent in the form of JSON.
                 await self.send(
                     text_data=json.dumps(
