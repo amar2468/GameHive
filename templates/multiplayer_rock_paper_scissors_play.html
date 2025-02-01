@@ -24,15 +24,15 @@
                                 <div class="carousel-inner">
 
                                     <div class="carousel-item active" data-value="paper">
-                                        <img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper">
+                                        <a class="user_selected_rps_choice" href="#"><img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper"></a>
                                     </div>
 
                                     <div class="carousel-item" data-value="rock">
-                                        <img class="img-fluid" src="{% static 'assets/rock.png' %}" alt="Picture of a rock">
+                                        <a class="user_selected_rps_choice" href="#"><img class="img-fluid" src="{% static 'assets/rock.png' %}" alt="Picture of a rock"></a>
                                     </div>
 
                                     <div class="carousel-item" data-value="scissors">
-                                        <img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors">
+                                        <a class="user_selected_rps_choice" href="#"><img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors"></a>
                                     </div>
 
                                 </div>
@@ -101,8 +101,6 @@
                     <br><br>
 
                     <input type="hidden" id="multiplayer_carousel_value" name="multiplayer_carousel_value" value="">
-
-                    <button type="button" id="multiplayer_selected_rps" style="font-size: 20px;" class="btn btn-primary btn-lg">Select</button>
                 </form>
 
                 <div class="modal" id="multiplayer_rps_end_of_game_info_modal" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -256,8 +254,6 @@
                         $('#scissors_opponent').hide();
                         $('#waiting_for_opponent_choice').hide();
 
-                        $('#multiplayer_selected_rps').text("Try Again");
-
                         $('#multiplayer_attempts_div').hide();
 
                         $('#multiplayer_rps_outcome_div').show();
@@ -331,8 +327,9 @@
             console.log('WebSocket connection closed:', event);
         });
 
-        // When the user clicks the button to submit their choice, this will be run.
-        document.querySelector('#multiplayer_selected_rps').onclick = function (e) {
+        // When the user chooses an option (rock,paper,scissors), it will jump to this block and perform numerous steps
+        // such as displaying the user choice, hiding the arrows, and sending the response back to the server.
+        $('.user_selected_rps_choice').click(function (e) {
             var selected_rps_user = $('#carousel_rps_user .carousel-item.active').data('value');
             $('#user_selection_prompt').text("You chose " + selected_rps_user + "!");
 
@@ -345,10 +342,9 @@
             gameSocket.send(JSON.stringify({
                 'type' : "rps_move",
                 'user_option': selected_rps_user,
-                'message' : "First round is complete",
                 'username': username
             }));
-        };
+        });
 
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
