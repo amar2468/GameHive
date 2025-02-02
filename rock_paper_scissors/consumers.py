@@ -97,6 +97,17 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                 'rps_room_name' : self.rps_room_name,
             }
         ))
+    
+    # If one user makes a move, this event type async function will be executed, sending the event type and the username of the 
+    # user who made the move.
+    async def opponent_move(self, event):
+        await self.send(text_data=json.dumps(
+            {
+                'type' : 'opponent_move',
+                'rps_room_name' : self.rps_room_name,
+                'opponent_username' : event['opponent_username']
+            }
+        ))
 
     async def receive(self, text_data):
         print(f"Received raw data: {text_data}")
@@ -134,6 +145,8 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
             "outcome_of_game" : "",
             "total_wins": 0
         })
+
+        print(self.room_state['rps_options'])
 
         # Storing the variable that stores the rps choice from the user in the rps_options dictionary.
         self.room_state['rps_options'][username]["user_option"] = user_option
@@ -253,3 +266,17 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                 # This is done so that the outcome of the round is not remembered in the next round.
                 self.room_state['rps_options'][user1_name]["outcome_of_round"] = ""
                 self.room_state['rps_options'][user2_name]["outcome_of_round"] = ""
+            
+            # In this block, I want to see if one of the users picked their choice. If they did, we want to trigger the 
+            # "opponent_move" event type. The information will be sent to the front-end, where we will change the behaviour in the
+            # template (hide the loading spinner & change the text)
+            elif (user1_choice == "" and user2_choice != "") or (user1_choice != "" and user2_choice == ""):
+
+                await self.channel_layer.group_send(
+                    self.rps_room_name,
+                    {
+                        'type' : 'opponent_move',
+                        'opponent_username' : username,
+                        'rps_room_name' : self.rps_room_name,
+                    }
+                )
