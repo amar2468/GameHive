@@ -257,6 +257,13 @@
 
                     if (rps_options[username]["outcome_of_game"] == "Game Over! You failed to win this game! Good luck next time!" || rps_options[username]["outcome_of_game"] == "Game Over! You won this game! You have received 10 points!")
                     {
+                        // Disabling the option to pick an option (rock,paper,scissors) as the game has ended and we don't want the 
+                        // user to choose any options anymore.
+                        $('.user_selected_rps_choice').css({
+                            'pointer-events' : 'none',
+                            'cursor' : 'default'
+                        });
+
                         $('#user_wins').text("");
                         $('#opponent_wins').text("");
                         
@@ -304,6 +311,13 @@
                             $('#scissors_opponent').hide();
                             $('#rock_opponent').hide();
                             $('#waiting_for_opponent_choice').show();
+
+                            // Re-enable the option to click on the rock,paper,scissor options (it was disabled when the user
+                            // already made their choice, so that multiple options weren't selected at once.
+                            $('.user_selected_rps_choice').css({
+                                'pointer-events' : '',
+                                'cursor' : ''
+                            });
 
                             // We are hiding the div that displays whether the user won/lost/drew in the current round. This is because
                             // we want to start the new round, so this is being reset for that purpose.
@@ -357,6 +371,12 @@
         // When the user chooses an option (rock,paper,scissors), it will jump to this block and perform numerous steps
         // such as displaying the user choice, hiding the arrows, and sending the response back to the server.
         $('.user_selected_rps_choice').click(function (e) {
+
+            $('.user_selected_rps_choice').css({
+                'pointer-events' : 'none',
+                'cursor' : 'default'
+            });
+
             var selected_rps_user = $('#carousel_rps_user .carousel-item.active').data('value');
             $('#user_selection_prompt').text("You chose " + selected_rps_user + "!");
 
