@@ -12,12 +12,17 @@ wins_required_to_win_game = 3
 def single_player_rps(request):
     # If the user is logged in, this block will be run.
     if request.user.is_authenticated:
-        # Try to remove "rounds" session variable, as it should be reset after every game.
+        # Try to remove "rounds", "user_total_wins", and "computer_wins" session variables, as they should be reset after every game.
         try:
-            del request.session['rounds']
+            if 'rounds' in request.session:
+                del request.session['rounds']
+            if 'user_total_wins' in request.session:
+                del request.session['user_total_wins']
+            if 'computer_wins' in request.session:
+                del request.session['computer_wins']
         # If the session variable "rounds" does not exist, we will just move on with the code
         except KeyError:
-            pass
+            print("Error: One or more of the session variable(s) do not exist.")
         
         return render(request, 'rock_paper_scissors_play.html')
     else:
