@@ -77,7 +77,7 @@
                                         </div>
 
                                         <br>
-                                        <p class="lead text-black text-center">Waiting for opponent to choose their option</p>
+                                        <p id="waiting_for_opponent_status" class="lead text-black text-center">Waiting for opponent to choose their option</p>
                                     </div>
 
                                 </div>
@@ -200,6 +200,22 @@
                 }
             }
 
+            // If the opponent makes their move first, we want to inform the user that the opponent made their choice.
+            else if (message.type === 'opponent_move') {
+                // We only want to change the text and loading spinner (to signify that an opponent has made their choice) if
+                // the user is the opponent.
+                if (username != message.opponent_username) {
+                    // Clearing the text that says that we are waiting for the opponent to make a choice
+                    $('#waiting_for_opponent_status').text("");
+
+                    // Saying that the opponent has made their choice
+                    $('#waiting_for_opponent_status').text("Opponent has made their choice");
+
+                    // Hide the spinner as the opponent has made their choice
+                    $('#multiplayer_loading_rps').hide();
+                }
+            }
+
             if (message.hasOwnProperty('rps_options')) {
                 let rps_options = message.rps_options;
                 let user_list = message.user_list;
@@ -311,6 +327,17 @@
 
                             $('#user_wins').text(rps_options[username]["total_wins"]);
                             $('#opponent_wins').text(rps_options[opponent_username]["total_wins"]);
+
+                            // We are the clearing the text that displays whether opponent made their choice or not
+                            $('#waiting_for_opponent_status').text("");
+
+                            // We are bringing the text that displays whether opponent made their choice or not back to default,
+                            // which is that we are waiting for opponent to make their choice
+                            $('#waiting_for_opponent_status').text("Waiting for opponent to choose their option");
+
+                            // Return the spinner, as we are moving on to the next round
+                            $('#multiplayer_loading_rps').show();
+
                         }, 2000);
                     }
                 }
