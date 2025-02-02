@@ -146,8 +146,6 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
             "total_wins": 0
         })
 
-        print(self.room_state['rps_options'])
-
         # Storing the variable that stores the rps choice from the user in the rps_options dictionary.
         self.room_state['rps_options'][username]["user_option"] = user_option
 
