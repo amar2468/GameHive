@@ -301,3 +301,7 @@ def log_out(request):
     # If user isn't logged in, the logout will not be allowed
     else:
         return render(request, '403.html')
+
+# If the user types in a URL that does not exist, the 404 template will be displayed, informing the user that the page doesn't exist
+def page_does_not_exist(request, exception):
+    return render(request, '404.html', status=404)
