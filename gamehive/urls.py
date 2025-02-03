@@ -32,3 +32,7 @@ urlpatterns = [
     path('login/', views.sign_in, name='login'),
     path('logout/', views.log_out, name='logout')
 ]
+
+from django.conf.urls import handler404
+
+handler404 = views.page_does_not_exist
