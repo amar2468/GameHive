@@ -2,6 +2,8 @@ from django.test import LiveServerTestCase
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+import time
+import random
 
 class SeleniumTestSinglePlayerRockPaperScissors(LiveServerTestCase):
     def setUp(self):
@@ -51,5 +53,44 @@ class SeleniumTestSinglePlayerRockPaperScissors(LiveServerTestCase):
             if self.browser:
                 self.browser.quit()
     
+    # This view will go through the process of playing the single player rock,paper,scissors game
     def test_single_player_rps_process(self):
-        pass
+        # Navigating to the single player rock,paper,scissors game
+        self.browser.get(f"{self.live_server_url}/rock_paper_scissors/single_player_rps/")
+        
+        time.sleep(3)
+
+        while True:
+            # Get all the possible options from rock,paper,scissors game (which would be the rock,paper,scissor choices)
+            rock_paper_scissors_options = self.browser.find_elements(By.CLASS_NAME, "carousel-item")
+
+            # Find the next button, which will move through the different rock,paper,scissor choices
+            next_button = self.browser.find_element(By.CLASS_NAME, "carousel-control-next")
+
+            # We are generating a random number of clicks on the next button (ranging from 0-2), which will pick one of the options randomly
+            no_of_clicks_on_next_button_random = random.randint(0, len(rock_paper_scissors_options) - 1)
+
+            for _ in range(no_of_clicks_on_next_button_random):
+                time.sleep(1)
+                next_button.click()
+
+            time.sleep(2)
+
+            # Find the choice that the user chose on the screen
+            active_rps_choice = self.browser.find_element(By.CLASS_NAME, "carousel-item.active")
+
+            time.sleep(1)
+
+            # Click on the choice that the user chose
+            active_rps_choice.find_element(By.CLASS_NAME, "selected_rps").click()
+            
+            time.sleep(3)
+
+            # Getting the modal element from the HTML template
+            rps_end_of_game_info_modal = self.browser.find_element(By.ID, "rps_end_of_game_info_modal")
+
+            time.sleep(2)
+
+            # Trying to see if the modal is being displayed on screen - if it is, it means that the game is over and we can end our test
+            if rps_end_of_game_info_modal.is_displayed():
+                break
