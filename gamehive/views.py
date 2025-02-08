@@ -58,11 +58,9 @@ def testimonials_page(request):
                     messages.error(request, f"{field.capitalize()}: {error}")
             return render(request, 'testimonials.html', {'form':form})
     else:
-        form = TestimonialsForm()
-
         testimonials_model_objs = TestimonialsModel.objects.all()
 
-        return render(request, 'testimonials.html', {'form' : form, 'testimonials_model_objs' : testimonials_model_objs})
+        return render(request, 'testimonials.html', {'testimonials_model_objs' : testimonials_model_objs})
 
 # View that will present the current leaderboard for all users, as well as provide the user the option to update their personal info
 
@@ -89,11 +87,15 @@ def update_personal_details(request):
 
             form = UpdatePersonalDetails(request.POST)
 
-            change_email = request.POST.get('change_email')
-
             if form.is_valid():
+                change_email = form.cleaned_data['change_email']
                 change_first_name = form.cleaned_data['change_first_name']
                 change_surname = form.cleaned_data['change_surname']
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, f"{field.capitalize()}: {error}")
+                return render(request, 'profile.html', {'form':form})
 
             try:
                 user_details = PersonalDetails.objects.get(user=request.user)
@@ -145,7 +147,8 @@ def change_password(request):
                     except ValidationError as e:
                         
                         response_info_for_password = {
-                            'error_messages' : e.messages
+                            'error_messages' : e.messages,
+                            'passwords_match' : False
                         }
 
                         return JsonResponse(response_info_for_password)
@@ -161,7 +164,13 @@ def change_password(request):
                             'passwords_match' : True
                         }
 
-                return JsonResponse(response_info_for_password)
+                return JsonResponse({'response_info_for_password' : response_info_for_password})
+
+            else:
+                response_info_for_password = {
+                    'passwords_match' : ''
+                }
+                return JsonResponse({'form' : form.errors, 'response_info_for_password' : response_info_for_password})
                 
         return render(request, 'profile.html')
     else:
