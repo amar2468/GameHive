@@ -43,7 +43,7 @@
 
                 <div class="col py-3">
                     <div id="personal_details_div">
-                        <form id="update_details_form" method="post" action="{% url 'update_personal_details' %}">
+                        <form id="update_details_form" method="post">
                             {% csrf_token %}
                             <h3 class="text-black text-center">Update Personal Information</h3>
                             <!-- Change Email address -->
@@ -70,16 +70,13 @@
                             
                             <div class="alert alert-success" id="update_details_success" role="alert" style="display:none;"></div>
                             
-                            {% if messages %}
-                            <div class="alert alert-danger">
-                                <ul>
-                                    {% for message in messages %}
-                                        <li style="list-style-type: square;">{{ message }}</li>
-                                    {% endfor %}
-                                </ul>
+                            <div id="update_personal_details_errors_div" style="display: none;">
+                                <div class="alert alert-danger">
+                                    <ul id="update_personal_details_errors_unordered_list">
+                                    </ul>
+                                </div>
                             </div>
-                            
-                            {% endif %}
+
                         </form>
                     </div>
 
@@ -239,7 +236,10 @@
                 $('#leaderboard_div').hide();
                 $('#reedem_points_div').hide();
 
+                // Hide the divs that display errors/success messages, whenever a new page is opened
+                $('#update_personal_details_errors_div').hide();
                 $('#update_password_errors_div').hide();
+                $('#update_details_success').hide();
             });
 
             // If the user clicks on the change password link, it will hide all the other pages and just display this one.
@@ -249,7 +249,10 @@
                 $('#reedem_points_div').hide();
                 $('#change_password_div').show();
 
+                // Hide the divs that display errors/success messages, whenever a new page is opened
+                $('#update_personal_details_errors_div').hide();
                 $('#update_password_errors_div').hide();
+                $('#update_details_success').hide();
             });
 
             // If the user clicks on the leaderboard link, it will hide all the other pages and just display this one.
@@ -259,7 +262,10 @@
                 $('#reedem_points_div').hide();
                 $('#leaderboard_div').show();
 
+                // Hide the divs that display errors/success messages, whenever a new page is opened
+                $('#update_personal_details_errors_div').hide();
                 $('#update_password_errors_div').hide();
+                $('#update_details_success').hide();
 
             });
 
@@ -269,9 +275,68 @@
                 $('#change_password_div').hide();
                 $('#leaderboard_div').hide();
                 $('#reedem_points_div').show();
-
+                
+                // Hide the divs that display errors/success messages, whenever a new page is opened
+                $('#update_personal_details_errors_div').hide();
                 $('#update_password_errors_div').hide();
+                $('#update_details_success').hide();
 
+            });
+
+            // We are going to perform an AJAX call if the update personal details form submitted, so that we can prevent the 
+            // page being reloaded and deliver the information from the backend using JavaScript/jQeury
+            $('#update_details_form').submit(function(e) {
+                // Preventing the submission of the form, which will prevent the reloading of the page
+                e.preventDefault();
+
+                // We are serialising the form data, so that it can be sent to the backend for review.
+                form_data = $('#update_details_form').serialize();
+
+                // AJAX POST request, which will attempt to update the personal details and deliver the outcome (success or failure) to the user
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'update_personal_details' %}",
+                    data: form_data,
+
+                    // If no errors occurred in the backend, this will be executed.
+                    success: function(response) {
+
+                        // If there was an issue with updating the personal details, such as an empty form being submitted,
+                        // this will display all the error messages in a list fashion.
+                        if (response.response_info_update_personal_details.success === "")
+                        {
+                            // Clearing any previous errors, so only new errors are displayed.
+                            $('#update_personal_details_errors_unordered_list').text("");
+
+                            // Iterating through each error message and displaying it in the required list, so user can correct their
+                            // actions
+                            for (let element in response.form)
+                            {
+                                response.form[element].forEach(error => {
+                                    $('#update_personal_details_errors_unordered_list').append(`<li>${element} : ${error}</li>`);
+                                });
+                            }
+
+                            // Displays the div, which holds the list of errors
+                            $('#update_personal_details_errors_div').show();
+
+                        }
+
+                        // If the personal details were updated successfully, the div will be populated with that message and
+                        // the div will be visible to the user, informing them of the successful outcome.
+                        else
+                        {
+                            $('#update_details_success').text(response.response_info_update_personal_details.success);
+                            $('#update_details_success').show();
+                        }
+                    },
+
+                    // If an error occurred while submitting the form, this will just print the error to the console, to help with
+                    // debugging the issue.
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
             });
 
             // We are going to perform an AJAX call if the update password form is submitted, so that we can prevent the page being 
@@ -290,6 +355,7 @@
                     url: "{% url 'change_password' %}",
                     data: form_data,
 
+                    // If no errors occurred in the backend, this will be executed.
                     success: function(response) {
 
                         // If the new password that the user enters matches the one that they entered in the field where you confirm
