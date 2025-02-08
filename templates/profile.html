@@ -40,6 +40,7 @@
                     </div>
                     
                 </div>
+
                 <div class="col py-3">
                     <div id="personal_details_div">
                         <form id="update_details_form" method="post" action="{% url 'update_personal_details' %}">
@@ -47,20 +48,20 @@
                             <h3 class="text-black text-center">Update Personal Information</h3>
                             <!-- Change Email address -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.change_email.id_for_label }}" name="change_email" value="{{ user.email }}" type="email" placeholder="name@example.com" autocomplete="off" required />
-                                <label for="{{ form.change_email.id_for_label }}">Email Address</label>
+                                <input class="form-control" id="change_email_id" name="change_email" value="{{ user.email }}" type="email" autocomplete="off" />
+                                <label for="change_email_id">Email Address</label>
                             </div>
             
                             <!-- Change/Add First Name -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.change_first_name.id_for_label }}" name="change_first_name" value="{{ user_details.first_name }}" type="text" autocomplete="off" />
-                                <label for="{{ form.change_first_name.id_for_label }}">First Name</label>
+                                <input class="form-control" id="change_first_name_id" name="change_first_name" value="{{ user_details.first_name }}" type="text" autocomplete="off" />
+                                <label for="change_first_name_id">First Name</label>
                             </div>
             
                             <!-- Change/Add Surname -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.change_surname.id_for_label }}" name="change_surname" value="{{ user_details.surname }}" type="text" autocomplete="off" />
-                                <label for="{{ form.change_surname.id_for_label }}">Surname</label>
+                                <input class="form-control" id="change_surname_id" name="change_surname" value="{{ user_details.surname }}" type="text" autocomplete="off" />
+                                <label for="change_surname_id">Surname</label>
                             </div>
             
                             <div class="d-grid"><button class="btn btn-primary btn-lg" id="update_details_btn" type="submit">Update Personal Details</button></div>
@@ -68,6 +69,17 @@
                             <br><br>
                             
                             <div class="alert alert-success" id="update_details_success" role="alert" style="display:none;"></div>
+                            
+                            {% if messages %}
+                            <div class="alert alert-danger">
+                                <ul>
+                                    {% for message in messages %}
+                                        <li style="list-style-type: square;">{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            
+                            {% endif %}
                         </form>
                     </div>
 
@@ -78,23 +90,29 @@
                             <h3 class="text-black text-center">Change Password</h3>
                             <!-- New Password -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.change_password.id_for_label }}" name="change_password" type="password" placeholder="Enter password..." required />
-                                <label for="{{ form.change_password.id_for_label }}">New Password</label>
+                                <input class="form-control" id="new_password_entered" name="change_password" type="password" autocomplete="off" />
+                                <label for="new_password_entered">New Password</label>
                             </div>
             
                             <!-- Confirm New Password -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.change_password_confirm.id_for_label }}" name="change_password_confirm" type="password" placeholder="Enter password..." required />
-                                <label for="{{ form.change_password_confirm.id_for_label }}">Confirm New Password</label>
+                                <input class="form-control" id="confirm_new_password_entered" name="change_password_confirm" type="password" autocomplete="off" />
+                                <label for="confirm_new_password_entered">Confirm New Password</label>
                             </div>
             
                             <div class="d-grid"><button class="btn btn-primary btn-lg" id="update_password_btn" type="submit">Update Password</button></div>
 
                             <br><br>
 
+                            <div id="update_password_errors_div" style="display: none;">
+                                <div class="alert alert-danger">
+                                    <ul id="error_messages_unordered_list">
+                                    </ul>
+                                </div>
+                            </div>
+                        
                             <div class="alert alert-success" id="update_password_success" role="alert" style="display: none;"></div>
                             <div class="alert alert-danger" id="update_password_fail" role="alert" style="display: none;background-color: red;color:white;"></div>
-
                         </form>
                     </div>
 
@@ -133,7 +151,7 @@
                                         <p class="card-text text-black">High quality keychains</p>
                                         <form class="buy_item_link" method="post">
                                             {% csrf_token %}
-                                            <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="1000" style="display:none;"/>
+                                            <input type="number" name="price_for_item_in_points" value="1000" style="display:none;"/>
                                             <button type="submit" class="btn btn-primary">1000 points</button>
                                         </form>
                                     </div>
@@ -147,7 +165,7 @@
                                         <p class="card-text text-black">High quality mugs</p>
                                         <form class="buy_item_link" method="post">
                                             {% csrf_token %}
-                                            <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="2000" style="display:none;"/>
+                                            <input type="number" name="price_for_item_in_points" value="2000" style="display:none;"/>
                                             <button type="submit" class="btn btn-primary">2000 points</button>
                                         </form>
                                     </div>
@@ -166,7 +184,7 @@
                                         <p class="card-text text-black">High quality t-shirts</p>
                                         <form class="buy_item_link" method="post">
                                             {% csrf_token %}
-                                            <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="5000" style="display:none;"/>
+                                            <input type="number" name="price_for_item_in_points" value="5000" style="display:none;"/>
                                             <button type="submit" class="btn btn-primary">5000 points</button>
                                         </form>
                                     </div>
@@ -180,7 +198,7 @@
                                         <p class="card-text text-black">High quality backpacks</p>
                                         <form class="buy_item_link" method="post">
                                             {% csrf_token %}
-                                            <input type="number" id="price_for_item_in_points" name="price_for_item_in_points" value="10000" style="display:none;"/>
+                                            <input type="number" name="price_for_item_in_points" value="10000" style="display:none;"/>
                                             <button type="submit" class="btn btn-primary">10000 points</button>
                                         </form>
                                     </div>
@@ -214,41 +232,59 @@
 
     <script>
         $(document).ready(function() {
+            // If the user clicks on the update personal information link, it will hide all the other pages and just display this one.
             $('#update_personal_info_link').click(function() {
                 $('#personal_details_div').show();
                 $('#change_password_div').hide();
                 $('#leaderboard_div').hide();
                 $('#reedem_points_div').hide();
+
+                $('#update_password_errors_div').hide();
             });
 
+            // If the user clicks on the change password link, it will hide all the other pages and just display this one.
             $('#change_password_link').click(function(){
                 $('#personal_details_div').hide();
                 $('#leaderboard_div').hide();
                 $('#reedem_points_div').hide();
                 $('#change_password_div').show();
+
+                $('#update_password_errors_div').hide();
             });
 
+            // If the user clicks on the leaderboard link, it will hide all the other pages and just display this one.
             $('#leaderboard_link').click(function(){
                 $('#personal_details_div').hide();
                 $('#change_password_div').hide();
                 $('#reedem_points_div').hide();
                 $('#leaderboard_div').show();
 
+                $('#update_password_errors_div').hide();
+
             });
 
+            // If the user clicks on the reedem points link, it will hide all the other pages and just display this one.
             $('#redeem_points_link').click(function(){
                 $('#personal_details_div').hide();
                 $('#change_password_div').hide();
                 $('#leaderboard_div').hide();
                 $('#reedem_points_div').show();
 
+                $('#update_password_errors_div').hide();
+
             });
 
+            // We are going to perform an AJAX call if the update password form is submitted, so that we can prevent the page being 
+            // reloaded and deliver the information from the backend using JavaScript/jQeury
+
             $('#update_password_form').submit(function(e) {
+                // Preventing the submission of the form, which will prevent the reloading of the page
                 e.preventDefault();
 
+                // We are serialising the form data, so that it can be sent to the backend for review.
                 form_data = $('#update_password_form').serialize();
 
+                // AJAX POST request, which will attempt to change the password and deliver the outcome (success or failure) to the user
                 $.ajax({
                     type: 'POST',
                     url: "{% url 'change_password' %}",
@@ -256,58 +292,52 @@
 
                     success: function(response) {
 
-                        if (response.passwords_match == true)
+                        // If the new password that the user enters matches the one that they entered in the field where you confirm
+                        // your new password, the user will be informed that the password has been updated.
+                        if (response.response_info_for_password.passwords_match === true)
                         {
                             $('#update_password_fail').hide();
                             $('#update_password_success').text("Password has been updated successfully!");
                             $('#update_password_success').show();
                         }
-                        else if (response.passwords_match == false)
+
+                        // If the new password that the user enters does not match the one that they entered in the field where 
+                        // you confirm your new password, the user will be informed that the passwords don't match.
+                        else if (response.response_info_for_password.passwords_match === false)
                         {   
                             $('#update_password_success').hide();
                             $('#update_password_fail').text("Passwords don't match. Try again.");
                             $('#update_password_fail').show();
                         }
 
-                        else
+                        // If there are errors in the form, we will set the value that detects whether the passwords match to ''
+                        // We do this because the user sent an empty form and we want to inform them that they have to enter a password
+                        // in both fields as it is required.
+                        else if (response.response_info_for_password.passwords_match === '')
                         {
-                            $('#form_errors').text("");
+                            // Clearing any previous text in the error messages list, so that only new error messages appear
+                            $('#error_messages_unordered_list').text("");
 
-                            for(var error in response.error_messages)
+                            // We are populating the list that holds the error messages with each error message that was detected by 
+                            // the backend, specifically Django forms.
+                            for (let element in response.form)
                             {
-                                $('#form_errors').append(response.error_messages[error] + "<br>");
+                                response.form[element].forEach(error => {
+                                    $('#error_messages_unordered_list').append(`<li>${element}: ${error}</li>`);
+                                });
                             }
 
-                            $('#form_errors').show();
+                            // We are displaying the errors from above on the screen.
+                            $('#update_password_errors_div').show();
                         }
                     },
 
+                    // If an error occurred while submitting the form, this will just print the error to the console, to help with
+                    // debugging the issue.
                     error: function(error) {
                         console.error(error);
                     }
                 });
-            });
-
-            $('#update_details_form').submit(function(e) {
-                e.preventDefault();
-
-                form_data = $('#update_details_form').serialize();
-                
-                $.ajax({
-                    type: 'POST',
-                    url: "{% url 'update_personal_details' %}",
-                    data: form_data,
-
-                    success: function(response) {
-                        $('#update_details_success').text(response.success);
-                        $('#update_details_success').show();
-                    },
-
-                    error: function(error) {
-                        console.error(error);
-                    }
-                });
-
             });
 
             $('.buy_item_link').submit(function(e) {
