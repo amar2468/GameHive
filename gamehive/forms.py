@@ -31,8 +31,8 @@ class TestimonialsForm(forms.Form):
     testimonial_message = forms.CharField(widget=forms.Textarea, required=True)
 
 class UpdatePersonalDetails(forms.Form):
-    change_first_name = forms.CharField(max_length=25)
-    change_surname = forms.CharField(max_length=25)
+    change_first_name = forms.CharField(max_length=25, required=True)
+    change_surname = forms.CharField(max_length=25, required=True)
     change_email = forms.EmailField(required=True)
 
 class ChangePasswordForm(forms.Form):
