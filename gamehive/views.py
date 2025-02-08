@@ -91,33 +91,34 @@ def update_personal_details(request):
                 change_email = form.cleaned_data['change_email']
                 change_first_name = form.cleaned_data['change_first_name']
                 change_surname = form.cleaned_data['change_surname']
-            else:
-                for field, errors in form.errors.items():
-                    for error in errors:
-                        messages.error(request, f"{field.capitalize()}: {error}")
-                return render(request, 'profile.html', {'form':form})
 
-            try:
-                user_details = PersonalDetails.objects.get(user=request.user)
-            except PersonalDetails.DoesNotExist:
-                user_details = PersonalDetails(user=request.user, first_name = change_first_name, surname = change_surname)
+                try:
+                    user_details = PersonalDetails.objects.get(user=request.user)
+                except PersonalDetails.DoesNotExist:
+                    user_details = PersonalDetails(user=request.user, first_name = change_first_name, surname = change_surname)
+                    user_details.save()
+
+                user_details.first_name = change_first_name
+
+                user_details.surname = change_surname
+
+                user_details.user.email = change_email
+
                 user_details.save()
 
-            user_details.first_name = change_first_name
+                user_details.user.save()
+                    
+                response_info_update_personal_details = {
+                    'success' : "Personal details updated successfully."
+                }
 
-            user_details.surname = change_surname
-
-            user_details.user.email = change_email
-
-            user_details.save()
-
-            user_details.user.save()
-                
-            response_info_update_personal_details = {
-                'success' : "Personal details updated successfully."
-            }
-
-            return JsonResponse(response_info_update_personal_details)
+                return JsonResponse({'response_info_update_personal_details' : response_info_update_personal_details})
+            
+            else:
+                response_info_update_personal_details = {
+                    'success' : ""
+                }
+                return JsonResponse({'form' : form.errors, 'response_info_update_personal_details' : response_info_update_personal_details})
         else:
             return render(request, 'profile.html')
     else:
