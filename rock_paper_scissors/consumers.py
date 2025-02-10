@@ -4,16 +4,12 @@ from django.contrib.auth.models import User
 from gamehive.models import GameUserProfile
 from asgiref.sync import sync_to_async
 import random
+import redis
+
+# Creating an instance of the Redis client
+redis_client = redis.StrictRedis(host="127.0.0.1", port="6379", db=0, decode_responses=True)
 
 class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
-    # Creating a global list to hold all the available rooms (Rooms that have one player waiting)
-    global available_rooms
-    available_rooms = []
-
-    # Creating a global dictionary to hold the current users in the session
-    global users_in_session
-    users_in_session = {}
-
     # Creating a global variable that stores the total number of wins required to win the game
     global wins_required_to_win_game
     wins_required_to_win_game = 3
@@ -23,7 +19,15 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
     REQUIRED_NUMBER_OF_USERS = 2
 
     async def connect(self):
+        # We are retrieving the current user who has just connected to the multiplayer rock,paper,scissors game
         current_user = self.scope['user']
+
+        # Retrieving the rooms - specifically which ones have been populated by 1 user. If there are no rooms that are currently
+        # populated, it will return an empty list
+        available_rooms = redis_client.lrange("available_rooms", 0, -1) or []
+
+        # Retrieving the users and what room they are located in. Returns an empty dictionary if users are not present in any room.
+        users_in_session = redis_client.hgetall("users_in_session") or {}
 
         # If there are no players in any room, then generate a random room for the user to enter in.
         if not available_rooms:
@@ -33,24 +37,57 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
 
             self.rps_room_name = rps_room_name
 
-            available_rooms.append(self.rps_room_name)
+            # Using the Redis client, we are adding the room number to the list of rooms that can be populated by another user
+            redis_client.rpush("available_rooms", self.rps_room_name)
 
-            users_in_session[self.rps_room_name] = [current_user.username]
+            # Adding the first user to the users_in_session dictionary. The key will be the room number, while the value is the 
+            # room number
+            current_users_in_session = [current_user.username]
+
+            # Using Redis client, we are adding the current user to the users_in_session dictionary, with the room number as the key
+            redis_client.hset("users_in_session", self.rps_room_name, json.dumps(current_users_in_session))
         
         # If there are available rooms (Rooms that have one player waiting), add the user to the first available one.
         else:
-            self.rps_room_name = available_rooms.pop(0)
+            # We can remove the room from the list of available rooms, as it will be populated by another user - (2 players per room)
+            self.rps_room_name = redis_client.lpop("available_rooms")
 
-            users_in_session[self.rps_room_name].append(current_user.username)
+            # Retrieving the users_in_session dictionary, so that we can append the second user to the "value" part of the "key", which
+            # is the room number.
+            current_users_in_session = redis_client.hget("users_in_session", self.rps_room_name)
+
+            # We need to retrieve the current user in the room and convert the result into a list. This will allow us to append the
+            # second user to the list and then return the result.
+            if current_users_in_session:
+                current_users_in_session = json.loads(current_users_in_session)
+
+            # Appending the second user to the list
+            current_users_in_session.append(current_user.username)
+
+            # Updating the Redis client with the two users that have joined the specific room number
+            redis_client.hset("users_in_session", self.rps_room_name, json.dumps(current_users_in_session))
 
         self.room_state = {}
 
         await self.channel_layer.group_add(self.rps_room_name, self.channel_name)
 
         await self.accept()
+        
+        # Retrieve the current users that are located in a room
+        current_users_session = redis_client.hget("users_in_session", self.rps_room_name)
+
+        # If there is at least one user who is in the specific room, retrieve the users that are populated in that room
+        if current_users_session:
+            current_users_session = json.loads(current_users_session)
+        # If no one is in the room, just create an empty list to show this
+        else:
+            current_users_session = []
+
+        # Count how many users are in the current room
+        number_of_users_in_session = len(current_users_session)
 
         # If two people are in the mentioned room, we will inform the client side that both users are in the room and the game can commence.
-        if len(users_in_session[self.rps_room_name]) == REQUIRED_NUMBER_OF_USERS:
+        if number_of_users_in_session == REQUIRED_NUMBER_OF_USERS:
             await self.channel_layer.group_send(
                 self.rps_room_name,
                 {
@@ -65,11 +102,18 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
             }))
 
     async def disconnect(self, close_code):
+        # We are retrieving all the rooms which have been populated by at least one user. If there are no rooms like that, we represent
+        # it with an empty list instead.
+        available_rooms = redis_client.lrange("available_rooms", 0, -1) or []
+
         if self.rps_room_name:
+            # If the specific room is populated by at least one user, remove the room as the session has disconnected
             if self.rps_room_name in available_rooms:
-                available_rooms.remove(self.rps_room_name)
-            if self.rps_room_name in users_in_session.keys():
-                del users_in_session[self.rps_room_name]
+                redis_client.lrem("available_rooms", 1, self.rps_room_name)
+            # If the specific room was in the dictionary that holds the room as the "key" and the users in it as the "value", we want
+            # to delete this room from the dictionary, along with the users in it, as the session has disconnected.
+            if redis_client.hexists("users_in_session", self.rps_room_name):
+                redis_client.hdel("users_in_session", self.rps_room_name)
         print(f"WebSocket Disconnected with code: {close_code}")
 
         await self.channel_layer.group_send(
