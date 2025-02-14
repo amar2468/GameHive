@@ -7,15 +7,13 @@ import random
 import redis
 
 # Creating an instance of the Redis client
-redis_client = redis.StrictRedis(host="127.0.0.1", port="6379", db=0, decode_responses=True)
+redis_client = redis.Redis(host="127.0.0.1", port="6379", db=0, decode_responses=True)
 
 class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
-    # Creating a global variable that stores the total number of wins required to win the game
-    global wins_required_to_win_game
-    wins_required_to_win_game = 3
+    # Creating a constant variable that stores the total number of wins required to win the game
+    WINS_REQUIRED_TO_WIN = 3
 
     # This variable will be used when checking if both users have joined the session
-    global REQUIRED_NUMBER_OF_USERS
     REQUIRED_NUMBER_OF_USERS = 2
 
     async def connect(self):
@@ -87,7 +85,7 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
         number_of_users_in_session = len(current_users_session)
 
         # If two people are in the mentioned room, we will inform the client side that both users are in the room and the game can commence.
-        if number_of_users_in_session == REQUIRED_NUMBER_OF_USERS:
+        if number_of_users_in_session == RockPaperScissorsConsumer.REQUIRED_NUMBER_OF_USERS:
             await self.channel_layer.group_send(
                 self.rps_room_name,
                 {
@@ -225,7 +223,7 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                     self.room_state['rps_options'][user2_name]['total_wins'] += 1
                 
                 # The user that gets 3 wins first wins the game, while the user that lost will get a message that they lost the game.
-                if self.room_state['rps_options'][user1_name]['total_wins'] == wins_required_to_win_game:
+                if self.room_state['rps_options'][user1_name]['total_wins'] == RockPaperScissorsConsumer.WINS_REQUIRED_TO_WIN:
                     self.room_state['rps_options'][user1_name]["outcome_of_game"] = "Game Over! You won this game! You have received 10 points!"
                     self.room_state['rps_options'][user2_name]["outcome_of_game"] = "Game Over! You failed to win this game! Good luck next time!"
                     
@@ -249,7 +247,7 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                         )
                 
                 # The user that gets 3 wins first wins the game, while the user that lost will get a message that they lost the game.
-                elif self.room_state['rps_options'][user2_name]['total_wins'] == wins_required_to_win_game:
+                elif self.room_state['rps_options'][user2_name]['total_wins'] == RockPaperScissorsConsumer.WINS_REQUIRED_TO_WIN:
                     self.room_state['rps_options'][user1_name]["outcome_of_game"] = "Game Over! You failed to win this game! Good luck next time!"
                     self.room_state['rps_options'][user2_name]["outcome_of_game"] = "Game Over! You won this game! You have received 10 points!"
 
