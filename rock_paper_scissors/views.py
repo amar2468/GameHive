@@ -3,9 +3,8 @@ from django.http import JsonResponse
 from gamehive.models import GameUserProfile
 import random
 
-# Creating a global variable that stores the total number of wins required to win the game
-global wins_required_to_win_game
-wins_required_to_win_game = 3
+# Creating a variable that stores the total number of wins required to win the game
+WINS_REQUIRED_TO_WIN_GAME = 3
 
 # This view allows a user to play single player mode, which will load the relevant template
 
@@ -78,7 +77,7 @@ def rps_form_submitted(request):
             request.session['rounds'] = rounds
 
             # If the user has managed to win 3 rounds first, the points will be added to their account.
-            if 'user_total_wins' in request.session and request.session['user_total_wins'] == wins_required_to_win_game:
+            if 'user_total_wins' in request.session and request.session['user_total_wins'] == WINS_REQUIRED_TO_WIN_GAME:
                 rps_end_of_game = ""
                 rps_end_of_game = "Game Over! You won this game! You have received 10 points!"
                 try:
@@ -108,7 +107,7 @@ def rps_form_submitted(request):
                 }
             
             # If the computer won three rounds before the user, the user will get a message that they lost.
-            elif 'computer_wins' in request.session and request.session['computer_wins'] == wins_required_to_win_game:
+            elif 'computer_wins' in request.session and request.session['computer_wins'] == WINS_REQUIRED_TO_WIN_GAME:
                 rps_end_of_game = ""        
                 rps_end_of_game = "Game Over! You failed to win this game! Good luck next time!"
 
