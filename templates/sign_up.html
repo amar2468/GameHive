@@ -32,19 +32,37 @@
                         <form method="post" action="{% url 'sign_up' %}">
                             {% csrf_token %}
                             <!-- Username input-->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.username.id_for_label }}" name="username" type="text" placeholder="Enter your name..." autocomplete="off" />
-                                <label for="{{ form.username.id_for_label }}">Username</label>
+                            <div class="d-flex">
+                                <div class="form-floating mb-3 flex-grow-1">
+                                    <input class="form-control" id="{{ form.username.id_for_label }}" name="username" type="text" placeholder="Enter your name..." autocomplete="off" />
+                                    <label for="{{ form.username.id_for_label }}">Username</label>
+                                </div>
+                                <div class="ms-2 d-flex align-items-center">
+                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter a valid username. You will need this when logging in."></i>
+                                </div>
                             </div>
                             <!-- Email address input-->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.email.id_for_label }}" name="email" type="email" placeholder="name@example.com" autocomplete="off" />
-                                <label for="{{ form.email.id_for_label }}">Email address</label>
+                            <div class="d-flex">
+                                <div class="form-floating mb-3 flex-grow-1">
+                                    <input class="form-control" id="{{ form.email.id_for_label }}" name="email" type="email" placeholder="name@example.com" autocomplete="off" />
+                                    <label for="{{ form.email.id_for_label }}">Email address</label>
+                                </div>
+
+                                <div class="ms-2 d-flex align-items-center">
+                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter a valid email. Invalid email addresses will be rejected."></i>
+                                </div>
                             </div>
+
                             <!-- Password input-->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="{{ form.password.id_for_label }}" name="password" type="password" placeholder="Enter password..." />
-                                <label for="{{ form.password.id_for_label }}">Password</label>
+                            <div class="d-flex">
+                                <div class="form-floating mb-3 flex-grow-1">
+                                    <input class="form-control" id="{{ form.password.id_for_label }}" name="password" type="password" placeholder="Enter password..." />
+                                    <label for="{{ form.password.id_for_label }}">Password</label>
+                                </div>
+
+                                <div class="ms-2 d-flex align-items-center">
+                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter a strong password with at least 8 characters."></i>
+                                </div>
                             </div>
 
                             <!-- Submit Button-->
@@ -57,5 +75,13 @@
             </div>
         </header>
     </div>
+
+    <script>
+
+        // When the template is loaded, the user will be able to see the tooltip text
+        $(document).ready(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
     {% endblock %}
 </body>

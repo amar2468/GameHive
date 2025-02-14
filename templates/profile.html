@@ -47,21 +47,39 @@
                             {% csrf_token %}
                             <h3 class="text-black text-center">Update Personal Information</h3>
                             <!-- Change Email address -->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="change_email_id" name="change_email" value="{{ user.email }}" type="email" autocomplete="off" />
-                                <label for="change_email_id">Email Address</label>
+                            <div class="d-flex">
+                                <div class="form-floating mb-3 flex-grow-1">
+                                    <input class="form-control" id="change_email_id" name="change_email" value="{{ user.email }}" type="email" autocomplete="off" />
+                                    <label for="change_email_id">Email Address</label>
+                                </div>
+
+                                <div class="m-2 d-flex align-items-center">
+                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter the new email address, if you wish to update it. The current email address is displayed in the input field."></i>
+                                </div>
                             </div>
             
                             <!-- Change/Add First Name -->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="change_first_name_id" name="change_first_name" value="{{ user_details.first_name }}" type="text" autocomplete="off" />
-                                <label for="change_first_name_id">First Name</label>
+                            <div class="d-flex">
+                                <div class="form-floating mb-3 flex-grow-1">
+                                    <input class="form-control" id="change_first_name_id" name="change_first_name" value="{{ user_details.first_name }}" type="text" autocomplete="off" />
+                                    <label for="change_first_name_id">First Name</label>
+                                </div>
+
+                                <div class="m-2 d-flex align-items-center">
+                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter the new name, if you wish to update it. The current name is displayed in the input field."></i>
+                                </div>
                             </div>
-            
+                            
                             <!-- Change/Add Surname -->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="change_surname_id" name="change_surname" value="{{ user_details.surname }}" type="text" autocomplete="off" />
-                                <label for="change_surname_id">Surname</label>
+                            <div class="d-flex">
+                                <div class="form-floating mb-3 flex-grow-1">
+                                    <input class="form-control" id="change_surname_id" name="change_surname" value="{{ user_details.surname }}" type="text" autocomplete="off" />
+                                    <label for="change_surname_id">Surname</label>
+                                </div>
+
+                                <div class="m-2 d-flex align-items-center">
+                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter the new surname, if you wish to update it. The current surname is displayed in the input field."></i>
+                                </div>
                             </div>
             
                             <div class="d-grid"><button class="btn btn-primary btn-lg" id="update_details_btn" type="submit">Update Personal Details</button></div>
@@ -86,15 +104,27 @@
                             <div class="alert alert-danger" id="form_errors" style="display:none;" role="alert"></div>
                             <h3 class="text-black text-center">Change Password</h3>
                             <!-- New Password -->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="new_password_entered" name="change_password" type="password" autocomplete="off" />
-                                <label for="new_password_entered">New Password</label>
+                            <div class="d-flex">
+                                <div class="form-floating mb-3 flex-grow-1">
+                                    <input class="form-control" id="new_password_entered" name="change_password" type="password" autocomplete="off" />
+                                    <label for="new_password_entered">New Password</label>
+                                </div>
+
+                                <div class="m-2 d-flex align-items-center">
+                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter the new password, making sure it is a strong password that contains at least 8 characters."></i>
+                                </div>
                             </div>
             
                             <!-- Confirm New Password -->
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="confirm_new_password_entered" name="change_password_confirm" type="password" autocomplete="off" />
-                                <label for="confirm_new_password_entered">Confirm New Password</label>
+                            <div class="d-flex">
+                                <div class="form-floating mb-3 flex-grow-1">
+                                    <input class="form-control" id="confirm_new_password_entered" name="change_password_confirm" type="password" autocomplete="off" />
+                                    <label for="confirm_new_password_entered">Confirm New Password</label>
+                                </div>
+
+                                <div class="m-2 d-flex align-items-center">
+                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="left" title="Enter the password again to confirm it."></i>
+                                </div>
                             </div>
             
                             <div class="d-grid"><button class="btn btn-primary btn-lg" id="update_password_btn" type="submit">Update Password</button></div>
@@ -229,6 +259,11 @@
 
     <script>
         $(document).ready(function() {
+
+            $(document).ready(function() {
+                $('[data-bs-toggle="tooltip"]').tooltip();
+            });
+
             // If the user clicks on the update personal information link, it will hide all the other pages and just display this one.
             $('#update_personal_info_link').click(function() {
                 $('#personal_details_div').show();
