@@ -94,19 +94,20 @@ def update_personal_details(request):
 
                 try:
                     user_details = PersonalDetails.objects.get(user=request.user)
+
+                    user_details.first_name = change_first_name
+
+                    user_details.surname = change_surname
+
+                    user_details.user.email = change_email
+
+                    user_details.save()
+
+                    user_details.user.save()
+                    
                 except PersonalDetails.DoesNotExist:
                     user_details = PersonalDetails(user=request.user, first_name = change_first_name, surname = change_surname)
                     user_details.save()
-
-                user_details.first_name = change_first_name
-
-                user_details.surname = change_surname
-
-                user_details.user.email = change_email
-
-                user_details.save()
-
-                user_details.user.save()
                     
                 response_info_update_personal_details = {
                     'success' : "Personal details updated successfully."
