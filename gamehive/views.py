@@ -110,16 +110,18 @@ def update_personal_details(request):
                     user_details.save()
                     
                 response_info_update_personal_details = {
-                    'success' : "Personal details updated successfully."
+                    'success' : "Personal details updated successfully.",
+                    'error_messages' : ""
                 }
 
-                return JsonResponse({'response_info_update_personal_details' : response_info_update_personal_details})
+                return JsonResponse(response_info_update_personal_details)
             
             else:
                 response_info_update_personal_details = {
-                    'success' : ""
+                    'success' : "",
+                    'error_messages' : form.errors
                 }
-                return JsonResponse({'form' : form.errors, 'response_info_update_personal_details' : response_info_update_personal_details})
+                return JsonResponse(response_info_update_personal_details)
         else:
             return render(request, 'profile.html')
     else:
@@ -140,7 +142,8 @@ def change_password(request):
 
                 if change_password != change_password_confirm:
                     response_info_for_password = {
-                        'passwords_match' : False
+                        'passwords_match' : False,
+                        'error_messages' : "Passwords don't match. Please enter the passwords again."
                     }
 
                 else:
@@ -149,8 +152,8 @@ def change_password(request):
                     except ValidationError as e:
                         
                         response_info_for_password = {
-                            'error_messages' : e.messages,
-                            'passwords_match' : False
+                            'passwords_match' : False,
+                            'error_messages' : e.messages
                         }
 
                         return JsonResponse(response_info_for_password)
@@ -163,16 +166,18 @@ def change_password(request):
                         user.save()
 
                         response_info_for_password = {
-                            'passwords_match' : True
+                            'passwords_match' : True,
+                            'error_messages' : ""
                         }
 
-                return JsonResponse({'response_info_for_password' : response_info_for_password})
+                return JsonResponse(response_info_for_password)
 
             else:
                 response_info_for_password = {
-                    'passwords_match' : ''
+                    'passwords_match' : '',
+                    'error_messages' : form.errors
                 }
-                return JsonResponse({'form' : form.errors, 'response_info_for_password' : response_info_for_password})
+                return JsonResponse(response_info_for_password)
                 
         return render(request, 'profile.html')
     else:
@@ -230,9 +235,12 @@ def sign_up(request):
             try:
                 password_validation.validate_password(password)
             except ValidationError as e:
-                for error in e.messages:
-                    messages.error(request, error)
-                return render(request, 'sign_up.html', {'form':form})
+                response_info_sign_up = {
+                    'success' : "",
+                    'error_messages' : e.messages
+                }
+
+                return JsonResponse(response_info_sign_up)
 
             # This try/except block looks for whether the username entered in the "sign up" page is unique. If it is, it will allow
             # for the creation of the account. However, if the username already exists, the user will get an error message telling them
@@ -243,19 +251,39 @@ def sign_up(request):
             except IntegrityError as e:
                 if 'UNIQUE constraint failed: auth_user.username' in str(e):
                     error_message = "Username already exists. Please choose a different username."
-                    return render(request, 'sign_up.html', {'error_message': error_message})
+                    response_info_sign_up = {
+                        'success' : "",
+                        'error_messages' : error_message
+                    }
+
+                    return JsonResponse(response_info_sign_up)
+                
+                error_message = "Error when creating the user. Please try again."
+                response_info_sign_up = {
+                    'success' : "",
+                    'error_messages' : error_message
+                }
+
+                return JsonResponse(response_info_sign_up)
 
             game_user_profile = GameUserProfile.objects.get_or_create(user=user)
             game_user_profile = game_user_profile[0]
             game_user_profile.current_score = 0
             game_user_profile.save()
 
-            return render(request, 'login.html')
+            response_info_sign_up = {
+                'success' : "Account has been created successfully. Redirecting you to the login page...",
+                'error_messages' : ""
+            }
+
+            return JsonResponse(response_info_sign_up)
         if not form.is_valid():
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field.capitalize()}: {error}")
-            return render(request, 'sign_up.html', {'form':form})
+            response_info_sign_up = {
+                'success' : "",
+                'error_messages' : form.errors
+            }
+
+            return JsonResponse(response_info_sign_up)
     else:
         form = RegistrationForm()
     if request.user.is_authenticated:
@@ -279,16 +307,27 @@ def sign_in(request):
 
             if user is not None:
                 login(request, user)
-                return render(request, 'index.html')
+                
+                response_info_login = {
+                    'success' : "You have logged in successfully. Redirecting to the homepage...",
+                    'error_message' : ""
+                }
+
+                return JsonResponse(response_info_login)
             else:
-                messages.error(request, "Incorrect username or password.")
-                return render(request, 'login.html', {'form':form})
+                response_info_login = {
+                    'success' : "",
+                    'error_message' : "Incorrect username or password."
+                }
+                
+                return JsonResponse(response_info_login)
         
         else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field.capitalize()}: {error}")
-            return render(request, 'login.html', {'form':form})
+            response_info_login = {
+                'success' : "",
+                'error_message' : form.errors
+            }
+            return JsonResponse(response_info_login)
     else:
         form = LoginForm()
 
