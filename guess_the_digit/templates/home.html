@@ -158,7 +158,7 @@
             let back_to_homepage_btn = document.getElementById("back_to_homepage_btn");
 
             replay_game_button.addEventListener("click", function() {
-                    let url = '{% url "play" %}' + "?selected_level=" + level_identifier + "&hints=" + hint_enabled;
+                    let url = '{% url "guess_the_digit:play" %}' + "?selected_level=" + level_identifier + "&hints=" + hint_enabled;
                     
                     window.location.href = url;
             });

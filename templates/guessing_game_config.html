@@ -7,7 +7,7 @@
     <div class="wrapper bg-light d-flex justify-content-center align-items-center">
       <div class="card">
         <div class="card-body">
-          <form class="text-black" id="guessing_game_config_form" action="{% url 'play' %}" method="get">
+          <form class="text-black" id="guessing_game_config_form" action="{% url 'guess_the_digit:play' %}" method="get">
               {% csrf_token %}
               Levels will bring benefits and disadvantages. Beginners may prefer the easy level
               <div class="dropdown" aria-required="true">
@@ -115,7 +115,7 @@
             $('#play_game').click(function() {
                 var form_info = $('#guessing_game_config_form').serialize();
     
-                var url = '{% url "play" %}?' + form_info;
+                var url = '{% url "guess_the_digit:play" %}?' + form_info;
                 
                 window.location.href = url;
             });
