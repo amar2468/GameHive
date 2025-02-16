@@ -44,19 +44,28 @@ def testimonials_page(request):
 
                 new_testimonial.save()
 
-                return render(request, 'testimonials.html')
+                response_info_testimonials_form = {
+                    'success' : "You have added your testimonial successfully.",
+                    'error_messages' : ""
+                }
+
+                return JsonResponse(response_info_testimonials_form)
+
             else:
-                messages.error(request, "You have already submitted a testimonial. You are allowed to submit only one.")
-                return render(request, 'testimonials.html', {'form' : form})
+                response_info_testimonials_form = {
+                    'success' : "",
+                    'error_messages' : "You have already submitted a testimonial. You are allowed to submit only one."
+                }
+
+                return JsonResponse(response_info_testimonials_form)
 
         else:
-            # This will iterate through the errors that have occurred (sent an empty form, etc..)
-            # These errors will then be displayed in the testimonials page, so user can fix their errors and submit a valid form.
+            response_info_testimonials_form = {
+                'success' : "",
+                'error_messages' : form.errors
+            }
 
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field.capitalize()}: {error}")
-            return render(request, 'testimonials.html', {'form':form})
+            return JsonResponse(response_info_testimonials_form)
     else:
         testimonials_model_objs = TestimonialsModel.objects.all()
 

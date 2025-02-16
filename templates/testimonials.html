@@ -14,18 +14,15 @@
                 </div>
                 <div class="row gx-5 justify-content-center">
                     <div class="col-lg-6">
-                        
-                        {% if messages %}
-                        <div class="alert alert-danger">
-                            <ul>
-                                {% for message in messages %}
-                                <li>{{ message }}</li>
-                                {% endfor %}
+
+                        <div id="div_testimonial_errors" class="alert alert-danger" style="display: none;">
+                            <ul id="testimonial_errors_list">
                             </ul>
                         </div>
-                        {% endif %}
 
-                        <form id="testimonials_form" method="post" action="{% url 'testimonials_page' %}">
+                        <div class="alert alert-success" id="testimonial_form_success" role="alert" style="display:none;"></div>
+
+                        <form id="testimonials_form" method="post">
                             {% csrf_token %}
                             <!-- Username -->
                             <div class="form-floating mb-3">
@@ -35,7 +32,7 @@
 
                             <!-- Message -->
                             <div class="form-floating mb-3">
-                                <textarea class="form-control" id="message" name="testimonial_message" type="text" style="height: 10rem" autocomplete="off" required></textarea>
+                                <textarea class="form-control" id="message" name="testimonial_message" type="text" style="height: 10rem" autocomplete="off"></textarea>
                                 <label for="message">Message</label>
                             </div>
 
@@ -72,5 +69,87 @@
             </div>
         </header>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            // If the form is submitted, this will perform an AJAX call and send the testimonial info to the backend.
+            // Then, it will be sent back to the client-side, so that it can be displayed.
+            $('#testimonials_form').submit(function (e) {
+                // We are preventing the submission of the form, as this will be done through AJAX
+                e.preventDefault();
+
+                // We are serialising the form data, so that it can be sent to the backend for review.
+                form_data = $('#testimonials_form').serialize();
+
+                // AJAX POST request, which will attempt to add a testimonial and
+                // deliver the outcome (success or failure) to the user
+                $.ajax({
+                    type : "POST",
+                    url : "{% url 'testimonials_page' %}",
+                    data : form_data,
+
+                    success: function(response) {
+
+                        // Making sure the div that shows the error messages is hidden.
+                        $('#div_testimonial_errors').hide();
+                        $('#testimonial_form_success').hide();
+
+                        // Clearing any previous errors, so only new errors are displayed.
+                        $('#testimonial_errors_list').text("");
+                        $('#testimonial_form_success').text("");
+
+                        // If there was an issue with creating the testimonial, error messages will be displayed on the screen
+                        if (response.success === "")
+                        {
+                            // If the error messages are stored in an object data type, we will iterate through each and 
+                            // append them to the list of error messages. All error messages will then be displayed in a list.
+                            if ($.type(response.error_messages) === "object")
+                            {
+                                // Iterating through each error message and putting it in the error list.
+                                for (let element in response.error_messages)
+                                {
+                                    response.error_messages[element].forEach(error => {
+                                        $('#testimonial_errors_list').append(`<li>${element} is required.</li>`);
+                                    });
+                                }
+                            }
+
+                            // If the error message is a simple string, we will just display it in the list as it is.
+                            else
+                            {
+                                $('#testimonial_errors_list').text(`${response.error_messages}`);
+                            }
+
+                            // Regardless of whether the errors are in an object or string data type, we want to display the div
+                            // the shows the errors. It will be visible on the screen.
+                            $('#div_testimonial_errors').show();
+                        }
+
+                        // If the testimonial was created successfully, a success message will be displayed on the screen
+                        // and the page will reload, so that the new testimonial is present on the screen.
+                        else
+                        {
+                            $('#testimonial_form_success').text(response.success);
+                            $('#testimonial_form_success').show();
+
+                            // Reloading the page so that the new testimonial is shown in the list of testimonials.
+                            setTimeout(function() {
+                                location.reload(true);
+                            }, 1500);
+                        }
+                    },
+
+                    // If an error occurred while submitting the form, this will just print the error to the console, to help with
+                    // debugging the issue.
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
+
+            });
+        });
+    </script>
+
     {% endblock %}
 </body>
