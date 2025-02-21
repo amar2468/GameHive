@@ -10,8 +10,6 @@
             <div class="row flex-nowrap">
                 <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
                     <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-
-                        <span class="fs-5 mb-3 d-block d-sm-none" style="color:#C0C0C0;">Profile</span>
                     
                         <ul class="nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                             <li class="nav-item">
@@ -45,7 +43,9 @@
                     <div id="personal_details_div">
                         <form id="update_details_form" method="post">
                             {% csrf_token %}
-                            <h3 class="text-black text-center">Update Personal Information</h3>
+                            <h3 class="fw-bolder text-black text-center">Update Personal Information</h3>
+
+                            <p class="lead text-black text-center">Keep your personal details up-to-date by filling out the form below, if any changes occur.</p>
                             <!-- Change Email address -->
                             <div class="d-flex">
                                 <div class="form-floating mb-3 flex-grow-1">
@@ -102,7 +102,11 @@
                         <form id="update_password_form" method="post">
                             {% csrf_token %}
                             <div class="alert alert-danger" id="form_errors" style="display:none;" role="alert"></div>
-                            <h3 class="text-black text-center">Change Password</h3>
+                            <h3 class="fw-bolder text-black text-center">Change Password</h3>
+                            <p class="lead text-black text-center">
+                                To change your password, enter your new password in the first field and confirm it by entering the
+                                same password in the second field.
+                            </p>
                             <!-- New Password -->
                             <div class="d-flex">
                                 <div class="form-floating mb-3 flex-grow-1">
@@ -143,9 +147,19 @@
                     </div>
 
                     <div id="leaderboard_div" style="display:none;">
+
+                        <h3 class="fw-bolder text-black text-center">Leaderboard</h3>
+                        <p class="lead text-black text-center">
+                            See where you stand among the best!
+                        </p>
+
                         <table class="table table-bordered;">
                             <thead id="table_heading_leaderboard">
-                                <th colspan="3" class="text-black text-center">Leaderboard</th>
+                                <tr>
+                                    <th class="fw-bolder text-black text-center" style="border:1px solid black;">Rank</th>
+                                    <th class="fw-bolder text-black text-center" style="border:1px solid black;">Username</th>
+                                    <th class="fw-bolder text-black text-center" style="border:1px solid black;">Score</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 {% for leaderboard in leaderboard_entries %}
@@ -160,7 +174,10 @@
                     </div>
                     
                     <div class="text-center" id="reedem_points_div" style="display:none;"> 
-                        <h3 class="text-black text-center">GameHive Store</h3>
+                        <h3 class="fw-bolder text-black text-center">GameHive Store</h3>
+                        <p class="lead text-black text-center">
+                            Turn your points into awesome prizes!
+                        </p>
 
                         {% for leaderboard in leaderboard_entries %}
                             {% if leaderboard.user.username == user_details.user|stringformat:"s" %}
@@ -259,10 +276,17 @@
     <script>
         $(document).ready(function() {
 
+            $('#update_personal_info_link').css("color", "yellow");
+
             $('[data-bs-toggle="tooltip"]').tooltip();
 
             // If the user clicks on the update personal information link, it will hide all the other pages and just display this one.
             $('#update_personal_info_link').click(function() {
+                $('#update_personal_info_link').css("color", "yellow");
+                $('#change_password_link').css("color", "#FFFFFF");
+                $('#leaderboard_link').css("color", "#FFFFFF");
+                $('#redeem_points_link').css("color", "#FFFFFF");
+
                 $('#personal_details_div').show();
                 $('#change_password_div').hide();
                 $('#leaderboard_div').hide();
@@ -276,6 +300,11 @@
 
             // If the user clicks on the change password link, it will hide all the other pages and just display this one.
             $('#change_password_link').click(function(){
+                $('#update_personal_info_link').css("color", "#FFFFFF");
+                $('#change_password_link').css("color", "yellow");
+                $('#leaderboard_link').css("color", "#FFFFFF");
+                $('#redeem_points_link').css("color", "#FFFFFF");
+
                 $('#personal_details_div').hide();
                 $('#leaderboard_div').hide();
                 $('#reedem_points_div').hide();
@@ -289,6 +318,11 @@
 
             // If the user clicks on the leaderboard link, it will hide all the other pages and just display this one.
             $('#leaderboard_link').click(function(){
+                $('#update_personal_info_link').css("color", "#FFFFFF");
+                $('#change_password_link').css("color", "#FFFFFF");
+                $('#leaderboard_link').css("color", "yellow");
+                $('#redeem_points_link').css("color", "#FFFFFF");
+
                 $('#personal_details_div').hide();
                 $('#change_password_div').hide();
                 $('#reedem_points_div').hide();
@@ -303,6 +337,11 @@
 
             // If the user clicks on the reedem points link, it will hide all the other pages and just display this one.
             $('#redeem_points_link').click(function(){
+                $('#update_personal_info_link').css("color", "#FFFFFF");
+                $('#change_password_link').css("color", "#FFFFFF");
+                $('#leaderboard_link').css("color", "#FFFFFF");
+                $('#redeem_points_link').css("color", "yellow");
+
                 $('#personal_details_div').hide();
                 $('#change_password_div').hide();
                 $('#leaderboard_div').hide();
