@@ -6,19 +6,23 @@
 
     {% if user.is_authenticated %}
     <!-- Header-->
-    <header class="py-5" style="background-color: #00308F;">
+    <header class="py-5">
         <div class="container px-5">
             <div class="row gx-5 justify-content-center">
-                <div class="col-lg-6">
-                    <div class="text-center my-5">
-                        <h1 class="display-5 text-white mb-2">Unlock Fun, One Game at a Time</h1>
-                        <p class="lead text-white mb-4">Exciting games that will make you feel happy!</p>
+                <div class="col-lg-6 col-xl-6 d-flex justify-content-center">
+                    <div class="my-5">
+                        <h1 class="display-5 text-black mb-2">Unlock Fun, <span style="color: #3F00FF;">One Game at a Time</span></h1>
+                        <p class="lead text-black mb-4 fs-5">Exciting games that will make you feel happy!</p>
                         {% if not user.is_authenticated %}
                             <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
                                 <a class="btn btn-primary btn-lg px-4 me-sm-3" href="{% url 'sign_up' %}">Get Started</a>
                             </div>
                         {% endif %}
                     </div>
+                </div>
+
+                <div class="col-lg-6 col-xl-6 d-flex justify-content-center">
+                    <img class="img-fluid" src="{% static 'assets/landing-page-image.jpg' %}" alt="Landing page picture" style="max-height: 300px;height:auto;border-radius:25%;" />
                 </div>
             </div>
         </div>
@@ -29,8 +33,7 @@
             <!-- Games section-->
             <div class="container px-5 my-5">
                 <div class="text-center mb-5">
-                    <h1 class="display-5 text-black mb-2">Games</h1>
-                    <p class="lead text-black mb-0">Play any of the games below - for free!</p>
+                    <h1 class="fw-bolder text-black mb-2">Play any of the games below - for free!</h1>
                 </div>
                 <div class="row gx-5 justify-content-center">
                     <!-- Guess the Digit Game-->
@@ -39,7 +42,8 @@
                             <div class="card-body p-5">
                                 <div class="mb-3">
                                     <span class="display-6 text-black">Guess the Digit</span>
-                                    <p>Guess the Digit is a game where you need to guess the correct number. There are three levels:
+                                    <p class="fw-light fs-6">
+                                        Guess the Digit is a game where you need to guess the correct number. There are three levels:
                                         easy, medium, and hard. Additionally, the user can pick if they want hints enabled or disabled.
                                         Enjoy!
                                     </p>
@@ -54,11 +58,11 @@
                             <div class="card-body p-5">
                                 <div class="mb-3">
                                     <span class="display-6 text-black">Rock, Paper, Scissors</span>
-                                    <p>
-                                        Rock, paper, scissors is a popular game where the users compete against each other by selecting
-                                        one of three options: Rock (crushes scissors), Paper (crushes rock), and Scissors (crushes paper).
-                                        There are two modes: Single player, where the user plays against the computer and, Multiplayer, where
-                                        the user plays against a real human. Enjoy!
+                                    <p class="fw-light fs-6">
+                                        Rock, paper, scissors is a popular game where the users compete against each other by
+                                        selecting one of three options: Rock (crushes scissors), Paper (crushes rock),
+                                        and Scissors (crushes paper). There are two modes: Single player, where the user plays
+                                        against the computer and, Multiplayer, where the user plays against a real human. Enjoy!
                                     </p>
                                 </div>
                                 <form id="form_rps_single_player_multiplayer" method="post">
@@ -108,19 +112,23 @@
     </section>
 
     {% else %}
-    <div class="d-flex justify-content-center align-items-center" style="background-color: #00308F;height:100vh;">
+    <div class="d-flex justify-content-center align-items-center py-5">
         <div class="container px-5">
             <div class="row gx-5 justify-content-center">
-                <div class="col-lg-6">
-                    <div class="text-center my-5">
-                        <h1 class="display-5 text-white mb-2">Unlock Fun, One Game at a Time</h1>
-                        <p class="lead text-white mb-4">Exciting games that will make you feel happy!</p>
+                <div class="col-lg-6 col-xl-6 d-flex justify-content-center">
+                    <div class="my-5">
+                        <h1 class="display-5 text-black mb-2">Unlock Fun, <span style="color:#3F00FF;">One Game at a Time</span></h1>
+                        <p class="lead text-black mb-4 fs-5">Exciting games that will make you feel happy!</p>
                         {% if not user.is_authenticated %}
                             <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
                                 <a class="btn btn-primary btn-lg px-4 me-sm-3" href="{% url 'sign_up' %}">Get Started</a>
                             </div>
                         {% endif %}
                     </div>
+                </div>
+
+                <div class="col-lg-6 col-xl-6 d-flex justify-content-center">
+                    <img class="img-fluid" src="{% static 'assets/landing-page-image.jpg' %}" alt="Landing page picture" style="max-height:300px;width:auto;border-radius:25%;"/>
                 </div>
             </div>
         </div>
