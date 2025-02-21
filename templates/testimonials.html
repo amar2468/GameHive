@@ -46,21 +46,21 @@
             
             <hr>
 
-            <div class="container px-5 my-5 px-5">
+            <div class="container px-5 my-5">
                 <div class="text-center mb-5">
-                    <h2 class="fw-bolder text-black">Here are some testimonials from our users...</h2>
+                    <h2 class="fw-bolder text-black">Testimonials</h2>
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row justify-content-center">
                 {% if testimonials_model_objs %}
                     {% for item in testimonials_model_objs %}
-                    <div class="col-md-3 d-flex mx-auto">
+                    <div class="col-lg-6 col-xl-4 justify-content-center">
                         <div class="card flex-fill">
                             <div class="card-body">
-                                <h5 class="card-title text-black">{{ item.user }}</h5>
+                                <h5 class="fw-bolder card-title lead">{{ item.user }}</h5>
                                 <p id="date_of_testimonial_text" class="card-text text-black">{{ item.date_of_testimonial }}</p>
-                                <p class="card-text text-black">{{ item.message }}</p>
+                                <p class="card-text text-black"><i class="bi bi-quote">"{{ item.message }}"</i></p>
                             </div>
                         </div>
                     </div>
