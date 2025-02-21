@@ -62,6 +62,7 @@ input::-webkit-inner-spin-button {
 
 #navbar_id { 
   background-color: #00308F;
+  border-radius: 20px;
 }
 
 #date_of_testimonial_text {
@@ -1659,12 +1660,6 @@ textarea.form-control-lg {
   isolation: isolate;
   border-color: var(--bs-nav-tabs-link-hover-border-color);
 }
-.nav-tabs .nav-link.active,
-.nav-tabs .nav-item.show .nav-link {
-  color: var(--bs-nav-tabs-link-active-color);
-  background-color: var(--bs-nav-tabs-link-active-bg);
-  border-color: var(--bs-nav-tabs-link-active-border-color);
-}
 .nav-tabs .dropdown-menu {
   margin-top: calc(-1 * var(--bs-nav-tabs-border-width));
   border-top-left-radius: 0;
@@ -1679,11 +1674,6 @@ textarea.form-control-lg {
   background: none;
   border: 0;
   border-radius: var(--bs-nav-pills-border-radius);
-}
-.nav-pills .nav-link.active,
-.nav-pills .show > .nav-link {
-  color: var(--bs-nav-pills-link-active-color);
-  background-color: var(--bs-nav-pills-link-active-bg);
 }
 .nav-fill > .nav-link,
 .nav-fill .nav-item {
@@ -1764,10 +1754,6 @@ textarea.form-control-lg {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
-}
-.navbar-nav .show > .nav-link,
-.navbar-nav .nav-link.active {
-  color: var(--bs-navbar-active-color);
 }
 .navbar-nav .dropdown-menu {
   position: static;
