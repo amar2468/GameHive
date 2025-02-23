@@ -28,6 +28,7 @@ urlpatterns = [
     path('update_personal_details/', views.update_personal_details, name='update_personal_details'),
     path('change_password/', views.change_password, name='change_password'),
     path('redeeming_points/', views.redeeming_points, name='redeeming_points'),
+    path('remove_testimonial/', views.remove_testimonial, name='remove_testimonial'),
     path('about/', views.about, name='about'),
     path('login/', views.sign_in, name='login'),
     path('logout/', views.log_out, name='logout')
