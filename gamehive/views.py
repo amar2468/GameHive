@@ -36,10 +36,12 @@ def testimonials_page(request):
                 testimonial_form_exists = TestimonialsModel.objects.get(user=request.user)
             except TestimonialsModel.DoesNotExist:
                 testimonials_message = form.cleaned_data['testimonial_message']
+                star_rating = form.cleaned_data['star_rating']
 
                 new_testimonial = TestimonialsModel(
                     user=request.user,
                     message=testimonials_message,
+                    star_rating=star_rating,
                 )
 
                 new_testimonial.save()
@@ -70,6 +72,28 @@ def testimonials_page(request):
         testimonials_model_objs = TestimonialsModel.objects.all()
 
         return render(request, 'testimonials.html', {'testimonials_model_objs' : testimonials_model_objs})
+
+def remove_testimonial(request):
+    # If the user is logged in, this block will execute
+    if request.user.is_authenticated:
+        # If the user clicked on the "delete" icon on their testimonial, this block will get executed.
+        if request.method == "POST":
+            # Find the current user's testimonial message
+            user_testimonial_to_delete = TestimonialsModel.objects.get(user=request.user)
+            
+            # Delete the current user's testimonial message
+            user_testimonial_to_delete.delete()
+
+            # Go back to the testimonial page, so user can see that it was deleted
+            return redirect('testimonials_page')
+        # If it was a GET request, we will just retrieve all the testimonials and pass them on to the template, for them to be displayed
+        else:
+            testimonials_model_objs = TestimonialsModel.objects.all()
+
+            return render(request, "testimonials.html", {'testimonials_model_objs' : testimonials_model_objs})
+    # If the user is not logged in, we will display a 403 error page
+    else:
+        return render(request, "403.html")
 
 # View that will present the current leaderboard for all users, as well as provide the user the option to update their personal info
 
