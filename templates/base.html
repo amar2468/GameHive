@@ -26,14 +26,13 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link" id="homepage_link" aria-current="page" href="#">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" id="about_link" href="#">About</a></li>
-                        <li class="nav-item"><a class="nav-link" id="testimonials_link" href="#">Testimonials</a></li>
+                        <li class="nav-item"><a class="nav-link" id="homepage_link" aria-current="page" href="javascript:void(0)">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" id="testimonials_link" href="javascript:void(0)">Testimonials</a></li>
                         {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" id="profile_link" href="#">Profile</a></li>
-                        <li class="nav-item"><a class="nav-link" id="logout_link" href="#">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link" id="profile_link" href="javascript:void(0)">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" id="logout_link" href="javascript:void(0)">Logout</a></li>
                         {% else %}
-                            <li class="nav-item"><a class="nav-link" id="sign_up_link" href="#">Sign Up</a></li>
+                            <li class="nav-item"><a class="nav-link" id="sign_up_link" href="javascript:void(0)">Sign Up</a></li>
                         {% endif %}
                     </ul>
                 </div>
@@ -51,87 +50,71 @@
         <script>
             $(document).ready(function() {
                 $('#homepage_link').css("color", "yellow");
-                $('#about_link').css("color", "#FFFFFF");
                 $('#testimonials_link').css("color", "#FFFFFF");
                 $('#profile_link').css("color", "#FFFFFF");
                 $('#logout_link').css("color", "#FFFFFF");
                 $('#sign_up_link').css("color", "#FFFFFF");
 
                 let currentPath = window.location.pathname;
-
+                
                 let homepage_url = "{% url 'homepage' %}";
-                let about_url = "{% url 'about' %}";
                 let testimonials_url = "{% url 'testimonials_page' %}";
                 let profile_url = "{% url 'my_profile' %}";
                 let logout_url = "{% url 'logout' %}";
                 let sign_up_url = "{% url 'sign_up' %}";
 
-                if (currentPath === homepage_url)
+                if (currentPath == homepage_url)
                 {
                     $('#homepage_link').css("color", "yellow");
-                    $('#about_link').css("color", "#FFFFFF");
+
                     $('#testimonials_link').css("color", "#FFFFFF");
                     $('#profile_link').css("color", "#FFFFFF");
                     $('#logout_link').css("color", "#FFFFFF");
                     $('#sign_up_link').css("color", "#FFFFFF");
                 }
 
-                else if (currentPath === about_url)
-                {
-                    $('#about_link').css("color", "yellow");
-                    $('#homepage_link').css("color", "#FFFFFF");
-                    $('#testimonials_link').css("color", "#FFFFFF");
-                    $('#profile_link').css("color", "#FFFFFF");
-                    $('#logout_link').css("color", "#FFFFFF");
-                    $('#sign_up_link').css("color", "#FFFFFF");
-                }
-
-                else if (currentPath === testimonials_url)
+                else if (currentPath == testimonials_url)
                 {
                     $('#testimonials_link').css("color", "yellow");
+
                     $('#homepage_link').css("color", "#FFFFFF");
-                    $('#about_link').css("color", "#FFFFFF");
                     $('#profile_link').css("color", "#FFFFFF");
                     $('#logout_link').css("color", "#FFFFFF");
                     $('#sign_up_link').css("color", "#FFFFFF");
                 }
 
-                else if (currentPath === profile_url)
+                else if (currentPath == profile_url)
                 {
                     $('#profile_link').css("color", "yellow");
+
                     $('#homepage_link').css("color", "#FFFFFF");
-                    $('#about_link').css("color", "#FFFFFF");
                     $('#testimonials_link').css("color", "#FFFFFF");
                     $('#logout_link').css("color", "#FFFFFF");
                     $('#sign_up_link').css("color", "#FFFFFF");
                 }
 
-                else if (currentPath === logout_url)
+                else if (currentPath == logout_url)
                 {
                     $('#logout_link').css("color", "yellow");
+
                     $('#homepage_link').css("color", "#FFFFFF");
-                    $('#about_link').css("color", "#FFFFFF");
                     $('#testimonials_link').css("color", "#FFFFFF");
                     $('#profile_link').css("color", "#FFFFFF");
                     $('#sign_up_link').css("color", "#FFFFFF");
                 }
 
-                else if(currentPath === sign_up_url)
+                else if(currentPath == sign_up_url)
                 {
                     $('#sign_up_link').css("color", "yellow");
+
                     $('#homepage_link').css("color", "#FFFFFF");
-                    $('#about_link').css("color", "#FFFFFF");
                     $('#testimonials_link').css("color", "#FFFFFF");
                     $('#profile_link').css("color", "#FFFFFF");
-                    $('#sign_up_link').css("color", "#FFFFFF");
+                    $('#logout_link').css("color", "#FFFFFF");
                 }
 
                 $('#homepage_link').click(function () {
                     window.location.href = "{% url 'homepage' %}";
-                });
-    
-                $('#about_link').click(function() {
-                    window.location.href = "{% url 'about' %}";
                 });
 
                 $('#testimonials_link').click(function() {
@@ -147,7 +130,7 @@
                 });
 
                 $('#sign_up_link').click(function() {
-                    window.location.href = "{% url 'about' %}";
+                    window.location.href = "{% url 'sign_up' %}";
                 });
             });
             
