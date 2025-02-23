@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Testimonials{% endblock %}
-<body>
+<body class="white_background">
     {% load static %}
     {% block content %}
-    <div class="bg-light wrapper">
+    <div class="wrapper white_background">
         <!-- Header-->
         <header class="py-5">
             {% if user.is_authenticated %}
@@ -30,6 +30,18 @@
                                 <label for="testimonial_username">Username</label>
                             </div>
 
+                            <label for="testimonial_star_ratings">Rating</label>
+                            <div class="form-floating mb-3">
+                                <div id="testimonial_star_ratings">
+                                    <input type="hidden" name="star_rating" id="star_rating" value="1" />
+                                    <a href="javascript:void(0)" class="testimonial_star_rating_link" aria-label="Star rating for testimonial form" data-index="1"><i class="bi bi-star-fill testimonial_star_rating_size" data-index="1"></i></a>
+                                    <a href="javascript:void(0)" class="testimonial_star_rating_link" aria-label="Star rating for testimonial form" data-index="2"><i class="bi bi-star testimonial_star_rating_size" data-index="2"></i></a>
+                                    <a href="javascript:void(0)" class="testimonial_star_rating_link" aria-label="Star rating for testimonial form" data-index="3"><i class="bi bi-star testimonial_star_rating_size" data-index="3"></i></a>
+                                    <a href="javascript:void(0)" class="testimonial_star_rating_link" aria-label="Star rating for testimonial form" data-index="4"><i class="bi bi-star testimonial_star_rating_size" data-index="4"></i></a>
+                                    <a href="javascript:void(0)" class="testimonial_star_rating_link" aria-label="Star rating for testimonial form" data-index="5"><i class="bi bi-star testimonial_star_rating_size" data-index="5"></i></a>
+                                </div>
+                            </div>
+
                             <!-- Message -->
                             <div class="form-floating mb-3">
                                 <textarea class="form-control" id="message" name="testimonial_message" type="text" style="height: 10rem" autocomplete="off"></textarea>
@@ -49,29 +61,83 @@
             <div class="container px-5 my-5">
                 <div class="text-center mb-5">
                     <h2 class="fw-bolder text-black">Testimonials</h2>
+                    <p class="lead text-black mb-0">
+                        See what our users have to say! Read real testimonials from people who have experienced and loved our service.
+                    </p>
                 </div>
             </div>
 
-            <div class="row justify-content-center">
-                {% if testimonials_model_objs %}
-                    {% for item in testimonials_model_objs %}
-                    <div class="col-lg-6 col-xl-4 justify-content-center">
-                        <div class="card flex-fill">
-                            <div class="card-body">
-                                <h5 class="fw-bolder card-title lead">{{ item.user }}</h5>
-                                <p id="date_of_testimonial_text" class="card-text text-black">{{ item.date_of_testimonial }}</p>
-                                <p class="card-text text-black"><i class="bi bi-quote">"{{ item.message }}"</i></p>
+            {% if testimonials_model_objs %}
+                {% for item in testimonials_model_objs %}
+                    {% if item.user == user %}
+                        <p class="lead text-center">Your Testimonial</p>
+                        
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6 col-xl-4 justify-content-center">
+                                <div class="card flex-fill">
+                                    <div class="card-body">
+                                        <form method="POST" action="{% url 'remove_testimonial' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="delete_testimonial_button_styling"><i class="bi bi-trash"></i></button>
+                                        </form>
+                                        
+                                        <h5 class="fw-bolder card-title lead">{{ item.user }}</h5>
+                                        <p id="date_of_testimonial_text" class="card-text text-black">{{ item.date_of_testimonial }}</p>
+                                        {% for i in ""|rjust:item.star_rating %}
+                                            <i class="bi bi-star-fill"></i>
+                                        {% endfor %}
+                                        <p class="card-text text-black"><i class="bi bi-quote">"{{ item.message }}"</i></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            
+            
+            {% if testimonials_model_objs %}
+                <p class="lead text-center">Let's see what other users said!</p>
+                <div class="row justify-content-center">
+                    {% for item in testimonials_model_objs %}
+                        {% if item.user != user %}
+                            <div class="col-lg-6 col-xl-4 justify-content-center">
+                                <div class="card flex-fill">
+                                    <div class="card-body">
+                                        <h5 class="fw-bolder card-title lead">{{ item.user }}</h5>
+                                        <p id="date_of_testimonial_text" class="card-text text-black">{{ item.date_of_testimonial }}</p>
+                                        {% for i in ""|rjust:item.star_rating %}
+                                            <i class="bi bi-star-fill"></i>
+                                        {% endfor %}
+                                        <p class="card-text text-black"><i class="bi bi-quote">"{{ item.message }}"</i></p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}        
                     {% endfor %}
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
         </header>
     </div>
 
     <script>
         $(document).ready(function () {
+
+            $('.testimonial_star_rating_link').click(function() {
+                // Retrieving the index of the star that was clicked, which will decide how many stars should be coloured in.
+                let star_rating_index = $(this).data("index");
+
+                $('#star_rating').val(star_rating_index);
+
+                // Clearing the stars that were filled in before
+                $(".bi-star-fill").removeClass("bi-star-fill").addClass("bi-star");
+                
+                for (let i = 1; i <= star_rating_index; i++)
+                {
+                    $(".bi-star[data-index='" + i + "']").removeClass("bi-star").addClass("bi-star-fill");
+                }
+            });
+
             // If the form is submitted, this will perform an AJAX call and send the testimonial info to the backend.
             // Then, it will be sent back to the client-side, so that it can be displayed.
             $('#testimonials_form').submit(function (e) {
