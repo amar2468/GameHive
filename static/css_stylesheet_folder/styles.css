@@ -61,8 +61,34 @@ input::-webkit-inner-spin-button {
 }
 
 #navbar_id { 
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   background-color: #00308F;
   border-radius: 20px;
+}
+
+.highlight_sign_up_nav_link_in_login_page {
+  color: yellow !important;
+}
+
+.unhighlight_nav_links {
+  color: #FFFFFF !important;
+}
+
+.white_background {
+  background-color: #FFFFFF !important;
+}
+
+.testimonial_star_rating_size {
+  font-size: 3rem;
+}
+
+.delete_testimonial_button_styling {
+  border:none;
+  background:none;
+  float:right;
+  font-size: 2rem;
 }
 
 #date_of_testimonial_text {
