@@ -28,6 +28,7 @@ class LoginForm(forms.Form):
 
 class TestimonialsForm(forms.Form):
     testimonial_message = forms.CharField(widget=forms.Textarea, required=True)
+    star_rating = forms.IntegerField()
 
 class UpdatePersonalDetails(forms.Form):
     change_first_name = forms.CharField(max_length=25, required=True)
