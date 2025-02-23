@@ -14,3 +14,4 @@ class TestimonialsModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_of_testimonial = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
+    star_rating = models.IntegerField()
