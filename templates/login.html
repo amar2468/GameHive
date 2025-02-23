@@ -3,9 +3,9 @@
 <body>
     {% load static %}
     {% block content %}
-    <div class="wrapper bg-light">
+    <div class="wrapper white_background">
         <!-- Header-->
-        <header class="bg-light py-5">
+        <header class="py-5 white_background">
             <div class="container px-5 my-5 px-5">
                 <div class="text-center mb-5">
                     <h2 class="fw-bolder">Sign in to your GameHive account</h2>
@@ -59,6 +59,9 @@
     <script>
         $(document).ready(function() {
             $('[data-bs-toggle="tooltip"]').tooltip();
+
+            $('#sign_up_link').addClass('highlight_sign_up_nav_link_in_login_page');
+            $('#homepage_link').addClass('unhighlight_nav_links');
 
             // If the form is submitted, this will perform an AJAX call and send the login info to the backend.
             // Then, it will be sent back to the client-side, so that it can be displayed.

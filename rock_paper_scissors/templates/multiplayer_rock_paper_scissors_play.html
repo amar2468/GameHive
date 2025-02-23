@@ -5,7 +5,7 @@
     {% load static %}
     {% block content %}
     <div id="start_multiplayer_game" style="display:none;">
-        <div class="d-flex wrapper bg-light justify-content-center align-items-center">
+        <div class="d-flex wrapper white_background justify-content-center align-items-center">
             <div class="container-fluid text-center rounded shadow my-5">
                 {{ rps_room_name }}
                 <p id="multiplayer_rps_game_heading" class="text-black text-center" style="font-size:22px;"></p>
@@ -24,15 +24,15 @@
                                 <div class="carousel-inner">
 
                                     <div class="carousel-item active" data-value="paper">
-                                        <a class="user_selected_rps_choice" href="#"><img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper"></a>
+                                        <a class="user_selected_rps_choice" href="javascript:void(0)"><img class="img-fluid" src="{% static 'assets/paper.png' %}" alt="Picture of a paper"></a>
                                     </div>
 
                                     <div class="carousel-item" data-value="rock">
-                                        <a class="user_selected_rps_choice" href="#"><img class="img-fluid" src="{% static 'assets/rock.png' %}" alt="Picture of a rock"></a>
+                                        <a class="user_selected_rps_choice" href="javascript:void(0)"><img class="img-fluid" src="{% static 'assets/rock.png' %}" alt="Picture of a rock"></a>
                                     </div>
 
                                     <div class="carousel-item" data-value="scissors">
-                                        <a class="user_selected_rps_choice" href="#"><img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors"></a>
+                                        <a class="user_selected_rps_choice" href="javascript:void(0)"><img class="img-fluid" src="{% static 'assets/scissors.png' %}" alt="Picture of scissors"></a>
                                     </div>
 
                                 </div>
