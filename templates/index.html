@@ -24,79 +24,77 @@
     </header>
 
     <section id="games_section white_background">
-        <div class="wrapper">
-            <!-- Games section-->
-            <div class="container px-5 my-5">
-                <div class="text-center mb-5">
-                    <h1 class="fw-bolder text-black mb-2">Play any of the games below - for free!</h1>
-                </div>
-                <div class="row gx-5 justify-content-center">
-                    <!-- Guess the Digit Game-->
-                    <div class="col-lg-6 col-xl-4">
-                        <div class="card mb-5 mb-xl-0">
-                            <div class="card-body p-5">
-                                <div class="mb-3">
-                                    <span class="display-6 text-black">Guess the Digit</span>
-                                    <p class="fw-light fs-6">
-                                        Guess the Digit is a game where you need to guess the correct number. There are three levels:
-                                        easy, medium, and hard. Additionally, the user can pick if they want hints enabled or disabled.
-                                        Enjoy!
-                                    </p>
-                                </div>
-                                <div class="d-grid"><a class="btn btn-primary" href="{% url 'guess_the_digit:config' %}">Play</a></div>
+        <!-- Games section-->
+        <div class="container px-5 my-5">
+            <div class="text-center mb-5">
+                <h1 class="fw-bolder text-black mb-2">Play any of the games below - for free!</h1>
+            </div>
+            <div class="row gx-5 justify-content-center">
+                <!-- Guess the Digit Game-->
+                <div class="col-lg-6 col-xl-4">
+                    <div class="card mb-5 mb-xl-0">
+                        <div class="card-body p-5">
+                            <div class="mb-3">
+                                <span class="display-6 text-black">Guess the Digit</span>
+                                <p class="fw-light fs-6">
+                                    Guess the Digit is a game where you need to guess the correct number. There are three levels:
+                                    easy, medium, and hard. Additionally, the user can pick if they want hints enabled or disabled.
+                                    Enjoy!
+                                </p>
                             </div>
+                            <div class="d-grid"><a class="btn btn-primary" href="{% url 'guess_the_digit:config' %}">Play</a></div>
                         </div>
                     </div>
-                    <!-- Rock Paper Scissors Game-->
-                    <div class="col-lg-6 col-xl-4">
-                        <div class="card mb-5 mb-xl-0">
-                            <div class="card-body p-5">
-                                <div class="mb-3">
-                                    <span class="display-6 text-black">Rock, Paper, Scissors</span>
-                                    <p class="fw-light fs-6">
-                                        Rock, paper, scissors is a popular game where the users compete against each other by
-                                        selecting one of three options: Rock (crushes scissors), Paper (crushes rock),
-                                        and Scissors (crushes paper). There are two modes: Single player, where the user plays
-                                        against the computer and, Multiplayer, where the user plays against a real human. Enjoy!
-                                    </p>
+                </div>
+                <!-- Rock Paper Scissors Game-->
+                <div class="col-lg-6 col-xl-4">
+                    <div class="card mb-5 mb-xl-0">
+                        <div class="card-body p-5">
+                            <div class="mb-3">
+                                <span class="display-6 text-black">Rock, Paper, Scissors</span>
+                                <p class="fw-light fs-6">
+                                    Rock, paper, scissors is a popular game where the users compete against each other by
+                                    selecting one of three options: Rock (crushes scissors), Paper (crushes rock),
+                                    and Scissors (crushes paper). There are two modes: Single player, where the user plays
+                                    against the computer and, Multiplayer, where the user plays against a real human. Enjoy!
+                                </p>
+                            </div>
+                            <form id="form_rps_single_player_multiplayer" method="post">
+                                {% csrf_token %}
+                                <div class="d-grid"><button type="submit" class="btn btn-primary">Play</button></div>
+                            </form>
+
+
+                            <div class="modal" id="rps_single_player_or_multiplayer_toggle" tabindex="-1" role="dialog">
+                                <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title">Choose Game Mode</h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="card mx-sm-4 mb-4">
+                                            <a class="multiplayer_option_modal" href="{% url 'rock_paper_scissors:single_player_rps' %}" style="text-decoration: none;">
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-center">Single Player</h5>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        
+                                        <div class="card mx-sm-4 mb-4">
+                                            <a class="multiplayer_option_modal" href="{% url 'rock_paper_scissors:multiplayer_rps_start_game' %}" style="text-decoration: none;">
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-center">Multiplayer</h5>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
                                 </div>
-                                <form id="form_rps_single_player_multiplayer" method="post">
-                                    {% csrf_token %}
-                                    <div class="d-grid"><button type="submit" class="btn btn-primary">Play</button></div>
-                                </form>
-
-
-                                <div class="modal" id="rps_single_player_or_multiplayer_toggle" tabindex="-1" role="dialog">
-                                    <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                        <h5 class="modal-title">Choose Game Mode</h5>
-                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="card mx-sm-4 mb-4">
-                                                <a class="multiplayer_option_modal" href="{% url 'rock_paper_scissors:single_player_rps' %}" style="text-decoration: none;">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">Single Player</h5>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            
-                                            <div class="card mx-sm-4 mb-4">
-                                                <a class="multiplayer_option_modal" href="{% url 'rock_paper_scissors:multiplayer_rps_start_game' %}" style="text-decoration: none;">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-center">Multiplayer</h5>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -107,69 +105,66 @@
     </section>
 
     <section id="about_section">
-        <div class="wrapper white_background">
-            <header class="py-5">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-10 mx-auto">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p id="intro_about_paragraph" class="lead text-black">
-                                        At GameHive, we're passionate about bringing the joy of gaming to your fingertips. We are a 
-                                        dedicated team of game enthusiasts who believe that gaming should be accessible to everyone. 
-                                        Our mission is to provide high-quality web app games that you can enjoy for free. Whether you're
-                                        a casual gamer looking for a quick escape or a seasoned player seeking a new challenge, GameHive
-                                        has something for everyone. We take pride in crafting engaging and addictive gaming experiences
-                                        that captivate players of all ages. Join us on this thrilling adventure as we continue to create,
-                                        innovate, and share the excitement of gaming with the world.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </header>
-    
-            <div class="container text-center">
-                <h3 class="fw-bolder text-black">GameHive Values...</h3>
+        <header class="py-5">
+            <div class="container">
                 <div class="row">
-                    <div class="col-md-3 d-flex mx-auto">
-                        <div class="card flex-fill">
+                    <div class="col-md-10 mx-auto">
+                        <div class="card">
                             <div class="card-body">
-                            <h5 class="fw-bolder card-title text-black">Creativity</h5>
-                            <p class="fw-light fs-6 card-text text-black">
-                                At GameHive, we foster creativity by offering innovative gameplay experiences that challenge your 
-                                imagination and inspire your inner game designer
-                            </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 d-flex mx-auto">
-                        <div class="card flex-fill">
-                            <div class="card-body">
-                            <h5 class="fw-bolder card-title text-black">Speed</h5>
-                            <p class="fw-light fs-6 card-text text-black">
-                                Time is precious, and at GameHive, we value yours. Enjoy games that load quickly and keep you in the
-                                action, no waiting required.
-                            </p>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div class="col-md-3 d-flex mx-auto">
-                        <div class="card flex-fill">
-                            <div class="card-body">
-                            <h5 class="fw-bolder card-title text-black">User Satisfaction</h5>
-                            <p class="fw-light fs-6 card-text text-black">
-                                Your happiness is our top priority. GameHive is dedicated to delivering joy through entertaining games
-                                and a community that cares.
-                            </p>
+                                <p id="intro_about_paragraph" class="lead text-black">
+                                    At GameHive, we're passionate about bringing the joy of gaming to your fingertips. We are a 
+                                    dedicated team of game enthusiasts who believe that gaming should be accessible to everyone. 
+                                    Our mission is to provide high-quality web app games that you can enjoy for free. Whether you're
+                                    a casual gamer looking for a quick escape or a seasoned player seeking a new challenge, GameHive
+                                    has something for everyone. We take pride in crafting engaging and addictive gaming experiences
+                                    that captivate players of all ages. Join us on this thrilling adventure as we continue to create,
+                                    innovate, and share the excitement of gaming with the world.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-    
+        </header>
+
+        <div class="container text-center">
+            <h3 class="fw-bolder text-black">GameHive Values...</h3>
+            <div class="row">
+                <div class="col-md-3 d-flex mx-auto">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                        <h5 class="fw-bolder card-title text-black">Creativity</h5>
+                        <p class="fw-light fs-6 card-text text-black">
+                            At GameHive, we foster creativity by offering innovative gameplay experiences that challenge your 
+                            imagination and inspire your inner game designer
+                        </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex mx-auto">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                        <h5 class="fw-bolder card-title text-black">Speed</h5>
+                        <p class="fw-light fs-6 card-text text-black">
+                            Time is precious, and at GameHive, we value yours. Enjoy games that load quickly and keep you in the
+                            action, no waiting required.
+                        </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 d-flex mx-auto">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                        <h5 class="fw-bolder card-title text-black">User Satisfaction</h5>
+                        <p class="fw-light fs-6 card-text text-black">
+                            Your happiness is our top priority. GameHive is dedicated to delivering joy through entertaining games
+                            and a community that cares.
+                        </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
