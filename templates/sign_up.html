@@ -137,15 +137,20 @@
                         // If the account has been successfully created, the message will be displayed on the screen.
                         else
                         {
+                            // Disabling the submit button in the sign up form, so that a user cannot click it while the request
+                            // is being processed
+                            $('#submitButton').prop("disabled", true);
+
                             // Making sure the div that shows the error messages is hidden.
                             $('#div_for_reg_form_errors').hide();
 
                             $('#reg_form_success').text(response.success);
                             $('#reg_form_success').show();
 
+                            // After 1.5 seconds of the user signing in successfully, redirect to the login page.
                             setTimeout(function () {
                                 window.location.href = "{% url 'login' %}";
-                            }, 2000);
+                            }, 1500);
                         }
 
                     },

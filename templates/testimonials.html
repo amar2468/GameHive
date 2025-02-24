@@ -216,7 +216,6 @@
 
                             // Reloading the page so that the new testimonial is shown in the list of testimonials.
                             setTimeout(function() {
-                                $('#submitButton').prop("disabled", false);
                                 location.reload(true);
                             }, 1500);
                         }
@@ -266,10 +265,8 @@
                             // while the request is being processed.
                             $('#delete_testimonial_button').prop("disabled", true);
 
-                            // We will re-enable the button to delete the testimonial and reload the page, so that the user can 
-                            // see that the testimonial has been deleted.
+                            // After 1.5 seconds, the page will be reloaded
                             setTimeout(function() {
-                                $('#delete_testimonial_button').prop("disabled", false);
                                 location.reload();
                             }, 1500);
                         }

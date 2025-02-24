@@ -82,6 +82,7 @@
                         // Hiding the error messages and resetting them so that previous errors don't show up
                         $('#div_login_form').hide();
                         $('#login_error_messages').text("");
+                        $('#login_form_success').text("");
 
                         // If the user manages to login successfully, display the success message of the screen
                         if (response.error_message === "")
@@ -90,15 +91,18 @@
                             // this if statement
                             if (response.success != "")
                             {
+                                // Disabling the submit button in the login form, so that a user cannot click it while the request
+                                // is being processed
+                                $('#submitButton').prop("disabled", true);
+
                                 // Adding the success message to the specific list that will be displayed on the screen.
-                                // Then, we display the div that holds that list.
-                                $('#login_error_messages').append(`<li>${response.success}</li`);
-                                $('#div_login_form').show();
+                                $('#login_form_success').text(response.success);
+                                $('#login_form_success').show();
                                 
-                                // After 2 seconds of the user signing in successfully, redirect to the homepage.
+                                // After 1.5 seconds of the user signing in successfully, redirect to the homepage.
                                 setTimeout(function () {
                                     window.location.href = "{% url 'homepage' %}";
-                                }, 2000);
+                                }, 1500);
                             }
                         }
 
