@@ -73,24 +73,44 @@ def testimonials_page(request):
 
         return render(request, 'testimonials.html', {'testimonials_model_objs' : testimonials_model_objs})
 
+# View that deals with deleting a testimonial message. It will check whether the current user has a testimonimal message record and
+# will delete it. If it doesn't exist, an error message will be returned.
 def remove_testimonial(request):
     # If the user is logged in, this block will execute
     if request.user.is_authenticated:
         # If the user clicked on the "delete" icon on their testimonial, this block will get executed.
         if request.method == "POST":
-            # Find the current user's testimonial message
-            user_testimonial_to_delete = TestimonialsModel.objects.get(user=request.user)
+
+            # Try part will attempt to get the user's testimonial message
+            try:
+                # Find the current user's testimonial message
+                user_testimonial_to_delete = TestimonialsModel.objects.get(user=request.user)
             
+            # If the user's testimonial message isn't there, we will return an error message back to the front-end
+            except:
+                # Creating a response dictionary which will store information on whether the testimonial was deleted
+                response_testimonial_status = {
+                    'success' : "no",
+                    'testimonial_status' : 'You do not have a testimonial to delete.'
+                }
+
+                # Return the response dictionary back to the front-end
+                return JsonResponse(response_testimonial_status)
+
             # Delete the current user's testimonial message
             user_testimonial_to_delete.delete()
 
-            # Go back to the testimonial page, so user can see that it was deleted
-            return redirect('testimonials_page')
-        # If it was a GET request, we will just retrieve all the testimonials and pass them on to the template, for them to be displayed
+            # Creating a response dictionary which will store information on whether the testimonial was deleted
+            response_testimonial_status = {
+                'success' : "yes",
+                'testimonial_status' : 'You have deleted your testimonial. Redirecting...'
+            }
+            
+            # Return the response dictionary back to the front-end
+            return JsonResponse(response_testimonial_status)
+        # If it was a GET request, we will display a 403 error page
         else:
-            testimonials_model_objs = TestimonialsModel.objects.all()
-
-            return render(request, "testimonials.html", {'testimonials_model_objs' : testimonials_model_objs})
+            return render(request, "403.html")
     # If the user is not logged in, we will display a 403 error page
     else:
         return render(request, "403.html")
