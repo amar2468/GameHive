@@ -20,33 +20,34 @@
     </head>
 
     <body>
-        <button class="col-4" type="button" id="hide_sidebar_btn" aria-label="Hide sidebar"><i class="bi bi-list"></i></button>
+        <button class="col-2" type="button" id="hide_sidebar_btn" aria-label="Hide sidebar"><i class="bi bi-list"></i></button>
         <div class="container-fluid">
             <div class="row">
 
-                <div id="sidebar_div" class="col-4 bg-dark">
+                <div id="sidebar_div" class="col-2 bg-dark">
                     <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100" id="navbarSupportedContent">
-                        <ul class="nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="sidebar_profile_page">
+                        <ul class="nav flex-column mb-sm-auto mb-0 align-items-sm-start" id="sidebar_profile_page">
+                            
                             <li class="nav-item">
-                                <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="update_personal_info_link">
-                                    <span class="ms-1">Update Personal Information</span>
+                                <a href="javascript:void(0)" style="color:white;" class="nav-link px-0" id="update_personal_info_link">
+                                    <span><i class="bi bi-person profile_sidebar_nav_link_styling" data-bs-toggle="tooltip" data-bs-placement="right" title="Update personal information"></i></span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="change_password_link">
-                                    <span class="ms-1">Change Password</span>
+                                <a href="javascript:void(0)" style="color:white;" class="nav-link px-0" id="change_password_link">
+                                    <span><i class="bi bi-lock profile_sidebar_nav_link_styling" data-bs-toggle="tooltip" data-bs-placement="right" title="Change your password"></i></span>
                                 </a>
                             </li>
                     
                             <li class="nav-item">
-                                <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="leaderboard_link">
-                                    <span class="ms-1">Leaderboard</span>
+                                <a href="javascript:void(0)" style="color:white;" class="nav-link px-0" id="leaderboard_link">
+                                    <span><i class="bi bi-table profile_sidebar_nav_link_styling" data-bs-toggle="tooltip" data-bs-placement="right" title="Leaderboard"></i></span>
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a href="javascript:void(0)" style="color:white;" class="nav-link align-middle px-0" id="redeem_points_link">
-                                    <span class="ms-1">Redeem Points</span>
+                                <a href="javascript:void(0)" style="color:white;" class="nav-link px-0" id="redeem_points_link">
+                                    <span><i class="bi bi-gift profile_sidebar_nav_link_styling" data-bs-toggle="tooltip" data-bs-placement="right" title="Redeem points"></i></span>
                                 </a>
                             </li>
                         </ul>
