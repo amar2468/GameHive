@@ -1,13 +1,17 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Config - Guess The Digit{% endblock %}
 
+{% block extra_js %}
+  <script src="{% static 'js/config_guessing_game.js' %}"></script>
+{% endblock %}
+
 <body>
-  {% load static %}
   {% block content %}
     <div class="wrapper white_background d-flex justify-content-center align-items-center">
       <div class="card">
         <div class="card-body">
-          <form class="text-black" id="guessing_game_config_form" action="{% url 'guess_the_digit:play' %}" method="get">
+          <form class="text-black" id="guessing_game_config_form" method="get">
               {% csrf_token %}
               Levels will bring benefits and disadvantages. Beginners may prefer the easy level
               <div class="dropdown" aria-required="true">
@@ -48,7 +52,7 @@
                     <p>You have picked the <span id="selected-value"></span> </p>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" id="play_game" class="btn btn-primary">Play Game</button>
+                    <button type="button" id="play_game" class="btn btn-primary" data-url="{% url 'guess_the_digit:play' %}?">Play Game</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   </div>
                 </div>
@@ -60,66 +64,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>     
-    <script>
-        $(document).ready(function () {
-            $('#guessing_game_config_form').submit(function(event) {
-                event.preventDefault();
 
-                var selected_level = $('select[name="selected_level"]').val();
-
-                var hints = $('select[name="hints"]').val();
-
-                if(selected_level === 'easy')
-                {
-                  if(hints === 'yes')
-                  {
-                    $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 10. You will have 2 guesses to do so. If you guess correctly, you will receive 5 points.");
-                  }
-
-                  else
-                  {
-                    $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 10. You will have 4 guesses to do so. If you guess correctly, you will receive 10 points.");
-                  }
-                  
-                }
-
-                else if(selected_level === 'medium')
-                {
-                  if(hints === 'yes')
-                  {
-                    $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 50. You will have 5 guesses to do so. If you guess correctly, you will receive 25 points.");
-                  }
-
-                  else
-                  {
-                    $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 50. You will have 10 guesses to do so. If you guess correctly, you will receive 50 points.");
-                  }
-                }
-
-                else if(selected_level === 'hard')
-                {
-                  if(hints === 'yes')
-                  {
-                    $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 100. You will have 10 guesses to do so. If you guess correctly, you will receive 50 points.");
-                  }
-
-                  else
-                  {
-                    $('#selected-value').text(selected_level + " level. In this level, you have to guess a number between 1 and 100. You will have 20 guesses to do so. If you guess correctly, you will receive 100 points.");
-                  }
-                }
-
-                $('#config_modal').modal('show');
-            });
-
-            $('#play_game').click(function() {
-                var form_info = $('#guessing_game_config_form').serialize();
-    
-                var url = '{% url "guess_the_digit:play" %}?' + form_info;
-                
-                window.location.href = url;
-            });
-        })
-    </script>
     {% endblock %}
 </body>
