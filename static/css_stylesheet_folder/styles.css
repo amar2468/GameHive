@@ -95,6 +95,10 @@ input::-webkit-inner-spin-button {
   font-size:13px;
 }
 
+.profile_sidebar_nav_link_styling {
+  font-size: 2rem;
+}
+
 table {
   border-collapse: collapse;
   border: 1px solid black !important;
