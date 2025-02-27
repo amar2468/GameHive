@@ -1,5 +1,8 @@
 $(document).ready(function() {
 
+    // Implementing a datatable for the leaderboard, so that we can get features such as sorting columns, pagination, and search.
+    new DataTable('#leaderboard_table');
+
     $('#update_personal_info_link').css("color", "yellow");
 
     $('#hide_sidebar_btn').click(function() {
