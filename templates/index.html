@@ -46,6 +46,7 @@
                                     easy, medium, and hard. Additionally, the user can pick if they want hints enabled or disabled.
                                     Enjoy!
                                 </p>
+                                <img class="img-fluid" src="{% static 'assets/guess_the_digit_home.jpg' %}" alt="Picture for the game Guess the Digit">
                             </div>
                             <div class="d-grid"><a class="btn btn-primary" href="{% url 'guess_the_digit:config' %}">Play</a></div>
                         </div>
@@ -63,6 +64,7 @@
                                     and Scissors (crushes paper). There are two modes: Single player, where the user plays
                                     against the computer and, Multiplayer, where the user plays against a real human. Enjoy!
                                 </p>
+                                <img class="img-fluid" src="{% static 'assets/rock-paper-scissors-hand-icons.png' %}" alt="Picture for the game rock,paper,scissors">
                             </div>
                             <form id="form_rps_single_player_multiplayer" method="post">
                                 {% csrf_token %}
