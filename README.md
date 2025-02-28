@@ -1,8 +1,7 @@
 # GameHive
 GameHive is a Web application which allows users to play the game of their choice.
 
-![Screenshot 2024-12-27 155048](https://github.com/user-attachments/assets/e9590ff4-f489-429e-a819-e073982fe777)
-
+![image](https://github.com/user-attachments/assets/360422e1-7c84-47b6-96b0-3505c098be7e)
 
 There are two games that the user can play:
 1. Guess the Digit
@@ -10,23 +9,30 @@ There are two games that the user can play:
  ![image](https://github.com/user-attachments/assets/e1f3017f-5751-4f53-8066-5ae6aee69097)
   
 2. Rock, Paper, Scissors (Single Player & Multiplayer Mode)
-![image](https://github.com/user-attachments/assets/e3bab2ab-13b9-4a4e-b3f7-1d3455d09aa7)
-
+   
+![image](https://github.com/user-attachments/assets/5cded345-c3a6-4c0d-814b-26737ba34e81)
 
 **Core Functionality:**
 1. Registration - Used forms.py to create a registration form using the Django forms import. This will provide a safer authentication process.
-![image](https://github.com/user-attachments/assets/72674299-a3aa-4172-b2a7-ac88197959cc)
+
+![image](https://github.com/user-attachments/assets/98d29308-e53b-475b-8771-5340b163ca93)
+
 
 2. Login
-![image](https://github.com/user-attachments/assets/9b93aedf-d8de-4a49-bb28-f4e077d9c41c)
+
+![image](https://github.com/user-attachments/assets/afc1f39b-741b-4036-8d3d-6852275cb465)
+
 
 3. Logout
 
 4. Profile - User can view the leaderboard and update their personal details (E.g. their password and their email)
-![image](https://github.com/user-attachments/assets/e4350c7f-10f7-404e-9100-b14af3a5dbe4)
+
+![image](https://github.com/user-attachments/assets/4a877e29-b0eb-4770-b4aa-46b25b1f22c8)
 
 5. Testimonials - People can submit their review regarding GameHive.
-![image](https://github.com/user-attachments/assets/0ed6a5cc-bd58-42bf-87bb-6e92d37b371f)
+
+![image](https://github.com/user-attachments/assets/18064162-6fd2-46b7-8670-57e8e73a93e5)
+
 
 6. Two Games - User can choose between two games: Guess the Digit & Rock, Paper, Scissors.
 
