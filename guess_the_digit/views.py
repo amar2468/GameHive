@@ -208,9 +208,17 @@ def guess_the_digit_game(request):
                 else:
                     number_of_guesses = 11
         
+        try:
+            game_user_profile = GameUserProfile.objects.get(user=request.user)
+
+            latest_score = game_user_profile.current_score
+        except GameUserProfile.DoesNotExist:
+            latest_score = 0
+
         context = {
             'specific_hint' : specific_hint,
             'level' : level,
+            'latest_score' : latest_score,
             'correct_number' : correct_number
         }
 
