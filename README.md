@@ -6,7 +6,8 @@ GameHive is a Web application which allows users to play the game of their choic
 There are two games that the user can play:
 1. Guess the Digit
 
- ![image](https://github.com/user-attachments/assets/e1f3017f-5751-4f53-8066-5ae6aee69097)
+ ![image](https://github.com/user-attachments/assets/7efa30f7-4710-4ada-b8c0-d96a27f5446d)
+
   
 2. Rock, Paper, Scissors (Single Player & Multiplayer Mode)
    
