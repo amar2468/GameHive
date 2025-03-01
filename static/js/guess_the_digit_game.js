@@ -22,7 +22,7 @@ if (correct_guess_div_guess_the_digit_text === 'Correct guess! Well done!' || ga
     let easy_level_div = document.getElementById("easy_level_div");
     let medium_level_div = document.getElementById("medium_level_div");
     let hard_level_div = document.getElementById("hard_level_div");
-    let div_for_replay_game_button = document.getElementById("div_for_replay_game_button");
+    let div_replay_game_or_homepage_redirect = document.getElementById("div_replay_game_or_homepage_redirect");
     
     // Identifies the level of the game, which will be used as a parameter in the URL, if the user "replays" the game
     let level_identifier = ""
@@ -57,8 +57,7 @@ if (correct_guess_div_guess_the_digit_text === 'Correct guess! Well done!' || ga
         hint_enabled = "yes"
     }
 
-    div_for_replay_game_button.style.display = "block"
-    div_for_going_back_to_homepage_button.style.display = "block"
+    div_replay_game_or_homepage_redirect.style.display = "block";
 
     // Hiding the guessing form (where user can choose the number that they want to guess), if the game is over
     let guessing_game_form = document.getElementById("guessing_game_form");
