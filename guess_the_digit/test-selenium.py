@@ -115,8 +115,10 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
 
         # If the div, that shows the range that the user can guess, is still visible, an error will be raised.
         if guess_range_div.is_displayed():
-            raise Exception(f"The guess range div is visible when level = {game_difficulty}, 
-                            and hints = {are_hints_enabled}, but should be hidden when the user ends the game.")
+            raise Exception(
+                f"The guess range div is visible when level = {game_difficulty}, "
+                f"and hints = {are_hints_enabled}, but should be hidden when the user ends the game."
+            )
         
         # If it is hidden, no need to do anything as this is what we want.
         else:
@@ -124,8 +126,10 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
         
         # If the div, that allows the user to input a number, is still visible, an error will be raised.
         if guess_number_input_field.is_displayed():
-            raise Exception(f"The input field is visible when level = {game_difficulty} and hints = {are_hints_enabled}, 
-                            but should be hidden when the user ends the game.")
+            raise Exception(
+                f"The input field is visible when level = {game_difficulty}, and hints = {are_hints_enabled},"
+                f"but should be hidden when the user ends the game."
+            )
         
         # If it is hidden, no need to do anything as this is what we want.
         else:
@@ -133,8 +137,10 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
 
         # If the div, that allows the user to submit their guess, is still visible, an error will be raised.
         if guess_number_button.is_displayed():
-            raise Exception(f"The submit button is visible for level = {game_difficulty} and hints = {are_hints_enabled}, 
-                            but should be hidden when the user ends the game.")
+            raise Exception(
+                f"The submit button is visible for level = {game_difficulty} and hints = {are_hints_enabled},"
+                f"but should be hidden when the user ends the game."
+            )
         
         # If it is hidden, no need to do anything as this is what we want.
         else:
@@ -147,8 +153,10 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
 
             # If the div the shows the hint is visible, it will raise an exception and the test will fail.
             if hint_div.is_displayed():
-                raise Exception(f"The hint div is visible for level = {game_difficulty}, 
-                                but should be hidden when the user ends the game.")
+                raise Exception(
+                    f"The hint div is visible for level = {game_difficulty}," 
+                    f"but should be hidden when the user ends the game."
+                )
             
             # If it is hidden, no need to do anything as this is what we want.
             else:
