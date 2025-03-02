@@ -55,9 +55,9 @@ class RockPaperScissorsIntegrationTestCase(TestCase):
 
         # FIRST ATTEMPT FROM USER
 
-        # Setting the user option as "paper"
+        # Setting the user option as "scissors"
         data = {
-            'carousel_value' : 'paper'
+            'carousel_value' : 'scissors'
         }
 
         # Making a POST request, sending the data such as the user option in the POST request
@@ -67,26 +67,26 @@ class RockPaperScissorsIntegrationTestCase(TestCase):
 
         self.assertEqual(post_response_for_rock_paper_scissors_game_url.status_code, 200)
 
+
         # In order to assert whether the values are equal to the expected ones, we need to use json so that it is easy to parse
         rps_response_data = post_response_for_rock_paper_scissors_game_url.json()
 
-        # Checking whether the user choice was set correctly i.e. "paper"
+        # Checking whether the user choice was set correctly i.e. "scissors"
 
-        self.assertEqual(rps_response_data['user_rps_choice'], "paper")
-
-        # Checking whether there are 2 attempts left, which is the correct number after one guess
-
-        self.assertEqual(rps_response_data['attempts'], 2)
+        self.assertEqual(rps_response_data['user_rps_choice'], "scissors")
 
         # Checking whether the computer choice is still "rock"
         
         self.assertEqual(rps_response_data['computer_rps_choice'], 'rock')
 
-        # Checking to see if this outcome would be a win, as it should be
+        # Checking to see if this outcome would be a loss, as it should be
 
-        self.assertEqual(rps_response_data['rps_outcome'], 'win')
+        self.assertEqual(rps_response_data['rps_round_outcome'], 'lose')
 
         # SECOND ATTEMPT FROM USER
+
+        # Setting the computer choice as "paper"
+        mock_choice.return_value = 'paper'
 
         # Setting the user option as "rock"
         data = {
@@ -107,18 +107,17 @@ class RockPaperScissorsIntegrationTestCase(TestCase):
 
         self.assertEqual(rps_response_data['user_rps_choice'], "rock")
 
-        # Checking whether there is 1 attempt left, which is the correct number after two guesses
+        # Checking whether the computer choice is "paper"
 
-        self.assertEqual(rps_response_data['attempts'], 1)
+        self.assertEqual(rps_response_data['computer_rps_choice'], 'paper')
 
-        # Checking whether the computer choice is still "rock"
-
-        self.assertEqual(rps_response_data['computer_rps_choice'], 'rock')
-
-        # Checking to see if this outcome would be a draw, as it should be
-        self.assertEqual(rps_response_data['rps_outcome'], 'draw')
-
+        # Checking to see if this outcome would be a loss, as it should be
+        self.assertEqual(rps_response_data['rps_round_outcome'], 'lose')
+        
         # LAST ATTEMPT FROM USER
+
+        # Setting the computer choice as "rock"
+        mock_choice.return_value = 'rock'
 
         # Setting the user option as "scissors"
         data = {
@@ -140,43 +139,26 @@ class RockPaperScissorsIntegrationTestCase(TestCase):
 
         self.assertEqual(rps_response_data['user_rps_choice'], "scissors")
 
-        # Checking whether this is the last attempt, which it should be
-
-        self.assertEqual(rps_response_data['attempts'], 0)
-
-        # Checking whether the computer choice is still "rock"
+        # Checking whether the computer choice is "rock"
 
         self.assertEqual(rps_response_data['computer_rps_choice'], 'rock')
 
         # Checking to see if this outcome would be a loss, as it should be
 
-        self.assertEqual(rps_response_data['rps_outcome'], 'lose')
-
+        self.assertEqual(rps_response_data['rps_round_outcome'], 'lose')
 
         # END THE ROUND TO SEE THE OUTCOME OF THE GAME - IN THIS CASE, THE USER HAS LOST
 
         # POST request is made, in order to end the round
 
-        post_response_for_rock_paper_scissors_game_url = self.client.post(rock_paper_scissors_game_url_form, follow=True)
+        # Checking whether the outcome of the game is that the user lost, as it should be
 
-        # Check to see if 200 code was returned, which indicates success
-
-        self.assertEqual(post_response_for_rock_paper_scissors_game_url.status_code, 200)
-
-        # In order to assert whether the values are equal to the expected ones, we need to use json so that it is easy to parse
-
-        rps_response_data = post_response_for_rock_paper_scissors_game_url.json()
-
-        # Checking whether the outcome of the round is that the user lost, as it should be
-
-        self.assertEqual(rps_response_data['rps_outcome'], 'Game Over! You failed to win this round! Good luck next time!')
+        self.assertEqual(rps_response_data['rps_end_of_game'], 'Game Over! You failed to win this game! Good luck next time!')
     
     # Simulating a situation where the user has won the round using the test below.
     
     @patch('rock_paper_scissors.views.random.choice')
     def test_simultating_user_winning_rock_paper_scissors_game(self, mock_choice):
-        # Setting the computer choice as "paper"
-        mock_choice.return_value = 'paper'
 
         # Logging in the user using the valid credentials
         self.client.login(username='testuser', password='Password34*')
@@ -193,6 +175,9 @@ class RockPaperScissorsIntegrationTestCase(TestCase):
 
 
         # FIRST ATTEMPT FROM USER
+        
+        # Setting the computer choice as "paper"
+        mock_choice.return_value = 'paper'
 
         # Setting the user option as "scissors"
 
@@ -216,20 +201,19 @@ class RockPaperScissorsIntegrationTestCase(TestCase):
 
         self.assertEqual(rps_response_data['user_rps_choice'], "scissors")
 
-        # Checking whether there are 2 attempts left, which is the correct number after one guess
-
-        self.assertEqual(rps_response_data['attempts'], 2)
-
-        # Checking whether the computer choice is still "paper"
+        # Checking whether the computer choice is "paper"
         
         self.assertEqual(rps_response_data['computer_rps_choice'], 'paper')
 
         # Checking to see if this outcome would be a win, as it should be
 
-        self.assertEqual(rps_response_data['rps_outcome'], 'win')
+        self.assertEqual(rps_response_data['rps_round_outcome'], 'win')
 
 
         # SECOND ATTEMPT FROM USER
+
+        # Setting the computer choice as "rock"
+        mock_choice.return_value = 'rock'
 
         # Setting the user option as "paper"
 
@@ -253,24 +237,23 @@ class RockPaperScissorsIntegrationTestCase(TestCase):
 
         self.assertEqual(rps_response_data['user_rps_choice'], "paper")
 
-        # Checking whether there is 1 attempt left, which is the correct number after two guesses
-
-        self.assertEqual(rps_response_data['attempts'], 1)
-
-        # Checking whether the computer choice is still "paper"
+        # Checking whether the computer choice is still "rock"
         
-        self.assertEqual(rps_response_data['computer_rps_choice'], 'paper')
+        self.assertEqual(rps_response_data['computer_rps_choice'], 'rock')
 
-        # Checking to see if this outcome would be a draw, as it should be
+        # Checking to see if this outcome of the round would be a win, as it should be
 
-        self.assertEqual(rps_response_data['rps_outcome'], 'draw')
+        self.assertEqual(rps_response_data['rps_round_outcome'], 'win')
 
         # THIRD ATTEMPT FROM USER
 
-        # Setting the user option as "scissors"
+        # Setting the computer choice as "scissors"
+        mock_choice.return_value = 'scissors'
+
+        # Setting the user option as "rock"
 
         data = {
-            'carousel_value' : 'scissors'
+            'carousel_value' : 'rock'
         }
 
         # Making a POST request, sending the data such as the user option in the POST request
@@ -285,50 +268,38 @@ class RockPaperScissorsIntegrationTestCase(TestCase):
 
         rps_response_data = post_response_for_rock_paper_scissors_game_url.json()
 
-        # Checking whether the user choice was set correctly i.e. "scissors"
+        # Checking whether the user choice was set correctly i.e. "rock"
 
-        self.assertEqual(rps_response_data['user_rps_choice'], "scissors")
+        self.assertEqual(rps_response_data['user_rps_choice'], "rock")
 
-        # Checking whether there are no attempts left, which is the correct number after three guesses
 
-        self.assertEqual(rps_response_data['attempts'], 0)
-
-        # Checking whether the computer choice is still "paper"
+        # Checking whether the computer choice is "scissors"
         
-        self.assertEqual(rps_response_data['computer_rps_choice'], 'paper')
+        self.assertEqual(rps_response_data['computer_rps_choice'], 'scissors')
 
         # Checking to see if this outcome would be a win, as it should be
 
-        self.assertEqual(rps_response_data['rps_outcome'], 'win')
+        self.assertEqual(rps_response_data['rps_round_outcome'], 'win')
 
 
         # END THE ROUND TO SEE THE OUTCOME OF THE GAME - IN THIS CASE, THE USER HAS WON
 
-        # Creating a user profile, so that the current score in the rock paper scissors game can be tracked
+        # Delete the game record for the user before adding the new information, ensuring we have a clean slate after each time this
+        # test is run. Otherwise, we will get an integrity error.
+        GameUserProfile.objects.filter(user=self.user).delete()
 
+        # Creating the game user profile and assigning a score of 0 for the user
         game_user_profile = GameUserProfile.objects.create(user=self.user, current_score=0)
 
-        # POST request is made, in order to end the round
+        # Checking whether the outcome of the game is that the user won, as it should be
 
-        post_response_for_rock_paper_scissors_game_url = self.client.post(rock_paper_scissors_game_url_form, follow=True)
+        self.assertEqual(rps_response_data['rps_end_of_game'], 'Game Over! You won this game! You have received 10 points!')
 
-        # Check to see if 200 code was returned, which indicates success
+        # Checking to see if the user won the game and if they did, add 10 points to their score
 
-        self.assertEqual(post_response_for_rock_paper_scissors_game_url.status_code, 200)
-
-        # In order to assert whether the values are equal to the expected ones, we need to use json so that it is easy to parse
-
-        rps_response_data = post_response_for_rock_paper_scissors_game_url.json()
-
-        # Checking whether the outcome of the round is that the user won, as it should be
-
-        self.assertEqual(rps_response_data['rps_outcome'], 'Game Over! You won this round! You have received 10 points!')
-
-        # Checking to see if the user won the round and if they did, add 10 points to their score
-
-        if rps_response_data['rps_outcome'] == "Game Over! You won this round! You have received 10 points!":
+        if rps_response_data['rps_end_of_game'] == "Game Over! You won this game! You have received 10 points!":
             game_user_profile.current_score = 10
         
-        # Check whether the user has 10 points, which indicates that they won the round
+        # Check whether the user has 10 points, which indicates that they won the game
         
         self.assertEqual(game_user_profile.current_score, 10)
