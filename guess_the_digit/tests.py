@@ -100,7 +100,7 @@ class GuessTheDigitIntegrationTestCase(TestCase):
         mock_random_number.return_value = 5
 
         # Navigating to the guess the digit game page, which will then be used for the GET and POST requests
-        guess_the_digit_game_url = reverse('play')
+        guess_the_digit_game_url = reverse('guess_the_digit:play')
 
         # GET Request - WHEN HINTS ARE ENABLED
 
@@ -184,7 +184,7 @@ class GuessTheDigitIntegrationTestCase(TestCase):
         mock_random_number.return_value = 8
 
         # Navigating to the guess the digit game page, which will then be used for the GET and POST requests
-        guess_the_digit_game_url = reverse('play')
+        guess_the_digit_game_url = reverse('guess_the_digit:play')
 
         # GET Request - WHEN HINTS ARE DISABLED
 
@@ -268,7 +268,7 @@ class GuessTheDigitIntegrationTestCase(TestCase):
         mock_random_number.return_value = 12
 
         # Navigating to the guess the digit game page, which will then be used for the GET and POST requests
-        guess_the_digit_game_url = reverse('play')
+        guess_the_digit_game_url = reverse('guess_the_digit:play')
 
         # GET Request - WHEN HINTS ARE ENABLED
 
@@ -352,7 +352,7 @@ class GuessTheDigitIntegrationTestCase(TestCase):
         mock_random_number.return_value = 10
         
         # Navigating to the guess the digit game page, which will then be used for the GET and POST requests
-        guess_the_digit_game_url = reverse('play')
+        guess_the_digit_game_url = reverse('guess_the_digit:play')
 
         # GET Request - WHEN HINTS ARE DISABLED
 
@@ -436,7 +436,7 @@ class GuessTheDigitIntegrationTestCase(TestCase):
         mock_random_number.return_value = 69
 
         # Navigating to the guess the digit game page, which will then be used for the GET and POST requests
-        guess_the_digit_game_url = reverse('play')
+        guess_the_digit_game_url = reverse('guess_the_digit:play')
 
         # GET Request - WHEN HINTS ARE ENABLED
 
@@ -520,7 +520,7 @@ class GuessTheDigitIntegrationTestCase(TestCase):
         mock_random_number.return_value = 100
 
         # Navigating to the guess the digit game page, which will then be used for the GET and POST requests
-        guess_the_digit_game_url = reverse('play')
+        guess_the_digit_game_url = reverse('guess_the_digit:play')
 
         # GET Request - WHEN HINTS ARE DISABLED
 
