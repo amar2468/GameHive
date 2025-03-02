@@ -4,6 +4,7 @@ from .forms import RegistrationForm, TestimonialsForm, UpdatePersonalDetails, Ch
 from django.contrib.auth.models import User
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
+import json
 
 
 # Unit test in the "RegistrationTestCase" class below
@@ -315,18 +316,25 @@ class LoginIntegrationTestCase(TestCase):
 
         response_for_login = self.client.post(login_url, data, follow=True)
 
-        # Verify for redirect
+        # Saving the content that was returned from the POST request
+        response_for_login_content = response_for_login.content
 
-        self.assertEqual(response_for_login.status_code, 200) # Check to see if 200 code was returned, which indicates success
-        
-        self.assertTrue(response_for_login.context['user'].is_authenticated) # Check if the user has been authenticated
+        # As this is a b-string, we need to change it to a string
+        response_for_login_content_str = response_for_login_content.decode("utf-8")
+
+        # Converting the str to a dict, so that we can access the "success" key.
+        response_for_login_content_dict = json.loads(response_for_login_content_str)
+
+        # Check to see if login was successful
+        self.assertEqual(response_for_login_content_dict.get("success"),"You have logged in successfully. Redirecting to the homepage...")
 
 # Unit test in the "TestimonialsForm" class below
 
 class TestimonialsFormTestCase(TestCase):
     def testing_valid_testimonials_form(self):
         data = {
-            'testimonial_message' : 'Hello there!'
+            'testimonial_message' : 'Hello there!',
+            'star_rating' : '5'
         }
 
         form = TestimonialsForm(data=data)
