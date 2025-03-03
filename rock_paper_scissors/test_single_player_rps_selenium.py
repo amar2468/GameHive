@@ -30,6 +30,8 @@ class SeleniumTestSinglePlayerRockPaperScissors(LiveServerTestCase):
         # Submit the form, in order to create the new account
         submit_button_sign_up.click()
 
+        time.sleep(3)
+
         # Navigate to the page where the user can fill the form, which will allow them to sign in
         self.browser.get(f"{self.live_server_url}/login")
 
@@ -47,6 +49,8 @@ class SeleniumTestSinglePlayerRockPaperScissors(LiveServerTestCase):
         # Submit the form by pressing "Enter" on the keyboard
         submit_button_login.click()
 
+        time.sleep(10)
+
     def tearDown(self):
         # Checks if the browser is being used. If it is and this function is called, the browser will close.
         if hasattr(self, 'browser'):
@@ -57,8 +61,6 @@ class SeleniumTestSinglePlayerRockPaperScissors(LiveServerTestCase):
     def test_single_player_rps_process(self):
         # Navigating to the single player rock,paper,scissors game
         self.browser.get(f"{self.live_server_url}/rock_paper_scissors/single_player_rps/")
-        
-        time.sleep(3)
 
         while True:
             # Get all the possible options from rock,paper,scissors game (which would be the rock,paper,scissor choices)
