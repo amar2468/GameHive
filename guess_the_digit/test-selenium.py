@@ -35,6 +35,8 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
 
         # Submit the form, in order to create the new account
         submit_button_sign_up.click()
+        
+        time.sleep(3)
 
         # Navigate to the page where the user can fill the form, which will allow them to sign in
         self.browser.get(f"{self.live_server_url}/login")
@@ -53,6 +55,7 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
 
         # Submit the form by pressing "Enter" on the keyboard
         submit_button_login.click()
+        time.sleep(3)
     
     def tearDown(self):
         # Checks if there is a self.browser attribute and whether the value is NOT None. If this is the case, the quit() can be executed
@@ -116,35 +119,35 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
         # If the div, that shows the range that the user can guess, is still visible, an error will be raised.
         if guess_range_div.is_displayed():
             raise Exception(
-                f"The guess range div is visible when level = {game_difficulty}, "
-                f"and hints = {are_hints_enabled}, but should be hidden when the user ends the game."
+                f"The guess range div is visible when level = {level}, "
+                f"and hints = {hints}, but should be hidden when the user ends the game."
             )
         
         # If it is hidden, no need to do anything as this is what we want.
         else:
-            print(f"Hidden for level = {game_difficulty} and hints = {are_hints_enabled}")
+            print(f"The guess range div is hidden for level = {level} and hints = {hints}, which is the desired behaviour!")
         
         # If the div, that allows the user to input a number, is still visible, an error will be raised.
         if guess_number_input_field.is_displayed():
             raise Exception(
-                f"The input field is visible when level = {game_difficulty}, and hints = {are_hints_enabled},"
+                f"The input field is visible when level = {level}, and hints = {hints},"
                 f"but should be hidden when the user ends the game."
             )
         
         # If it is hidden, no need to do anything as this is what we want.
         else:
-            print(f"Hidden for level = {game_difficulty} and hint = {are_hints_enabled}")
+            print(f"The input field is hidden for level = {level} and hint = {hints}, which is the desired behaviour!")
 
         # If the div, that allows the user to submit their guess, is still visible, an error will be raised.
         if guess_number_button.is_displayed():
             raise Exception(
-                f"The submit button is visible for level = {game_difficulty} and hints = {are_hints_enabled},"
+                f"The submit button is visible for level = {level} and hints = {hints},"
                 f"but should be hidden when the user ends the game."
             )
         
         # If it is hidden, no need to do anything as this is what we want.
         else:
-            print(f"Hidden for level = {game_difficulty} and hints = {are_hints_enabled}")
+            print(f"The submit button is hidden for level = {level} and hints = {hints}, which is the desired behaviour!")
         
         # If the hints were enabled, we want to check if the div that shows the hint is hidden at the end of the game.
         if hints == "yes":
@@ -154,13 +157,13 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
             # If the div the shows the hint is visible, it will raise an exception and the test will fail.
             if hint_div.is_displayed():
                 raise Exception(
-                    f"The hint div is visible for level = {game_difficulty}," 
+                    f"The hint div is visible for level = {level}," 
                     f"but should be hidden when the user ends the game."
                 )
             
             # If it is hidden, no need to do anything as this is what we want.
             else:
-                print(f"Hidden for level = {game_difficulty}")
+                print(f"The hint div is hidden for level = {level}, which is the desired behaviour!")
 
     # We are checking to see if the required divs are hidden after the game is complete. This is because these divs are no longer necessary
     # as the user has finished the game. Below are individual tests that verify this, based on factors such as different levels, hints enabled, etc...
