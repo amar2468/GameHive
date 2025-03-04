@@ -10,7 +10,7 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
 
         # Try/Except to install and start the browser, so that if it fails, an error message is displayed in the console.
         try:
-            self.browser = webdriver.Chrome(ChromeDriverManager().install())
+            self.browser = webdriver.Chrome()
         except Exception as e:
             self.fail(f"Failed to start the browser: {e}")
         

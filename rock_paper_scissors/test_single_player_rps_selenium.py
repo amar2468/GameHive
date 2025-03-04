@@ -8,7 +8,7 @@ import random
 class SeleniumTestSinglePlayerRockPaperScissors(LiveServerTestCase):
     def setUp(self):
         # Controlling Chrome browser using Chrome driver
-        self.browser = webdriver.Chrome(ChromeDriverManager().install())
+        self.browser = webdriver.Chrome()
 
         # Navigate to the sign up page, so that the user account can be created
         self.browser.get(f"{self.live_server_url}/sign_up")
