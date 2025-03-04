@@ -1,6 +1,5 @@
 from django.test import LiveServerTestCase
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 import time
 import random
@@ -21,9 +20,9 @@ class SeleniumTestSinglePlayerRockPaperScissors(LiveServerTestCase):
 
         # We will clear the fields and then fill them in with the sign up information
         username_field_sign_up.clear()
-        username_field_sign_up.send_keys("user12")
+        username_field_sign_up.send_keys("user34")
         email_field_sign_up.clear()
-        email_field_sign_up.send_keys("user12@gmail.com")
+        email_field_sign_up.send_keys("user34@gmail.com")
         password_field_sign_up.clear()
         password_field_sign_up.send_keys("Strongpassword100!")
 
@@ -42,7 +41,7 @@ class SeleniumTestSinglePlayerRockPaperScissors(LiveServerTestCase):
 
         # We will clear the fields and then fill them in with the login information
         username_field_login.clear()
-        username_field_login.send_keys("user12")
+        username_field_login.send_keys("user34")
         password_field_login.clear()
         password_field_login.send_keys("Strongpassword100!")
 
