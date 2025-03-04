@@ -2,5 +2,5 @@ asgiref==3.7.2
 channels==3.0.5
 Django==4.2.9
 redis==5.0.1
-selenium==4.29.0
+selenium==4.27.0
 webdriver_manager==4.0.2
