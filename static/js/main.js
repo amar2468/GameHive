@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('#homepage_link').css("color", "yellow");
+    $('#homepage_link').css("color", "#FFFFFF");
     $('#testimonials_link').css("color", "#FFFFFF");
     $('#profile_link').css("color", "#FFFFFF");
     $('#logout_link').css("color", "#FFFFFF");
