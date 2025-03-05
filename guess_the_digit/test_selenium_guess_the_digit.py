@@ -79,7 +79,7 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
         # Fill them in using the information below.
         game_difficulty.send_keys(level)
         are_hints_enabled.send_keys(hints)
-        time.sleep(3)
+        time.sleep(1)
 
         # Submit the form, so that the game can commence.
         start_guess_the_digit_game.click()
@@ -114,6 +114,8 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
         guess_range_div = self.browser.find_element(By.ID, hidden_div_level)
         guess_number_input_field = self.browser.find_element(By.ID, "guess_number_input_field")
         guess_number_button = self.browser.find_element(By.ID, "guess_number_button")
+
+        time.sleep(2)
 
         # If the div, that shows the range that the user can guess, is still visible, an error will be raised.
         if guess_range_div.is_displayed():
