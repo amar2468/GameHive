@@ -72,9 +72,6 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
         game_difficulty = self.browser.find_element(By.NAME, "selected_level")
         are_hints_enabled = self.browser.find_element(By.NAME, "hints")
         start_guess_the_digit_game = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
-        
-        # Locate the button to play the game, which will appear in the modal that pops up when user clicks on the submit button on the form. This is sort of a confirmation button before the game commences.
-        modal_play_game_button = self.browser.find_element(By.ID, "play_game")
 
         # Fill them in using the information below.
         game_difficulty.send_keys(level)
@@ -85,7 +82,10 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
         start_guess_the_digit_game.click()
 
         time.sleep(1)
-        
+
+        # Locate the button to play the game, which will appear in the modal that pops up when user clicks on the submit button on the form. This is sort of a confirmation button before the game commences.
+        modal_play_game_button = self.browser.find_element(By.ID, "play_game")
+
         modal_play_game_button.click()
 
         number_of_rounds = no_of_rounds
