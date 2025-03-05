@@ -48,7 +48,7 @@ class SeleniumTestSinglePlayerRockPaperScissors(LiveServerTestCase):
         # Submit the form by pressing "Enter" on the keyboard
         submit_button_login.click()
 
-        time.sleep(10)
+        time.sleep(2)
 
     def tearDown(self):
         # Checks if the browser is being used. If it is and this function is called, the browser will close.
@@ -75,8 +75,8 @@ class SeleniumTestSinglePlayerRockPaperScissors(LiveServerTestCase):
                 time.sleep(1)
                 next_button.click()
 
-            time.sleep(2)
-
+            time.sleep(1)
+            
             # Find the choice that the user chose on the screen
             active_rps_choice = self.browser.find_element(By.CLASS_NAME, "carousel-item.active")
 
@@ -85,13 +85,14 @@ class SeleniumTestSinglePlayerRockPaperScissors(LiveServerTestCase):
             # Click on the choice that the user chose
             active_rps_choice.find_element(By.CLASS_NAME, "selected_rps").click()
             
-            time.sleep(3)
+            time.sleep(2)
 
             # Getting the modal element from the HTML template
             rps_end_of_game_info_modal = self.browser.find_element(By.ID, "rps_end_of_game_info_modal")
 
-            time.sleep(2)
+            time.sleep(1)
 
             # Trying to see if the modal is being displayed on screen - if it is, it means that the game is over and we can end our test
             if rps_end_of_game_info_modal.is_displayed():
+                time.sleep(1)
                 break
