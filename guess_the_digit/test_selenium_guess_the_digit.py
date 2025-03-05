@@ -83,6 +83,9 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
 
         # Submit the form, so that the game can commence.
         start_guess_the_digit_game.click()
+
+        time.sleep(1)
+        
         modal_play_game_button.click()
 
         number_of_rounds = no_of_rounds
