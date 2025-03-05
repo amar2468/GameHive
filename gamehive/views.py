@@ -286,7 +286,8 @@ def sign_up(request):
             password = form.cleaned_data['password']
             # We have created the "account_type" variable, which will be "user" for every new user that gets added. The other account
             # type is "admin", but this will only be given to the user after they have already created their account.
-            account_type = "user"
+            
+            #account_type = "user"
 
             try:
                 password_validation.validate_password(password)
@@ -303,7 +304,7 @@ def sign_up(request):
             # to pick a unique username.
             
             try:
-                user = User.objects.create_user(username=username, email=email, password=password, account_type=account_type)
+                user = User.objects.create_user(username=username, email=email, password=password)
             except IntegrityError as e:
                 if 'UNIQUE constraint failed: auth_user.username' in str(e):
                     error_message = "Username already exists. Please choose a different username."
