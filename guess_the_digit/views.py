@@ -214,6 +214,8 @@ def guess_the_digit_game(request):
             latest_score = game_user_profile.current_score
         except GameUserProfile.DoesNotExist:
             latest_score = 0
+        
+        correct_number = request.session['correct_number']
 
         context = {
             'specific_hint' : specific_hint,
