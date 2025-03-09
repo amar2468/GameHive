@@ -1,9 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from .forms import RegistrationForm, TestimonialsForm, UpdatePersonalDetails, ChangePasswordForm
-from django.contrib.auth.models import User
-from django.contrib.auth import password_validation
-from django.core.exceptions import ValidationError
+from gamehive.models import CustomUser
 import json
 
 
@@ -291,7 +289,7 @@ class RegistrationIntegrationTestCase(TestCase):
         # Verify that user was created
         self.assertEqual(response_registration.status_code, 200) # Check to see if 200 code was returned, which indicates success
 
-        self.assertTrue(User.objects.filter(username='testuser').exists()) # See if user exists in database
+        self.assertTrue(CustomUser.objects.filter(username='testuser').exists()) # See if user exists in database
 
 # Integration test for the login functionality is below
 
@@ -300,7 +298,7 @@ class LoginIntegrationTestCase(TestCase):
     def test_for_login_process(self):
 
         # Created test user to attempt the login process
-        self.user = User.objects.create_user(
+        self.user = CustomUser.objects.create_user(
             username='david12',
             password='Whatis12!'
         )
@@ -366,7 +364,7 @@ class TestimonialsFormTestCase(TestCase):
 class TestimonialsFormIntegrationTestCase(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='Password34*')
+        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*')
         self.client = Client()
     
     def test_for_testimonials_form_process(self):
@@ -526,7 +524,7 @@ class UpdatePersonalDetailsTestCase(TestCase):
 class UpdatePersonalDetailsIntegrationTestCase(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='Password34*')
+        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*')
         self.client = Client()
     
     def test_for_update_personal_details_process(self):
@@ -568,7 +566,7 @@ class ChangePasswordFormTestCase(TestCase):
 class ChangePasswordFormIntegrationTestCase(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='Password34*')
+        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*')
         self.client = Client()
     
     def test_for_change_password_process(self):
