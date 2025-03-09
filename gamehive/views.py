@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect
-from django.contrib import messages
 from django.db import IntegrityError
 from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails, BuyItemForm
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
-from gamehive.models import GameUserProfile,TestimonialsModel, PersonalDetails
+from gamehive.models import CustomUser,GameUserProfile,TestimonialsModel, PersonalDetails
 from django.http import JsonResponse
 
 # View that renders the homepage which allows a user to either sign up/login or play the game of their choice
@@ -212,7 +210,7 @@ def change_password(request):
                         return JsonResponse(response_info_for_password)
                     else:
 
-                        user = User.objects.get(username=request.user)
+                        user = CustomUser.objects.get(username=request.user)
 
                         user.set_password(change_password)
 
@@ -284,10 +282,6 @@ def sign_up(request):
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            # We have created the "account_type" variable, which will be "user" for every new user that gets added. The other account
-            # type is "admin", but this will only be given to the user after they have already created their account.
-            
-            #account_type = "user"
 
             try:
                 password_validation.validate_password(password)
@@ -304,7 +298,7 @@ def sign_up(request):
             # to pick a unique username.
             
             try:
-                user = User.objects.create_user(username=username, email=email, password=password)
+                user = CustomUser.objects.create_user(username=username, email=email, password=password)
             except IntegrityError as e:
                 if 'UNIQUE constraint failed: auth_user.username' in str(e):
                     error_message = "Username already exists. Please choose a different username."
