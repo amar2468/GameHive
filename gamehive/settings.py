@@ -5,21 +5,23 @@ Django settings for gamehive project.
 from pathlib import Path
 import os
 import environ
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Initialising the environment variables
-env = environ.Env()
+# If this will run locally, we want to load the .env file. This check is here because we don't have the .env file in the repo,
+# so Jenkins wouldn't be able to get the credentials from it. Instead, Jenkins will use environment variables for this in the pipeline.
+if os.getenv("JENKINS_ENV") is None:
+    load_dotenv()
 
-# Loading the .env file, which contains the super admin credentials
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+# Retrieving the credentials for the super admin, depending on if the application is run locally (will use .env) 
+# or in Jenkins (will use environment variables)
+SUPER_ADMIN_USERNAME = os.getenv("SUPER_ADMIN_USERNAME")
+SUPER_ADMIN_PASSWORD = os.getenv("SUPER_ADMIN_PASSWORD")
+SUPER_ADMIN_EMAIL = os.getenv("SUPER_ADMIN_EMAIL")
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SUPER_ADMIN_USERNAME = env("SUPER_ADMIN_USERNAME")
-SUPER_ADMIN_PASSWORD = env("SUPER_ADMIN_PASSWORD")
-SUPER_ADMIN_EMAIL = env("SUPER_ADMIN_EMAIL")
-
 SECRET_KEY = 'i7#*%oi$(k9=s*d(deztb#ur2ig8yittrvau1$^n8i#t(f*9nu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
