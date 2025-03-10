@@ -298,7 +298,7 @@ def sign_up(request):
             # to pick a unique username.
             
             try:
-                user = CustomUser.objects.create_user(username=username, email=email, password=password)
+                user = CustomUser.objects.create_user(username=username, email=email, password=password, account_type="user")
             except IntegrityError as e:
                 if 'UNIQUE constraint failed: auth_user.username' in str(e):
                     error_message = "Username already exists. Please choose a different username."
