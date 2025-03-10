@@ -300,7 +300,8 @@ class LoginIntegrationTestCase(TestCase):
         # Created test user to attempt the login process
         self.user = CustomUser.objects.create_user(
             username='david12',
-            password='Whatis12!'
+            password='Whatis12!',
+            account_type="user"
         )
 
         # Login data below
@@ -364,7 +365,7 @@ class TestimonialsFormTestCase(TestCase):
 class TestimonialsFormIntegrationTestCase(TestCase):
 
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*')
+        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*', account_type="user")
         self.client = Client()
     
     def test_for_testimonials_form_process(self):
@@ -524,7 +525,7 @@ class UpdatePersonalDetailsTestCase(TestCase):
 class UpdatePersonalDetailsIntegrationTestCase(TestCase):
 
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*')
+        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*', account_type="user")
         self.client = Client()
     
     def test_for_update_personal_details_process(self):
@@ -566,7 +567,7 @@ class ChangePasswordFormTestCase(TestCase):
 class ChangePasswordFormIntegrationTestCase(TestCase):
 
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*')
+        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*', account_type="user")
         self.client = Client()
     
     def test_for_change_password_process(self):

@@ -9,7 +9,7 @@ from gamehive.models import CustomUser,GameUserProfile
 class GuessTheDigitTestCase(TestCase):
     # Create the user so that the unit tests for the game can be carried out
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*')
+        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*', account_type="user")
         self.client = Client()
     
     # This function will test valid input and whether the form is deemed to be valid (as expected)
@@ -85,7 +85,7 @@ class GuessTheDigitTestCase(TestCase):
 class GuessTheDigitIntegrationTestCase(TestCase):
     # Create the user so that the integration test for the game can be carried out
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', email='testuser@gmail.com', password='Password34*')
+        self.user = CustomUser.objects.create_user(username='testuser', email='testuser@gmail.com', password='Password34*', account_type="user")
         self.client = Client()
     
     # Simulating the "Guess the Digit" game using the scenario that the user chose the easy level with hints enabled

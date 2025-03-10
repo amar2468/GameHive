@@ -8,7 +8,7 @@ from django.urls import reverse
 
 class RockPaperScissorsTestCase(TestCase):
     def setUp(self):
-        self.user = CustomUser.objects.create(username='testuser', password='Password34*')
+        self.user = CustomUser.objects.create(username='testuser', password='Password34*', account_type="user")
         self.client = Client()
     
     def testing_valid_input_rps(self):
@@ -30,7 +30,7 @@ class RockPaperScissorsTestCase(TestCase):
 class RockPaperScissorsIntegrationTestCase(TestCase):
     # Setting up the user so that the integration test can be carried out while user is logged in
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', email='testuser@gmail.com', password='Password34*')
+        self.user = CustomUser.objects.create_user(username='testuser', email='testuser@gmail.com', password='Password34*', account_type="user")
         self.client = Client()
     
     # Simulating a situation where the user has lost the round using the test below.
