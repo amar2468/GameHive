@@ -5,6 +5,7 @@ pipeline {
         SUPER_ADMIN_USERNAME = credentials('SUPER_ADMIN_USERNAME')
         SUPER_ADMIN_PASSWORD = credentials('SUPER_ADMIN_PASSWORD')
         SUPER_ADMIN_EMAIL = credentials('SUPER_ADMIN_EMAIL')
+        DJANGO_SECRET_KEY= credentials('DJANGO_SECRET_KEY')
         JENKINS_ENV="true"
     }
     
