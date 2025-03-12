@@ -33,7 +33,7 @@ pipeline {
         }
         
         // Stage 4: Apply Migrations
-        stage('Apply ') {
+        stage('Apply Migrations') {
             steps {
                 bat '.\\gamehive-virtual-environment\\Scripts\\python manage.py migrate'
             }
