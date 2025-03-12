@@ -26,11 +26,11 @@ There are two games that the user can play:
 
 3. Logout
 
-4. Profile - User can view the leaderboard and update their personal details (E.g. their password and their email)
+4. Profile - User can update their personal details (email, first name, surname), change their password, view the leaderboard, and redeem their points to purchase amazing prizes.
 
 ![image](https://github.com/user-attachments/assets/4a877e29-b0eb-4770-b4aa-46b25b1f22c8)
 
-5. Testimonials - People can submit their review regarding GameHive.
+5. Testimonials - People can submit their review regarding GameHive. They can even give a star rating out of 5.
 
 ![image](https://github.com/user-attachments/assets/18064162-6fd2-46b7-8670-57e8e73a93e5)
 
@@ -69,12 +69,11 @@ SINGLE PLAYER MODE:
 
 2. Computer Choice - A random choice will be made between rock, paper, scissors
 
-3. Attempts - User is given three attempts to win the round. In order to win points, they need to either:
-(a) Win 3 times
-(b) Win 2 times
+3. To win a game, a user (player or computer) would need to win 3 rounds. In other words, the first user to win 3 rounds wins the game.
 
-4. Points - If the user wins the round, they will receive 10 points. This will be added to their total score for this game and the 
-leaderboard for this game can be found in the profile page under the sidebar heading "Leaderboard"
+4. Points - If the player wins the game, they will receive 10 points. This will be added to their total score for this game and the 
+leaderboard for this game can be found in the profile page under the sidebar option "Leaderboard". The computer does not get any points
+regardless of whether they win the game.
 
 MULTIPLAYER MODE:
 
@@ -82,16 +81,13 @@ MULTIPLAYER MODE:
 
 2. Player 2 Choice - Player 2 chooses between rock, paper, scissors
 
-3. Attempts - There are three attempts. In order for a player to win, they must get either:
-(a) Win 3 times
-(b) Win 2 times
+3. The first user who wins 3 rounds is the winner of the game.
 
-4. Points - If one of the players win the round, they will get 10 points, which will be added to the leaderboard score.
+4. Points - The user who won the game gets 10 points, which will be added to the leaderboard score.
 
 **Testing**
 
-Testing is required with any app that is being created. For GameHive, unit testing and integration testing were/are being used to test
-a variety of functionalities such as:
+Testing is required for any application that is being created. For GameHive, unit testing and integration testing were/are being used to test a variety of functionalities such as:
 1. Registration process
 2. Login process
 3. Testimonials form
@@ -100,6 +96,13 @@ a variety of functionalities such as:
 
 Additionally, unit & integration tests were used to test:
 1. Guess the Digit game using valid and invalid inputs, as well as simulating the process using each level and hints enabled/disabled.
-2. Rock, Paper, Scissors game, where there were two integration tests: A situation where the user has lost the round and a situation where the user has won the round.
+2. Rock, Paper, Scissors game - Single Player Mode, where there were two integration tests: A situation where the user has lost the round and a situation where the user has won the round.
 
-This ensures that these aspects of GameHive work correctly. The test files are called tests.py and can be found in this project.
+Selenium testing was also used to simulate the whole process of registering, logging in, and playing the game. There are two selenium tests that have been created:
+1. test_selenium_guess_the_digit.py : It goes through the process of registering the user, logging them in, and running through various scenarios for this game. In terms of the scenarios, we would be testing whether specific divs were hidden at the end of the game, as it should be. Specifically, it would be the divs that display the following:
+(a) Div that shows the range that the user can guess between (e.g. 1-10)
+(b) Div that allows a user to input their guess number (input field)
+(c) Div that allows a user to submit their guess (submit button)
+(d) Div that shows the specific hint for this game (number is even/odd). This div will only be checked if the hints were enabled, prior to starting the game.
+
+2. test_single_player_rps_selenium.py : It goes through the process of registering the user, logging them in, and simulating the game. At the end of the game, we are checking to see if the modal (the modal displays the end result of the game and has two buttons, one for going back to homepage and the other one that replays the game) shows up, which it should. 
