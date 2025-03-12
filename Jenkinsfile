@@ -1,30 +1,49 @@
 pipeline {
     agent any
     
+    environment {
+        SUPER_ADMIN_USERNAME = credentials('SUPER_ADMIN_USERNAME')
+        SUPER_ADMIN_PASSWORD = credentials('SUPER_ADMIN_PASSWORD')
+        SUPER_ADMIN_EMAIL = credentials('SUPER_ADMIN_EMAIL')
+        JENKINS_ENV="true"
+    }
+    
     stages {
-        stage('Checkout') {
+        // Stage 1: Checkout Source Code
+        stage('Checkout Source Code') {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/amar2468/GameHive.git'
             }
         }
         
-        stage('Setup') {
+        // Stage 2: Set Up Python Virtual Environment
+        stage('Set Up Python Virtual Environment') {
             steps {
-                // Creating a virtual environment
                 bat 'python -m venv gamehive-virtual-environment'
             }
         }
         
-        stage('Testing') {
+        // Stage 3: Install Python Dependencies
+        stage('Install Python Dependencies') {
             steps {
-                // Installing all the required dependencies that are needed in the virtual environment
+                bat '.\\gamehive-virtual-environment\\Scripts\\python -m pip install --upgrade pip'
                 bat '.\\gamehive-virtual-environment\\Scripts\\python -m pip install -r requirements.txt'
-                
-                // Runs all the tests inside this project
-                bat '.\\gamehive-virtual-environment\\Scripts\\python manage.py test'
             }
         }
         
+        // Stage 4: Apply Migrations
+        stage('Apply ') {
+            steps {
+                bat '.\\gamehive-virtual-environment\\Scripts\\python manage.py migrate'
+            }
+        }
+
+        // Stage 5: Run Tests
+        stage('Run Tests') {
+            steps {
+                bat '.\\gamehive-virtual-environment\\Scripts\\python manage.py test gamehive'
+            }
+        }
     }
 }
