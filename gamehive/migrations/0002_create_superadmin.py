@@ -3,7 +3,7 @@
 from django.db import migrations
 from django.conf import settings
 
-def create_superadmin(apps):
+def create_superadmin(apps, schema_editor):
     CustomUserModel = apps.get_model("gamehive", "CustomUser")
 
     if not CustomUserModel.objects.exists():
