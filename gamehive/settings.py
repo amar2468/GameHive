@@ -22,7 +22,7 @@ SUPER_ADMIN_PASSWORD = os.getenv("SUPER_ADMIN_PASSWORD")
 SUPER_ADMIN_EMAIL = os.getenv("SUPER_ADMIN_EMAIL")
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'i7#*%oi$(k9=s*d(deztb#ur2ig8yittrvau1$^n8i#t(f*9nu'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
