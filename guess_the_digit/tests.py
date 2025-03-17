@@ -24,67 +24,64 @@ class BaseTestCase(TestCase):
 # Unit test for "Guess the Digit" game - This class contains two tests - testing valid input & testing invalid input
 
 class GuessTheDigitUnitTestCase(BaseTestCase):
-    # This function will test valid input and whether the form is deemed to be valid (as expected)
+    # Checks whether the form submission (guessing a number) will be valid or not. Takes the user guess and whether we want it to
+    # assertTrue or assertFalse. assertFalse is the default, unless otherwise specified.
+    def check_form_validity(self, guess_number_input_field, assert_type=False):
+        # Takes in whatever data was passed by the individual test case methods
+        data = {
+            'guess_number_input_field' : guess_number_input_field
+        }
+
+        # Take the input and validate it using the django form
+        form = GuessTheNumberInputForm(data=data)
+
+        if assert_type == True:
+            # Check whether the form is valid, which it should be
+            self.assertTrue(form.is_valid())
+        else:
+            # Check whether the form is valid, which it shouldn't be
+            self.assertFalse(form.is_valid())
+
+    # This method will test valid input and whether the form is deemed to be valid (as expected)
     def testing_valid_input(self):
-        # User chooses the number 4 as their guess
-        data = {
-            'guess_number_input_field' : 4
-        }
+        # Creating a variable to store a valid number for the "Guess the Digit" game.
+        guess_number_input_field = 4
+        assert_type = True
 
-        # Take the input and validate it using the django form
-        form = GuessTheNumberInputForm(data=data)
+        # Calling the method to check whether the form is valid
+        self.check_form_validity(guess_number_input_field, assert_type)
+    
+    # Method to test if an empty string is allowed to be submitted as a guess
+    def test_empty_string_character_input(self):
+        # Creating a variable to store an invalid character for the "Guess the Digit" game.
+        guess_number_input_field = ''
 
-        # Check whether the form is valid, which it should be
-        self.assertTrue(form.is_valid())
-
-    # This function will have multiple cases of invalid input and checks whether the form is not valid (as expected)
-    def testing_invalid_input(self):
-        # Testing whitespace in the input field, instead of integers
-        data = {
-            'guess_number_input_field' : ''
-        }
-
-        # Take the input and validate it using the django form
-        form = GuessTheNumberInputForm(data=data)
-
-        # Check whether the form is valid, which it shouldn't be
-        self.assertFalse(form.is_valid())
-
+        # Calling the method to check whether the form is valid
+        self.check_form_validity(guess_number_input_field)
+    
+    # Method to test if letters are allowed to be submitted as a guess
+    def test_letters_character_input(self):
         # Testing letters in the input field, instead of integers
-        data = {
-            'guess_number_input_field' : 'a'
-        }
+        guess_number_input_field = 'a'
 
-        # Take the input and validate it using the django form
-        form = GuessTheNumberInputForm(data=data)
-
-        # Check whether the form is valid, which it shouldn't be
-        self.assertFalse(form.is_valid())
-
+        # Calling the method to check whether the form is valid
+        self.check_form_validity(guess_number_input_field)
+    
+    # Method to test if special characters are allowed to be submitted as a guess
+    def test_special_characters_input(self):
         # Testing special characters in the input field
+        guess_number_input_field = '!*!*!*!*!*'
 
-        data = {
-            'guess_number_input_field' : '!*!*!*!*!*'
-        }
-
-        # Take the input and validate it using the django form
-        form = GuessTheNumberInputForm(data=data)
-
-        # Check whether the form is valid, which it shouldn't be
-        self.assertFalse(form.is_valid())
-
+        # Calling the method to check whether the form is valid
+        self.check_form_validity(guess_number_input_field)
+    
+    # Method to test if spaces are allowed to be submitted as a guess
+    def test_spaces_as_character_input(self):
         # Testing spaces between numbers in the input field
+        guess_number_input_field = '12 2'
 
-        data = {
-            'guess_number_input_field' : '12 2'
-        }
-
-        # Take the input and validate it using the django form
-        form = GuessTheNumberInputForm(data=data)
-
-        # Check whether the form is valid, which it shouldn't be
-        self.assertFalse(form.is_valid())
-
+        # Calling the method to check whether the form is valid
+        self.check_form_validity(guess_number_input_field)
 
 # Integration test for "Guess the Digit" game
 
