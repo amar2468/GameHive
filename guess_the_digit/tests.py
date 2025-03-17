@@ -4,19 +4,28 @@ from django.urls import reverse
 from unittest.mock import patch
 from gamehive.models import CustomUser,GameUserProfile
 
-# Unit test for "Guess the Digit" game - This class contains two tests - testing valid input & testing invalid input
-
-class GuessTheDigitTestCase(TestCase):
-    # Create the user so that the unit tests for the game can be carried out
+# Base class contains the user sign up & login. We set up the test user, which will be used in each individual unit/integration test
+class BaseTestCase(TestCase):
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*', account_type="user")
+        # Create the test user
+        self.user = CustomUser.objects.create_user(
+            username='testuser',
+            email='testuser@gmail.com',
+            password='Password34*',
+            account_type="user"
+        )
+
+        # Initialising the client
         self.client = Client()
-    
-    # This function will test valid input and whether the form is deemed to be valid (as expected)
-    def testing_valid_input(self):
-        # User logs in using the valid credentials
+
+        # Login with the test user credentials from above
         self.client.login(username='testuser', password='Password34*')
 
+# Unit test for "Guess the Digit" game - This class contains two tests - testing valid input & testing invalid input
+
+class GuessTheDigitUnitTestCase(BaseTestCase):
+    # This function will test valid input and whether the form is deemed to be valid (as expected)
+    def testing_valid_input(self):
         # User chooses the number 4 as their guess
         data = {
             'guess_number_input_field' : 4
@@ -30,9 +39,6 @@ class GuessTheDigitTestCase(TestCase):
 
     # This function will have multiple cases of invalid input and checks whether the form is not valid (as expected)
     def testing_invalid_input(self):
-        # User logs in using the valid credentials
-        self.client.login(username='testuser', password='Password34*')
-
         # Testing whitespace in the input field, instead of integers
         data = {
             'guess_number_input_field' : ''
@@ -82,18 +88,11 @@ class GuessTheDigitTestCase(TestCase):
 
 # Integration test for "Guess the Digit" game
 
-class GuessTheDigitIntegrationTestCase(TestCase):
-    # Create the user so that the integration test for the game can be carried out
-    def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', email='testuser@gmail.com', password='Password34*', account_type="user")
-        self.client = Client()
+class GuessTheDigitIntegrationTestCase(BaseTestCase):
     
     # Simulating the "Guess the Digit" game using the scenario that the user chose the easy level with hints enabled
-        
     @patch('guess_the_digit.views.random.randint')
     def test_for_guess_the_digit_process_level_easy_hints_enabled(self, mock_random_number):
-        # User logs in using the valid credentials
-        self.client.login(username='testuser', password='Password34*')
 
         # Set the correct number as 5. This is the number the user has to guess.
         mock_random_number.return_value = 5
@@ -176,9 +175,6 @@ class GuessTheDigitIntegrationTestCase(TestCase):
 
     @patch('guess_the_digit.views.random.randint')
     def test_for_guess_the_digit_process_level_easy_hints_disabled(self, mock_random_number):
-        # User logs in using the valid credentials
-        self.client.login(username='testuser', password='Password34*')
-
         # Set the correct number as 8. This is the number the user has to guess.
         mock_random_number.return_value = 8
 
@@ -260,9 +256,6 @@ class GuessTheDigitIntegrationTestCase(TestCase):
 
     @patch('guess_the_digit.views.random.randint')
     def test_for_guess_the_digit_process_level_medium_hints_enabled(self, mock_random_number):
-        # User logs in using the valid credentials
-        self.client.login(username='testuser', password='Password34*')
-
         # Set the correct number as 12. This is the number the user has to guess.
         mock_random_number.return_value = 12
 
@@ -344,9 +337,6 @@ class GuessTheDigitIntegrationTestCase(TestCase):
 
     @patch('guess_the_digit.views.random.randint')
     def test_for_guess_the_digit_process_level_medium_hints_disabled(self, mock_random_number):
-        # User logs in using the valid credentials
-        self.client.login(username='testuser', password='Password34*')
-
         # Set the correct number as 10. This is the number the user has to guess.
         mock_random_number.return_value = 10
         
@@ -428,9 +418,6 @@ class GuessTheDigitIntegrationTestCase(TestCase):
 
     @patch('guess_the_digit.views.random.randint')
     def test_for_guess_the_digit_process_level_hard_hints_enabled(self, mock_random_number):
-        # User logs in using the valid credentials
-        self.client.login(username='testuser', password='Password34*')
-
         # Set the correct number as 69. This is the number the user has to guess.
         mock_random_number.return_value = 69
 
@@ -512,9 +499,6 @@ class GuessTheDigitIntegrationTestCase(TestCase):
 
     @patch('guess_the_digit.views.random.randint')
     def test_for_guess_the_digit_process_level_hard_hints_disabled(self, mock_random_number):
-        # User logs in using the valid credentials
-        self.client.login(username='testuser', password='Password34*')
-
         # Set the correct number as 100. This is the number the user has to guess.
         mock_random_number.return_value = 100
 
