@@ -16,12 +16,11 @@ class RockPaperScissorsTestCase(TestCase):
         )
 
         self.client = Client()
+
+        self.client.login(username='testuser', password='Password34*')
     
     # Testing whether the form is valid if the user chooses "rock"
     def testing_valid_input_rps_rock(self):
-
-        self.client.login(username='testuser', password='Password34*')
-
         data = {
             'carousel_value' : 'rock'
         }
@@ -32,9 +31,6 @@ class RockPaperScissorsTestCase(TestCase):
 
     # Testing whether the form is valid if the user chooses "paper"
     def testing_valid_input_rps_paper(self):
-
-        self.client.login(username='testuser', password='Password34*')
-
         data = {
             'carousel_value' : 'paper'
         }
@@ -45,9 +41,6 @@ class RockPaperScissorsTestCase(TestCase):
     
     # Testing whether the form is valid if the user chooses "scissors"
     def testing_valid_input_rps_scissors(self):
-
-        self.client.login(username='testuser', password='Password34*')
-
         data = {
             'carousel_value' : 'scissors'
         }
@@ -63,265 +56,143 @@ class RockPaperScissorsTestCase(TestCase):
 class RockPaperScissorsIntegrationTestCase(TestCase):
     # Setting up the user so that the integration test can be carried out while user is logged in
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', email='testuser@gmail.com', password='Password34*', account_type="user")
+        # Create the test user
+        self.user = CustomUser.objects.create_user(
+            username='testuser',
+            email='testuser@gmail.com',
+            password='Password34*',
+            account_type="user"
+        )
+
+        # Initialising the client
         self.client = Client()
-    
-    # Simulating a situation where the user has lost the round using the test below.
-    @patch('rock_paper_scissors.views.random.choice')
-    def test_simultating_user_losing_rock_paper_scissors_game(self, mock_choice):
-        # Setting the computer choice as "rock"
-        mock_choice.return_value = 'rock'
 
         # Logging in the user using the valid credentials
         self.client.login(username='testuser', password='Password34*')
-
-        # Navigating to the rps_form_submitted view, which will then be used for the GET and POST requests
-        rock_paper_scissors_game_url_form = reverse('rock_paper_scissors:rps_form_submitted')
-
-        # GET request made, which would open the rps game page
-        get_response_for_rock_paper_scissors_game_url = self.client.get(rock_paper_scissors_game_url_form)
-
-        # Check to see if 200 code was returned, which indicates success
-
-        self.assertEqual(get_response_for_rock_paper_scissors_game_url.status_code, 200)
-
-        # FIRST ATTEMPT FROM USER
-
-        # Setting the user option as "scissors"
-        data = {
-            'carousel_value' : 'scissors'
-        }
-
-        # Making a POST request, sending the data such as the user option in the POST request
-        post_response_for_rock_paper_scissors_game_url = self.client.post(rock_paper_scissors_game_url_form, data, follow=True)
-
-        # Check to see if 200 code was returned, which indicates success
-
-        self.assertEqual(post_response_for_rock_paper_scissors_game_url.status_code, 200)
-
-
-        # In order to assert whether the values are equal to the expected ones, we need to use json so that it is easy to parse
-        rps_response_data = post_response_for_rock_paper_scissors_game_url.json()
-
-        # Checking whether the user choice was set correctly i.e. "scissors"
-
-        self.assertEqual(rps_response_data['user_rps_choice'], "scissors")
-
-        # Checking whether the computer choice is still "rock"
-        
-        self.assertEqual(rps_response_data['computer_rps_choice'], 'rock')
-
-        # Checking to see if this outcome would be a loss, as it should be
-
-        self.assertEqual(rps_response_data['rps_round_outcome'], 'lose')
-
-        # SECOND ATTEMPT FROM USER
-
-        # Setting the computer choice as "paper"
-        mock_choice.return_value = 'paper'
-
-        # Setting the user option as "rock"
-        data = {
-            'carousel_value' : 'rock'
-        }
-
-        # Making a POST request, sending the data such as the user option in the POST request
-        post_response_for_rock_paper_scissors_game_url = self.client.post(rock_paper_scissors_game_url_form, data, follow=True)
-
-        # Check to see if 200 code was returned, which indicates success
-
-        self.assertEqual(post_response_for_rock_paper_scissors_game_url.status_code, 200)
-
-        # In order to assert whether the values are equal to the expected ones, we need to use json so that it is easy to parse
-        rps_response_data = post_response_for_rock_paper_scissors_game_url.json()
-
-        # Checking whether the user choice was set correctly i.e. "rock"
-
-        self.assertEqual(rps_response_data['user_rps_choice'], "rock")
-
-        # Checking whether the computer choice is "paper"
-
-        self.assertEqual(rps_response_data['computer_rps_choice'], 'paper')
-
-        # Checking to see if this outcome would be a loss, as it should be
-        self.assertEqual(rps_response_data['rps_round_outcome'], 'lose')
-        
-        # LAST ATTEMPT FROM USER
-
-        # Setting the computer choice as "rock"
-        mock_choice.return_value = 'rock'
-
-        # Setting the user option as "scissors"
-        data = {
-            'carousel_value' : 'scissors'
-        }
-
-        # Making a POST request, sending the data such as the user option in the POST request
-        post_response_for_rock_paper_scissors_game_url = self.client.post(rock_paper_scissors_game_url_form, data, follow=True)
-
-        # Check to see if 200 code was returned, which indicates success
-
-        self.assertEqual(post_response_for_rock_paper_scissors_game_url.status_code, 200)
-
-        # In order to assert whether the values are equal to the expected ones, we need to use json so that it is easy to parse
-
-        rps_response_data = post_response_for_rock_paper_scissors_game_url.json()
-
-        # Checking whether the user choice was set correctly i.e. "scissors"
-
-        self.assertEqual(rps_response_data['user_rps_choice'], "scissors")
-
-        # Checking whether the computer choice is "rock"
-
-        self.assertEqual(rps_response_data['computer_rps_choice'], 'rock')
-
-        # Checking to see if this outcome would be a loss, as it should be
-
-        self.assertEqual(rps_response_data['rps_round_outcome'], 'lose')
-
-        # END THE ROUND TO SEE THE OUTCOME OF THE GAME - IN THIS CASE, THE USER HAS LOST
-
-        # POST request is made, in order to end the round
-
-        # Checking whether the outcome of the game is that the user lost, as it should be
-
-        self.assertEqual(rps_response_data['rps_end_of_game'], 'Game Over! You failed to win this game! Good luck next time!')
     
-    # Simulating a situation where the user has won the round using the test below.
-    
-    @patch('rock_paper_scissors.views.random.choice')
-    def test_simultating_user_winning_rock_paper_scissors_game(self, mock_choice):
-
-        # Logging in the user using the valid credentials
-        self.client.login(username='testuser', password='Password34*')
-
-        # Navigating to the rps_form_submitted view, which will then be used for the GET and POST requests
-        rock_paper_scissors_game_url_form = reverse('rock_paper_scissors:rps_form_submitted')
-
-        # GET request made, which would open the rps game page
-        get_response_for_rock_paper_scissors_game_url = self.client.get(rock_paper_scissors_game_url_form)
-
-        # Check to see if 200 code was returned, which indicates success
-
-        self.assertEqual(get_response_for_rock_paper_scissors_game_url.status_code, 200)
-
-
-        # FIRST ATTEMPT FROM USER
-        
-        # Setting the computer choice as "paper"
-        mock_choice.return_value = 'paper'
-
-        # Setting the user option as "scissors"
-
-        data = {
-            'carousel_value' : 'scissors'
-        }
-
-        # Making a POST request, sending the data such as the user option in the POST request
-
-        post_response_for_rock_paper_scissors_game_url = self.client.post(rock_paper_scissors_game_url_form, data, follow=True)
-
-        # Check to see if 200 code was returned, which indicates success
-
-        self.assertEqual(post_response_for_rock_paper_scissors_game_url.status_code, 200)
-
-        # In order to assert whether the values are equal to the expected ones, we need to use json so that it is easy to parse
-
-        rps_response_data = post_response_for_rock_paper_scissors_game_url.json()
-
-        # Checking whether the user choice was set correctly i.e. "scissors"
-
-        self.assertEqual(rps_response_data['user_rps_choice'], "scissors")
-
-        # Checking whether the computer choice is "paper"
-        
-        self.assertEqual(rps_response_data['computer_rps_choice'], 'paper')
-
-        # Checking to see if this outcome would be a win, as it should be
-
-        self.assertEqual(rps_response_data['rps_round_outcome'], 'win')
-
-
-        # SECOND ATTEMPT FROM USER
-
-        # Setting the computer choice as "rock"
-        mock_choice.return_value = 'rock'
-
-        # Setting the user option as "paper"
-
-        data = {
-            'carousel_value' : 'paper'
-        }
-
-        # Making a POST request, sending the data such as the user option in the POST request
-
-        post_response_for_rock_paper_scissors_game_url = self.client.post(rock_paper_scissors_game_url_form, data, follow=True)
-
-        # Check to see if 200 code was returned, which indicates success
-
-        self.assertEqual(post_response_for_rock_paper_scissors_game_url.status_code, 200)
-
-        # In order to assert whether the values are equal to the expected ones, we need to use json so that it is easy to parse
-
-        rps_response_data = post_response_for_rock_paper_scissors_game_url.json()
-
-        # Checking whether the user choice was set correctly i.e. "paper"
-
-        self.assertEqual(rps_response_data['user_rps_choice'], "paper")
-
-        # Checking whether the computer choice is still "rock"
-        
-        self.assertEqual(rps_response_data['computer_rps_choice'], 'rock')
-
-        # Checking to see if this outcome of the round would be a win, as it should be
-
-        self.assertEqual(rps_response_data['rps_round_outcome'], 'win')
-
-        # THIRD ATTEMPT FROM USER
-
-        # Setting the computer choice as "scissors"
-        mock_choice.return_value = 'scissors'
-
-        # Setting the user option as "rock"
-
-        data = {
-            'carousel_value' : 'rock'
-        }
-
-        # Making a POST request, sending the data such as the user option in the POST request
-
-        post_response_for_rock_paper_scissors_game_url = self.client.post(rock_paper_scissors_game_url_form, data, follow=True)
-
-        # Check to see if 200 code was returned, which indicates success
-
-        self.assertEqual(post_response_for_rock_paper_scissors_game_url.status_code, 200)
-
-        # In order to assert whether the values are equal to the expected ones, we need to use json so that it is easy to parse
-
-        rps_response_data = post_response_for_rock_paper_scissors_game_url.json()
-
-        # Checking whether the user choice was set correctly i.e. "rock"
-
-        self.assertEqual(rps_response_data['user_rps_choice'], "rock")
-
-
-        # Checking whether the computer choice is "scissors"
-        
-        self.assertEqual(rps_response_data['computer_rps_choice'], 'scissors')
-
-        # Checking to see if this outcome would be a win, as it should be
-
-        self.assertEqual(rps_response_data['rps_round_outcome'], 'win')
-
-
-        # END THE ROUND TO SEE THE OUTCOME OF THE GAME - IN THIS CASE, THE USER HAS WON
-
+    def create_user_game_profile(self):
         # Delete the game record for the user before adding the new information, ensuring we have a clean slate after each time this
         # test is run. Otherwise, we will get an integrity error.
         GameUserProfile.objects.filter(user=self.user).delete()
 
         # Creating the game user profile and assigning a score of 0 for the user
         game_user_profile = GameUserProfile.objects.create(user=self.user, current_score=0)
+
+        return game_user_profile
+    
+    # Method - simulating a situation where the user has lost the game
+    @patch('rock_paper_scissors.views.random.choice')
+    def test_simultating_user_losing_rock_paper_scissors_game(self, mock_choice):
+        # Added failed attempts from the user. This is because we are simulating a game where the user lost.
+        user_attempts = ["scissors", "rock", "scissors"]
+
+        # Adding successful attempts from the computer, as the computer has to win in this scenario.
+        computer_attempts = ["rock", "paper", "rock"]
+
+        mock_choice.return_value = computer_attempts[0]
+
+        # Navigating to the rps_form_submitted view, which will then be used for the GET and POST requests
+        rock_paper_scissors_game_url_form = reverse('rock_paper_scissors:rps_form_submitted')
+
+        # GET request made, which would open the rps game page
+        get_response_for_rock_paper_scissors_game_url = self.client.get(rock_paper_scissors_game_url_form)
+
+        # Check to see if 200 code was returned, which indicates success
+
+        self.assertEqual(get_response_for_rock_paper_scissors_game_url.status_code, 200)
+
+        for i in range(0, len(user_attempts)):
+            # Setting the RPS option for the computer, as per the computer_attempts list.
+            mock_choice.return_value = computer_attempts[i]
+
+            # Setting the RPS option for the user, as per the user_attempts list.
+            user_data = {
+                'carousel_value' : user_attempts[i]
+            }
+
+            # Making a POST request, sending the data such as the user option in the POST request
+            post_resp_for_rock_paper_scissors_game_url = self.client.post(rock_paper_scissors_game_url_form, user_data, follow=True)
+
+            # Check to see if 200 code was returned, which indicates success
+
+            self.assertEqual(post_resp_for_rock_paper_scissors_game_url.status_code, 200)
+
+            # In order to assert whether the values are equal to the expected ones, we need to use json so that it is easy to parse
+            rps_response_data = post_resp_for_rock_paper_scissors_game_url.json()
+
+            # Checking whether the user choice was set correctly
+
+            self.assertEqual(rps_response_data['user_rps_choice'], user_attempts[i])
+
+            # Checking whether the computer choice was set correctly
+            
+            self.assertEqual(rps_response_data['computer_rps_choice'], computer_attempts[i])
+
+            # Checking to see if this outcome would be a loss, as it should be
+
+            self.assertEqual(rps_response_data['rps_round_outcome'], 'lose')
+
+        # Checking whether the outcome of the game is that the user lost, as it should be
+
+        self.assertEqual(rps_response_data['rps_end_of_game'], 'Game Over! You failed to win this game! Good luck next time!')
+    
+    # Method - simulating a situation where the user has won the game
+    @patch('rock_paper_scissors.views.random.choice')
+    def test_simultating_user_winning_rock_paper_scissors_game(self, mock_choice):
+        # Added successful attempts from the user. This is because we are simulating a game where the user wins.
+        user_attempts = ["paper", "scissors", "rock"]
+
+        # Adding failed attempts from the computer, as the computer has to lose in this scenario.
+        computer_attempts = ["rock", "paper", "scissors"]
+
+        mock_choice.return_value = computer_attempts[0]
+
+        # Navigating to the rps_form_submitted view, which will then be used for the GET and POST requests
+        rock_paper_scissors_game_url_form = reverse('rock_paper_scissors:rps_form_submitted')
+
+        # GET request made, which would open the rps game page
+        get_response_for_rock_paper_scissors_game_url = self.client.get(rock_paper_scissors_game_url_form)
+
+        # Check to see if 200 code was returned, which indicates success
+
+        self.assertEqual(get_response_for_rock_paper_scissors_game_url.status_code, 200)
+
+        for i in range(0, len(user_attempts)):
+            # Setting the RPS option for the computer, as per the computer_attempts list.
+            mock_choice.return_value = computer_attempts[i]
+
+            # Setting the RPS option for the user, as per the user_attempts list.
+            user_data = {
+                'carousel_value' : user_attempts[i]
+            }
+
+            # Making a POST request, sending the data such as the user option in the POST request
+            post_resp_for_rock_paper_scissors_game_url = self.client.post(rock_paper_scissors_game_url_form, user_data, follow=True)
+
+            # Check to see if 200 code was returned, which indicates success
+
+            self.assertEqual(post_resp_for_rock_paper_scissors_game_url.status_code, 200)
+
+            # In order to assert whether the values are equal to the expected ones, we need to use json so that it is easy to parse
+            rps_response_data = post_resp_for_rock_paper_scissors_game_url.json()
+
+            # Checking whether the user choice was set correctly
+
+            self.assertEqual(rps_response_data['user_rps_choice'], user_attempts[i])
+
+            # Checking whether the computer choice was set correctly
+            
+            self.assertEqual(rps_response_data['computer_rps_choice'], computer_attempts[i])
+
+            # Checking to see if this outcome would be a loss, as it should be
+
+            self.assertEqual(rps_response_data['rps_round_outcome'], 'win')
+
+        # Checking whether the outcome of the game is that the user won, as it should be
+
+        self.assertEqual(rps_response_data['rps_end_of_game'], 'Game Over! You won this game! You have received 10 points!')
+
+        game_user_profile = self.create_user_game_profile()
 
         # Checking whether the outcome of the game is that the user won, as it should be
 
