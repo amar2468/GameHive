@@ -39,7 +39,7 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
             redis_client.rpush("available_rooms", self.rps_room_name)
 
             # Adding the first user to the users_in_session dictionary. The key will be the room number, while the value is the 
-            # room number
+            # users in it
             current_users_in_session = [current_user.username]
 
             # Using Redis client, we are adding the current user to the users_in_session dictionary, with the room number as the key
