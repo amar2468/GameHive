@@ -8,15 +8,48 @@ from django.urls import reverse
 
 class RockPaperScissorsTestCase(TestCase):
     def setUp(self):
-        self.user = CustomUser.objects.create(username='testuser', password='Password34*', account_type="user")
+        self.user = CustomUser.objects.create(
+            username='testuser',
+            email='testuser@gmail.com',
+            password='Password34*',
+            account_type="user"
+        )
+
         self.client = Client()
     
-    def testing_valid_input_rps(self):
+    # Testing whether the form is valid if the user chooses "rock"
+    def testing_valid_input_rps_rock(self):
 
         self.client.login(username='testuser', password='Password34*')
 
         data = {
             'carousel_value' : 'rock'
+        }
+
+        form = RockPaperScissorsInputForm(data=data)
+
+        self.assertTrue(form.is_valid())
+
+    # Testing whether the form is valid if the user chooses "paper"
+    def testing_valid_input_rps_paper(self):
+
+        self.client.login(username='testuser', password='Password34*')
+
+        data = {
+            'carousel_value' : 'paper'
+        }
+
+        form = RockPaperScissorsInputForm(data=data)
+
+        self.assertTrue(form.is_valid())
+    
+    # Testing whether the form is valid if the user chooses "scissors"
+    def testing_valid_input_rps_scissors(self):
+
+        self.client.login(username='testuser', password='Password34*')
+
+        data = {
+            'carousel_value' : 'scissors'
         }
 
         form = RockPaperScissorsInputForm(data=data)
