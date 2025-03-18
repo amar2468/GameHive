@@ -12,11 +12,6 @@ from django.http import JsonResponse
 def homepage(request):
     return render(request, 'index.html')
 
-# Displays relevant information about the company
-
-def about(request):
-    return render(request, 'about.html')
-
 # First part of this view is the POST method, which saves a testimonial to the relevant custom model. The else part will just display
 # the page to the user without submitting any forms
 
