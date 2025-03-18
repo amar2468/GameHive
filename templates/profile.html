@@ -67,6 +67,19 @@
                             <h3 class="fw-bolder text-black text-center">Update Personal Information</h3>
 
                             <p class="lead text-black text-center">Keep your personal details up-to-date by filling out the form below, if any changes occur.</p>
+                            
+                            <!-- Display User's Account Type -->
+                            <div class="d-flex">
+                                <div class="form-floating mb-3 flex-grow-1">
+                                    <input class="form-control" id="account_type_id" name="account_type" value="{{ user.account_type }}" type="text" autocomplete="off" disabled />
+                                    <label for="change_first_name_id">Account Type</label>
+                                </div>
+
+                                <div class="m-2 d-flex align-items-center">
+                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="left" title="Displays the account type for the user. The account can either be 'user', 'admin', or 'super_admin'."></i>
+                                </div>
+                            </div>
+                            
                             <!-- Change Email address -->
 
                             <div class="d-flex">
@@ -186,9 +199,9 @@
                             <tbody>
                                 {% for leaderboard in leaderboard_entries %}
                                     <tr>
-                                        <td class="text-black">{{ forloop.counter }}</td>
-                                        <td class="text-black">{{ leaderboard.user.username }}</td>
-                                        <td class="text-black">{{ leaderboard.current_score }}</td>
+                                        <td class="text-black text-center">{{ forloop.counter }}</td>
+                                        <td class="text-black text-center">{{ leaderboard.user.username }}</td>
+                                        <td class="text-black text-center">{{ leaderboard.current_score }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
