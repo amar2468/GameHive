@@ -12,6 +12,19 @@ from django.http import JsonResponse
 def homepage(request):
     return render(request, 'index.html')
 
+# View that will display the admin dashboard, where admin can perform common admin activities.
+def admin_dashboard(request):
+    # If the user is logged in, we will then check to see if the user is an admin or super admin. If so, the
+    # admin dashboard will be displayed.
+    if request.user.is_authenticated:
+        if request.user.account_type == "super_admin" or request.user.account_type == "admin":
+            return render(request, "admin_dashboard.html")
+        else:
+            return render(request, "403.html")
+    # If the user is not logged in, the page is forbidden for them.
+    else:
+        return render(request, "403.html")
+
 # First part of this view is the POST method, which saves a testimonial to the relevant custom model. The else part will just display
 # the page to the user without submitting any forms
 
