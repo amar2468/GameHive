@@ -6,7 +6,6 @@ from gamehive.models import GameUserProfile
 # Guess the digit game functionality in the view below
 def guess_the_digit_game(request):
     if request.user.is_authenticated:
-
         # If the user wins a game, this function will be executed, taking in the number of points that the user won and saving it
         # to their record.
         def update_user_score(user_points_win):
@@ -37,7 +36,7 @@ def guess_the_digit_game(request):
             }
 
             return response_obj
-
+        
         # Creating constant variables that will store each of the three levels in the game
         EASY_LEVEL = "easy"
         MEDIUM_LEVEL = "medium"
@@ -67,7 +66,115 @@ def guess_the_digit_game(request):
         global number_of_guesses
         global level
         global specific_hint
-        if request.method == "POST":
+        
+        # This block below will execute when the user submits the form (which asks for the level and if hints should be enabled)
+        if request.method == "GET":    
+            level = request.GET.get('selected_level')
+
+            hints = request.GET.get('hints')
+
+            correct_number = request.session.get('correct_number')
+
+            # Generate the hint (if number is odd or even) depending on the current_score condition
+            def create_hint(odd_or_even):
+                if hints == "yes":
+                    if odd_or_even % 2 == 0:
+                        return "The number is even"
+                    else:
+                        return "The number is odd"
+                else:
+                    return ""
+
+            # Check if the correct number has been specified in the current_score session
+            if 'correct_number' not in request.session:
+
+                # If the level is "easy", a random number in the guess range, number of attempts when hints are disabled, and number of
+                # attempts when hints are enabled will be sent to the function. From there, depending on whether the user chose to
+                # enable/disable hints, the number of guesses will be generated. We are returning the number of guesses, as well as if
+                # the hint was enabled or disabled.
+                if level == EASY_LEVEL:
+                    response_obj = generate_correct_number_and_set_no_of_attempts(
+                        random.randint(1,10), EASY_LEVEL_ATTEMPTS_HINTS_DISABLED, EASY_LEVEL_ATTEMPTS_HINTS_ENABLED
+                    )
+                # If the level is "medium", a random number in the guess range, number of attempts when hints are disabled, and number of
+                # attempts when hints are enabled will be sent to the function. From there, depending on whether the user chose to
+                # enable/disable hints, the number of guesses will be generated. We are returning the number of guesses, as well as if
+                # the hint was enabled or disabled.
+                # If the level is medium, generate a random number between 1 and 50
+                elif level == MEDIUM_LEVEL:
+                    response_obj = generate_correct_number_and_set_no_of_attempts(
+                        random.randint(1,50), MEDIUM_LEVEL_ATTEMPTS_HINTS_DISABLED, MEDIUM_LEVEL_ATTEMPTS_HINTS_ENABLED
+                    )
+
+                # If the level is "hard", a random number in the guess range, number of attempts when hints are disabled, and number of
+                # attempts when hints are enabled will be sent to the function. From there, depending on whether the user chose to
+                # enable/disable hints, the number of guesses will be generated. We are returning the number of guesses, as well as if
+                # the hint was enabled or disabled.
+                elif level == HARD_LEVEL:
+                    response_obj = generate_correct_number_and_set_no_of_attempts(
+                        random.randint(1,100), HARD_LEVEL_ATTEMPTS_HINTS_DISABLED, HARD_LEVEL_ATTEMPTS_HINTS_ENABLED
+                    )
+                        
+            # If the correct number has already been specified, it needs to be re-generated
+            if 'correct_number' in request.session:
+
+                # If the level is "easy", we will first remove the correct number from the session as we need to generate it again.
+                # Then, we are calling the function, passing in the random number in the guess range, number of attempts when hints
+                # are disabled, and number of attempts when hints are enabled. From there, depending on 
+                # whether the user chose to enable/disable hints, the number of guesses will be generated. We are returning the number
+                # of guesses, as well as if the hint was enabled or disabled.
+                if level == EASY_LEVEL:
+                    request.session.pop('correct_number', None)
+
+                    response_obj = generate_correct_number_and_set_no_of_attempts(
+                        random.randint(1,10), EASY_LEVEL_ATTEMPTS_HINTS_DISABLED, EASY_LEVEL_ATTEMPTS_HINTS_ENABLED
+                    )
+                
+                # If the level is "medium", we will first remove the correct number from the session as we need to generate it again.
+                # Then, we are calling the function, passing in the random number in the guess range, number of attempts when hints
+                # are disabled, and number of attempts when hints are enabled. From there, depending on 
+                # whether the user chose to enable/disable hints, the number of guesses will be generated. We are returning the number
+                # of guesses, as well as if the hint was enabled or disabled.
+                elif level == MEDIUM_LEVEL:
+                    request.session.pop('correct_number', None)
+                    
+                    response_obj = generate_correct_number_and_set_no_of_attempts(
+                        random.randint(1,50), MEDIUM_LEVEL_ATTEMPTS_HINTS_DISABLED, MEDIUM_LEVEL_ATTEMPTS_HINTS_ENABLED
+                    )
+
+                # If the level is "hard", we will first remove the correct number from the session as we need to generate it again.
+                # Then, we are calling the function, passing in the random number in the guess range, number of attempts when hints
+                # are disabled, and number of attempts when hints are enabled. From there, depending on 
+                # whether the user chose to enable/disable hints, the number of guesses will be generated. We are returning the number
+                # of guesses, as well as if the hint was enabled or disabled.
+                elif level == HARD_LEVEL:
+                    request.session.pop('correct_number', None)
+
+                    response_obj = generate_correct_number_and_set_no_of_attempts(
+                        random.randint(1,100), HARD_LEVEL_ATTEMPTS_HINTS_DISABLED, HARD_LEVEL_ATTEMPTS_HINTS_ENABLED
+                    )
+            number_of_guesses = response_obj['number_of_guesses']
+            
+            try:
+                game_user_profile = GameUserProfile.objects.get(user=request.user)
+
+                latest_score = game_user_profile.current_score
+            except GameUserProfile.DoesNotExist:
+                latest_score = 0
+            
+            correct_number = request.session['correct_number']
+            specific_hint = response_obj['specific_hint']
+
+            context = {
+                'specific_hint' : response_obj['specific_hint'],
+                'level' : level,
+                'latest_score' : latest_score,
+                'correct_number' : correct_number
+            }
+
+            return render(request, 'home.html', context)
+
+        elif request.method == "POST":
 
             form = GuessTheNumberInputForm(request.POST)
 
@@ -144,111 +251,6 @@ def guess_the_digit_game(request):
 
 
                 return render(request, 'home.html', context)
-        
-        level = request.GET.get('selected_level')
-
-        hints = request.GET.get('hints')
-
-        correct_number = request.session.get('correct_number')
-
-        # Generate the hint (if number is odd or even) depending on the current_score condition
-        def create_hint(odd_or_even):
-            if hints == "yes":
-                if odd_or_even % 2 == 0:
-                    return "The number is even"
-                else:
-                    return "The number is odd"
-            else:
-                return ""
-
-        # Check if the correct number has been specified in the current_score session
-        if 'correct_number' not in request.session:
-
-            # If the level is "easy", a random number in the guess range, number of attempts when hints are disabled, and number of
-            # attempts when hints are enabled will be sent to the function. From there, depending on whether the user chose to
-            # enable/disable hints, the number of guesses will be generated. We are returning the number of guesses, as well as if
-            # the hint was enabled or disabled.
-            if level == EASY_LEVEL:
-                response_obj = generate_correct_number_and_set_no_of_attempts(
-                    random.randint(1,10), EASY_LEVEL_ATTEMPTS_HINTS_DISABLED, EASY_LEVEL_ATTEMPTS_HINTS_ENABLED
-                )
-            # If the level is "medium", a random number in the guess range, number of attempts when hints are disabled, and number of
-            # attempts when hints are enabled will be sent to the function. From there, depending on whether the user chose to
-            # enable/disable hints, the number of guesses will be generated. We are returning the number of guesses, as well as if
-            # the hint was enabled or disabled.
-            # If the level is medium, generate a random number between 1 and 50
-            elif level == MEDIUM_LEVEL:
-                response_obj = generate_correct_number_and_set_no_of_attempts(
-                    random.randint(1,50), MEDIUM_LEVEL_ATTEMPTS_HINTS_DISABLED, MEDIUM_LEVEL_ATTEMPTS_HINTS_ENABLED
-                )
-
-            # If the level is "hard", a random number in the guess range, number of attempts when hints are disabled, and number of
-            # attempts when hints are enabled will be sent to the function. From there, depending on whether the user chose to
-            # enable/disable hints, the number of guesses will be generated. We are returning the number of guesses, as well as if
-            # the hint was enabled or disabled.
-            elif level == HARD_LEVEL:
-                response_obj = generate_correct_number_and_set_no_of_attempts(
-                    random.randint(1,100), HARD_LEVEL_ATTEMPTS_HINTS_DISABLED, HARD_LEVEL_ATTEMPTS_HINTS_ENABLED
-                )
-                    
-        # If the correct number has already been specified, it needs to be re-generated
-        if 'correct_number' in request.session:
-
-            # If the level is "easy", we will first remove the correct number from the session as we need to generate it again.
-            # Then, we are calling the function, passing in the random number in the guess range, number of attempts when hints
-            # are disabled, and number of attempts when hints are enabled. From there, depending on 
-            # whether the user chose to enable/disable hints, the number of guesses will be generated. We are returning the number
-            # of guesses, as well as if the hint was enabled or disabled.
-            if level == EASY_LEVEL:
-                request.session.pop('correct_number', None)
-
-                response_obj = generate_correct_number_and_set_no_of_attempts(
-                    random.randint(1,10), EASY_LEVEL_ATTEMPTS_HINTS_DISABLED, EASY_LEVEL_ATTEMPTS_HINTS_ENABLED
-                )
-            
-            # If the level is "medium", we will first remove the correct number from the session as we need to generate it again.
-            # Then, we are calling the function, passing in the random number in the guess range, number of attempts when hints
-            # are disabled, and number of attempts when hints are enabled. From there, depending on 
-            # whether the user chose to enable/disable hints, the number of guesses will be generated. We are returning the number
-            # of guesses, as well as if the hint was enabled or disabled.
-            elif level == MEDIUM_LEVEL:
-                request.session.pop('correct_number', None)
-                
-                response_obj = generate_correct_number_and_set_no_of_attempts(
-                    random.randint(1,50), MEDIUM_LEVEL_ATTEMPTS_HINTS_DISABLED, MEDIUM_LEVEL_ATTEMPTS_HINTS_ENABLED
-                )
-
-            # If the level is "hard", we will first remove the correct number from the session as we need to generate it again.
-            # Then, we are calling the function, passing in the random number in the guess range, number of attempts when hints
-            # are disabled, and number of attempts when hints are enabled. From there, depending on 
-            # whether the user chose to enable/disable hints, the number of guesses will be generated. We are returning the number
-            # of guesses, as well as if the hint was enabled or disabled.
-            elif level == HARD_LEVEL:
-                request.session.pop('correct_number', None)
-
-                response_obj = generate_correct_number_and_set_no_of_attempts(
-                    random.randint(1,100), HARD_LEVEL_ATTEMPTS_HINTS_DISABLED, HARD_LEVEL_ATTEMPTS_HINTS_ENABLED
-                )
-        number_of_guesses = response_obj['number_of_guesses']
-        
-        try:
-            game_user_profile = GameUserProfile.objects.get(user=request.user)
-
-            latest_score = game_user_profile.current_score
-        except GameUserProfile.DoesNotExist:
-            latest_score = 0
-        
-        correct_number = request.session['correct_number']
-        specific_hint = response_obj['specific_hint']
-
-        context = {
-            'specific_hint' : response_obj['specific_hint'],
-            'level' : level,
-            'latest_score' : latest_score,
-            'correct_number' : correct_number
-        }
-
-        return render(request, 'home.html', context)
     else:
         return render(request, '403.html')
 
