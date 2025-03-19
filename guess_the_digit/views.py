@@ -6,6 +6,64 @@ from gamehive.models import GameUserProfile
 # Guess the digit game functionality in the view below
 def guess_the_digit_game(request):
     if request.user.is_authenticated:
+
+        # If the user wins a game, this function will be executed, taking in the number of points that the user won and saving it
+        # to their record.
+        def update_user_score(user_points_win):
+            try:
+                game_user_profile = GameUserProfile.objects.get(user=request.user)
+            except GameUserProfile.DoesNotExist:
+                game_user_profile = GameUserProfile(user=request.user)
+            
+            game_user_profile.current_score += user_points_win
+            game_user_profile.save()
+        
+        # This function will take the guess range and the number of attempts depending on whether the hints were enabled
+        # or disabled. Then, we will specify the exact number of attempts the user should get, depending on whether hints were
+        # enabled or disabled.
+        def generate_correct_number_and_set_no_of_attempts(number_range, attempts_easy_level_enabled, attempts_easy_level_disabled):
+            request.session['correct_number'] = number_range
+
+            specific_hint = create_hint(request.session['correct_number'])
+
+            if specific_hint == "":
+                number_of_guesses = attempts_easy_level_enabled
+            else:
+                number_of_guesses = attempts_easy_level_disabled
+            
+            response_obj = {
+                'number_of_guesses' : number_of_guesses,
+                'specific_hint' : specific_hint
+            }
+
+            return response_obj
+
+        # Creating constant variables that will store each of the three levels in the game
+        EASY_LEVEL = "easy"
+        MEDIUM_LEVEL = "medium"
+        HARD_LEVEL = "hard"
+
+        # Defining the points won for each level and whether hints were enabled/disabled.
+        EASY_LEVEL_HINTS_ENABLED_POINTS = 5
+        EASY_LEVEL_HINTS_DISABLED_POINTS = 10
+
+        MEDIUM_LEVEL_HINTS_ENABLED_POINTS = 25
+        MEDIUM_LEVEL_HINTS_DISABLED_POINTS = 50
+
+        HARD_LEVEL_HINTS_ENABLED_POINTS = 75
+        HARD_LEVEL_HINTS_DISABLED_POINTS = 100
+
+        # Defining the number of guesses, depending on the level and whether hints were enabled/disabled.
+
+        EASY_LEVEL_ATTEMPTS_HINTS_ENABLED = 2
+        EASY_LEVEL_ATTEMPTS_HINTS_DISABLED = 4
+
+        MEDIUM_LEVEL_ATTEMPTS_HINTS_ENABLED = 5
+        MEDIUM_LEVEL_ATTEMPTS_HINTS_DISABLED = 10
+
+        HARD_LEVEL_ATTEMPTS_HINTS_ENABLED = 11
+        HARD_LEVEL_ATTEMPTS_HINTS_DISABLED = 20
+
         global number_of_guesses
         global level
         global specific_hint
@@ -26,68 +84,38 @@ def guess_the_digit_game(request):
                 if user_guess == correct_number:
                     result = "Correct guess! Well done!"
 
-                    if level == "easy":
+                    if level == EASY_LEVEL:
                         # No hints were enabled, so user gets the full score
                         if specific_hint == "":
-                            try:
-                                game_user_profile = GameUserProfile.objects.get(user=request.user)
-                            except GameUserProfile.DoesNotExist:
-                                game_user_profile = GameUserProfile(user=request.user)
-                            
-                            game_user_profile.current_score += 10
-                            game_user_profile.save()
+                            # Calling the function which will update the user score with the required number of points
+                            update_user_score(EASY_LEVEL_HINTS_DISABLED_POINTS)
                         # Hints were enabled, half the score, regardless of level
                         else:
-                            try:
-                                game_user_profile = GameUserProfile.objects.get(user=request.user)
-                            except GameUserProfile.DoesNotExist:
-                                game_user_profile = GameUserProfile(user=request.user)
-                            
-                            game_user_profile.current_score += 5
-                            game_user_profile.save()
+                            # Calling the function which will update the user score with the required number of points
+                            update_user_score(EASY_LEVEL_HINTS_ENABLED_POINTS)
 
-                    elif level == "medium":
+                    elif level == MEDIUM_LEVEL:
 
                         # No hints were enabled, so user gets the full score
                         if specific_hint == "":
-                            try:
-                                game_user_profile = GameUserProfile.objects.get(user=request.user)
-                            except GameUserProfile.DoesNotExist:
-                                game_user_profile = GameUserProfile(user=request.user)
-
-                            game_user_profile.current_score += 50      
-                            game_user_profile.save()   
+                            # Calling the function which will update the user score with the required number of points
+                            update_user_score(MEDIUM_LEVEL_HINTS_DISABLED_POINTS) 
 
                         # Hints were enabled, half the score, regardless of level
                         else:
-                            try:
-                                game_user_profile = GameUserProfile.objects.get(user=request.user)
-                            except GameUserProfile.DoesNotExist:
-                                game_user_profile = GameUserProfile(user=request.user)
-                            
-                            game_user_profile.current_score += 25
-                            game_user_profile.save()
+                            # Calling the function which will update the user score with the required number of points
+                            update_user_score(MEDIUM_LEVEL_HINTS_ENABLED_POINTS)
 
-                    elif level == "hard":
+                    elif level == HARD_LEVEL:
                         # No hints were enabled, so user gets the full score
                         if specific_hint == "":
-                            try:
-                                game_user_profile = GameUserProfile.objects.get(user=request.user)
-                            except GameUserProfile.DoesNotExist:
-                                game_user_profile = GameUserProfile(user=request.user)
-
-                            game_user_profile.current_score += 100
-                            game_user_profile.save()
+                            # Calling the function which will update the user score with the required number of points
+                            update_user_score(HARD_LEVEL_HINTS_DISABLED_POINTS)
 
                         # Hints were enabled, half the score, regardless of level
                         else:
-                            try:
-                                game_user_profile = GameUserProfile.objects.get(user=request.user)
-                            except GameUserProfile.DoesNotExist:
-                                game_user_profile = GameUserProfile(user=request.user)
-                            
-                            game_user_profile.current_score += 75
-                            game_user_profile.save()
+                            # Calling the function which will update the user score with the required number of points
+                            update_user_score(HARD_LEVEL_HINTS_ENABLED_POINTS)
 
                 elif user_guess != correct_number and number_of_guesses != 0:
                     number_of_guesses -= 1
@@ -136,77 +164,72 @@ def guess_the_digit_game(request):
         # Check if the correct number has been specified in the current_score session
         if 'correct_number' not in request.session:
 
-            # If the level is easy, generate a random number between 1 and 10
-            if level == 'easy':
-                request.session['correct_number'] = random.randint(1,10)
-
-                specific_hint = create_hint(request.session['correct_number'])
-
-                if specific_hint == "":
-                    number_of_guesses = 4
-                else:
-                    number_of_guesses = 2
-            
+            # If the level is "easy", a random number in the guess range, number of attempts when hints are disabled, and number of
+            # attempts when hints are enabled will be sent to the function. From there, depending on whether the user chose to
+            # enable/disable hints, the number of guesses will be generated. We are returning the number of guesses, as well as if
+            # the hint was enabled or disabled.
+            if level == EASY_LEVEL:
+                response_obj = generate_correct_number_and_set_no_of_attempts(
+                    random.randint(1,10), EASY_LEVEL_ATTEMPTS_HINTS_DISABLED, EASY_LEVEL_ATTEMPTS_HINTS_ENABLED
+                )
+            # If the level is "medium", a random number in the guess range, number of attempts when hints are disabled, and number of
+            # attempts when hints are enabled will be sent to the function. From there, depending on whether the user chose to
+            # enable/disable hints, the number of guesses will be generated. We are returning the number of guesses, as well as if
+            # the hint was enabled or disabled.
             # If the level is medium, generate a random number between 1 and 50
-            elif level == 'medium':
-                request.session['correct_number'] = random.randint(1,50)
+            elif level == MEDIUM_LEVEL:
+                response_obj = generate_correct_number_and_set_no_of_attempts(
+                    random.randint(1,50), MEDIUM_LEVEL_ATTEMPTS_HINTS_DISABLED, MEDIUM_LEVEL_ATTEMPTS_HINTS_ENABLED
+                )
 
-                specific_hint = create_hint(request.session['correct_number'])
-
-                if specific_hint == "":
-                    number_of_guesses = 10
-                else:
-                    number_of_guesses = 5
-
-            # If the level is hard, generate a random number between 1 and 100
-            elif level == 'hard':
-                request.session['correct_number'] = random.randint(1,100)
-
-                specific_hint = create_hint(request.session['correct_number'])
-
-                if specific_hint == "":
-                    number_of_guesses = 20
-                else:
-                    number_of_guesses = 11
+            # If the level is "hard", a random number in the guess range, number of attempts when hints are disabled, and number of
+            # attempts when hints are enabled will be sent to the function. From there, depending on whether the user chose to
+            # enable/disable hints, the number of guesses will be generated. We are returning the number of guesses, as well as if
+            # the hint was enabled or disabled.
+            elif level == HARD_LEVEL:
+                response_obj = generate_correct_number_and_set_no_of_attempts(
+                    random.randint(1,100), HARD_LEVEL_ATTEMPTS_HINTS_DISABLED, HARD_LEVEL_ATTEMPTS_HINTS_ENABLED
+                )
                     
         # If the correct number has already been specified, it needs to be re-generated
         if 'correct_number' in request.session:
 
-            # If the level is easy, generate a random number between 1 and 10
-            if level == 'easy':
+            # If the level is "easy", we will first remove the correct number from the session as we need to generate it again.
+            # Then, we are calling the function, passing in the random number in the guess range, number of attempts when hints
+            # are disabled, and number of attempts when hints are enabled. From there, depending on 
+            # whether the user chose to enable/disable hints, the number of guesses will be generated. We are returning the number
+            # of guesses, as well as if the hint was enabled or disabled.
+            if level == EASY_LEVEL:
                 request.session.pop('correct_number', None)
-                request.session['correct_number'] = random.randint(1,10)
 
-                specific_hint = create_hint(request.session['correct_number'])
-
-                if specific_hint == "":
-                    number_of_guesses = 4
-                else:
-                    number_of_guesses = 2
+                response_obj = generate_correct_number_and_set_no_of_attempts(
+                    random.randint(1,10), EASY_LEVEL_ATTEMPTS_HINTS_DISABLED, EASY_LEVEL_ATTEMPTS_HINTS_ENABLED
+                )
             
-            # If the level is medium, generate a random number between 1 and 50
-            elif level == 'medium':
+            # If the level is "medium", we will first remove the correct number from the session as we need to generate it again.
+            # Then, we are calling the function, passing in the random number in the guess range, number of attempts when hints
+            # are disabled, and number of attempts when hints are enabled. From there, depending on 
+            # whether the user chose to enable/disable hints, the number of guesses will be generated. We are returning the number
+            # of guesses, as well as if the hint was enabled or disabled.
+            elif level == MEDIUM_LEVEL:
                 request.session.pop('correct_number', None)
-                request.session['correct_number'] = random.randint(1,50)
                 
-                specific_hint = create_hint(request.session['correct_number'])
+                response_obj = generate_correct_number_and_set_no_of_attempts(
+                    random.randint(1,50), MEDIUM_LEVEL_ATTEMPTS_HINTS_DISABLED, MEDIUM_LEVEL_ATTEMPTS_HINTS_ENABLED
+                )
 
-                if specific_hint == "":
-                    number_of_guesses = 10
-                else:
-                    number_of_guesses = 5
-
-            # If the level is hard, generate a random number between 1 and 100
-            elif level == 'hard':
+            # If the level is "hard", we will first remove the correct number from the session as we need to generate it again.
+            # Then, we are calling the function, passing in the random number in the guess range, number of attempts when hints
+            # are disabled, and number of attempts when hints are enabled. From there, depending on 
+            # whether the user chose to enable/disable hints, the number of guesses will be generated. We are returning the number
+            # of guesses, as well as if the hint was enabled or disabled.
+            elif level == HARD_LEVEL:
                 request.session.pop('correct_number', None)
-                request.session['correct_number'] = random.randint(1,100)
 
-                specific_hint = create_hint(request.session['correct_number'])
-
-                if specific_hint == "":
-                    number_of_guesses = 20
-                else:
-                    number_of_guesses = 11
+                response_obj = generate_correct_number_and_set_no_of_attempts(
+                    random.randint(1,100), HARD_LEVEL_ATTEMPTS_HINTS_DISABLED, HARD_LEVEL_ATTEMPTS_HINTS_ENABLED
+                )
+        number_of_guesses = response_obj['number_of_guesses']
         
         try:
             game_user_profile = GameUserProfile.objects.get(user=request.user)
@@ -216,9 +239,10 @@ def guess_the_digit_game(request):
             latest_score = 0
         
         correct_number = request.session['correct_number']
+        specific_hint = response_obj['specific_hint']
 
         context = {
-            'specific_hint' : specific_hint,
+            'specific_hint' : response_obj['specific_hint'],
             'level' : level,
             'latest_score' : latest_score,
             'correct_number' : correct_number
