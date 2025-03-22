@@ -83,14 +83,13 @@ def guess_the_digit_game(request):
         if request.method == "GET":
             # Creating a hash entry for the specific user and populating it with the variables below
             redis_client.hset(request.user.username, "number_of_guesses", 0)
-            redis_client.hset(request.user.username, "level", "")
             redis_client.hset(request.user.username, "specific_hint", "")
 
             # Setting the level for the game inside the hash entry for the user and retrieving the value, so that it can be used.
             redis_client.hset(request.user.username, "level", request.GET.get('selected_level'))
             level = redis_client.hget(request.user.username, "level")
 
-            # Setting the hints for the game inside the hash entry for the user and retrieving the value, so that it can be used.
+            # Setting the variable that determines whether hints are enabled or disabled
             redis_client.hset(request.user.username, "hints", request.GET.get('hints'))
             hints = redis_client.hget(request.user.username, "hints")
 
