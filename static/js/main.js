@@ -2,6 +2,7 @@ $(document).ready(function() {
     $('#homepage_link').css("color", "#FFFFFF");
     $('#testimonials_link').css("color", "#FFFFFF");
     $('#profile_link').css("color", "#FFFFFF");
+    $('#admin_dashboard_link').css("color", "#FFFFFF")
     $('#logout_link').css("color", "#FFFFFF");
     $('#sign_up_link').css("color", "#FFFFFF");
 
@@ -10,6 +11,7 @@ $(document).ready(function() {
     let homepage_url = $('#homepage_link').data("url");
     let testimonials_url = $('#testimonials_link').data("url");
     let profile_url = $('#profile_link').data("url");
+    let admin_dashboard_url = $('#admin_dashboard_link').data("url");
     let logout_url = $('#logout_link').data("url");
     let sign_up_url = $('#sign_up_link').data("url");
 
@@ -19,6 +21,7 @@ $(document).ready(function() {
 
         $('#testimonials_link').css("color", "#FFFFFF");
         $('#profile_link').css("color", "#FFFFFF");
+        $('#admin_dashboard_link').css("color", "#FFFFFF");
         $('#logout_link').css("color", "#FFFFFF");
         $('#sign_up_link').css("color", "#FFFFFF");
     }
@@ -29,6 +32,7 @@ $(document).ready(function() {
 
         $('#homepage_link').css("color", "#FFFFFF");
         $('#profile_link').css("color", "#FFFFFF");
+        $('#admin_dashboard_link').css("color", "#FFFFFF");
         $('#logout_link').css("color", "#FFFFFF");
         $('#sign_up_link').css("color", "#FFFFFF");
     }
@@ -39,6 +43,18 @@ $(document).ready(function() {
 
         $('#homepage_link').css("color", "#FFFFFF");
         $('#testimonials_link').css("color", "#FFFFFF");
+        $('#admin_dashboard_link').css("color", "#FFFFFF");
+        $('#logout_link').css("color", "#FFFFFF");
+        $('#sign_up_link').css("color", "#FFFFFF");
+    }
+
+    else if (currentPath == admin_dashboard_url)
+    {
+        $('#admin_dashboard_link').css("color", "yellow");
+
+        $('#homepage_link').css("color", "#FFFFFF");
+        $('#testimonials_link').css("color", "#FFFFFF");
+        $('#profile_link').css("color", "#FFFFFF");
         $('#logout_link').css("color", "#FFFFFF");
         $('#sign_up_link').css("color", "#FFFFFF");
     }
@@ -50,6 +66,7 @@ $(document).ready(function() {
         $('#homepage_link').css("color", "#FFFFFF");
         $('#testimonials_link').css("color", "#FFFFFF");
         $('#profile_link').css("color", "#FFFFFF");
+        $('#admin_dashboard_link').css("color", "#FFFFFF");
         $('#sign_up_link').css("color", "#FFFFFF");
     }
 
@@ -60,6 +77,7 @@ $(document).ready(function() {
         $('#homepage_link').css("color", "#FFFFFF");
         $('#testimonials_link').css("color", "#FFFFFF");
         $('#profile_link').css("color", "#FFFFFF");
+        $('#admin_dashboard_link').css("color", "#FFFFFF");
         $('#logout_link').css("color", "#FFFFFF");
     }
 
@@ -73,6 +91,10 @@ $(document).ready(function() {
 
     $('#profile_link').click(function() {
         window.location.href = profile_url;
+    })
+
+    $('#admin_dashboard_link').click(function() {
+        window.location.href = admin_dashboard_url
     })
 
     $('#logout_link').click(function() {
