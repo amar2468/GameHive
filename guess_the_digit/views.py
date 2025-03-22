@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .forms import GuessTheNumberInputForm
 import random
 from gamehive.models import GameUserProfile
+import redis
 
 # Guess the digit game functionality in the view below
 def guess_the_digit_game(request):
@@ -21,21 +22,20 @@ def guess_the_digit_game(request):
         # or disabled. Then, we will specify the exact number of attempts the user should get, depending on whether hints were
         # enabled or disabled.
         def generate_correct_number_and_set_no_of_attempts(number_range, attempts_easy_level_enabled, attempts_easy_level_disabled):
-            request.session['correct_number'] = number_range
+            redis_client.hset(request.user.username, "correct_number", number_range)
+            correct_number = redis_client.hget(request.user.username, "correct_number")
 
-            specific_hint = create_hint(request.session['correct_number'])
+            specific_hint = create_hint(int(correct_number))
 
             if specific_hint == "":
                 number_of_guesses = attempts_easy_level_enabled
             else:
                 number_of_guesses = attempts_easy_level_disabled
             
-            response_obj = {
-                'number_of_guesses' : number_of_guesses,
-                'specific_hint' : specific_hint
-            }
-
-            return response_obj
+            redis_client.hset(request.user.username, "number_of_guesses", number_of_guesses)
+            redis_client.hset(request.user.username, "specific_hint", specific_hint)
+            number_of_guesses = redis_client.hget(request.user.username, "number_of_guesses")
+            specific_hint = redis_client.hget(request.user.username, "specific_hint")
         
         # Creating constant variables that will store each of the three levels in the game
         EASY_LEVEL = "easy"
@@ -63,17 +63,23 @@ def guess_the_digit_game(request):
         HARD_LEVEL_ATTEMPTS_HINTS_ENABLED = 11
         HARD_LEVEL_ATTEMPTS_HINTS_DISABLED = 20
 
-        global number_of_guesses
-        global level
-        global specific_hint
+        # Creating an instance of the Redis client
+        redis_client = redis.Redis(host="127.0.0.1", port="6379", db=0, decode_responses=True)
         
         # This block below will execute when the user submits the form (which asks for the level and if hints should be enabled)
-        if request.method == "GET":    
-            level = request.GET.get('selected_level')
+        if request.method == "GET":
+            # Creating a hash entry for the specific user and populating it with the variables below
+            redis_client.hset(request.user.username, "number_of_guesses", 0)
+            redis_client.hset(request.user.username, "level", "")
+            redis_client.hset(request.user.username, "specific_hint", "")
 
-            hints = request.GET.get('hints')
+            redis_client.hset(request.user.username, "level", request.GET.get('selected_level'))
+            level = redis_client.hget(request.user.username, "level")
 
-            correct_number = request.session.get('correct_number')
+            redis_client.hset(request.user.username, "hints", request.GET.get('hints'))
+            hints = redis_client.hget(request.user.username, "hints")
+
+            correct_number = redis_client.hget(request.user.username, "correct_number")
 
             # Generate the hint (if number is odd or even) depending on the current_score condition
             def create_hint(odd_or_even):
@@ -86,14 +92,13 @@ def guess_the_digit_game(request):
                     return ""
 
             # Check if the correct number has been specified in the current_score session
-            if 'correct_number' not in request.session:
-
+            if correct_number is None:
                 # If the level is "easy", a random number in the guess range, number of attempts when hints are disabled, and number of
                 # attempts when hints are enabled will be sent to the function. From there, depending on whether the user chose to
                 # enable/disable hints, the number of guesses will be generated. We are returning the number of guesses, as well as if
                 # the hint was enabled or disabled.
                 if level == EASY_LEVEL:
-                    response_obj = generate_correct_number_and_set_no_of_attempts(
+                    generate_correct_number_and_set_no_of_attempts(
                         random.randint(1,10), EASY_LEVEL_ATTEMPTS_HINTS_DISABLED, EASY_LEVEL_ATTEMPTS_HINTS_ENABLED
                     )
                 # If the level is "medium", a random number in the guess range, number of attempts when hints are disabled, and number of
@@ -102,7 +107,7 @@ def guess_the_digit_game(request):
                 # the hint was enabled or disabled.
                 # If the level is medium, generate a random number between 1 and 50
                 elif level == MEDIUM_LEVEL:
-                    response_obj = generate_correct_number_and_set_no_of_attempts(
+                    generate_correct_number_and_set_no_of_attempts(
                         random.randint(1,50), MEDIUM_LEVEL_ATTEMPTS_HINTS_DISABLED, MEDIUM_LEVEL_ATTEMPTS_HINTS_ENABLED
                     )
 
@@ -111,22 +116,21 @@ def guess_the_digit_game(request):
                 # enable/disable hints, the number of guesses will be generated. We are returning the number of guesses, as well as if
                 # the hint was enabled or disabled.
                 elif level == HARD_LEVEL:
-                    response_obj = generate_correct_number_and_set_no_of_attempts(
+                    generate_correct_number_and_set_no_of_attempts(
                         random.randint(1,100), HARD_LEVEL_ATTEMPTS_HINTS_DISABLED, HARD_LEVEL_ATTEMPTS_HINTS_ENABLED
                     )
                         
             # If the correct number has already been specified, it needs to be re-generated
-            if 'correct_number' in request.session:
-
+            else:
                 # If the level is "easy", we will first remove the correct number from the session as we need to generate it again.
                 # Then, we are calling the function, passing in the random number in the guess range, number of attempts when hints
                 # are disabled, and number of attempts when hints are enabled. From there, depending on 
                 # whether the user chose to enable/disable hints, the number of guesses will be generated. We are returning the number
                 # of guesses, as well as if the hint was enabled or disabled.
                 if level == EASY_LEVEL:
-                    request.session.pop('correct_number', None)
+                    redis_client.hdel(request.user.username, "correct_number")
 
-                    response_obj = generate_correct_number_and_set_no_of_attempts(
+                    generate_correct_number_and_set_no_of_attempts(
                         random.randint(1,10), EASY_LEVEL_ATTEMPTS_HINTS_DISABLED, EASY_LEVEL_ATTEMPTS_HINTS_ENABLED
                     )
                 
@@ -136,9 +140,9 @@ def guess_the_digit_game(request):
                 # whether the user chose to enable/disable hints, the number of guesses will be generated. We are returning the number
                 # of guesses, as well as if the hint was enabled or disabled.
                 elif level == MEDIUM_LEVEL:
-                    request.session.pop('correct_number', None)
+                    redis_client.hdel(request.user.username, "correct_number")
                     
-                    response_obj = generate_correct_number_and_set_no_of_attempts(
+                    generate_correct_number_and_set_no_of_attempts(
                         random.randint(1,50), MEDIUM_LEVEL_ATTEMPTS_HINTS_DISABLED, MEDIUM_LEVEL_ATTEMPTS_HINTS_ENABLED
                     )
 
@@ -148,12 +152,11 @@ def guess_the_digit_game(request):
                 # whether the user chose to enable/disable hints, the number of guesses will be generated. We are returning the number
                 # of guesses, as well as if the hint was enabled or disabled.
                 elif level == HARD_LEVEL:
-                    request.session.pop('correct_number', None)
+                    redis_client.hdel(request.user.username, "correct_number")
 
-                    response_obj = generate_correct_number_and_set_no_of_attempts(
+                    generate_correct_number_and_set_no_of_attempts(
                         random.randint(1,100), HARD_LEVEL_ATTEMPTS_HINTS_DISABLED, HARD_LEVEL_ATTEMPTS_HINTS_ENABLED
                     )
-            number_of_guesses = response_obj['number_of_guesses']
             
             try:
                 game_user_profile = GameUserProfile.objects.get(user=request.user)
@@ -162,11 +165,12 @@ def guess_the_digit_game(request):
             except GameUserProfile.DoesNotExist:
                 latest_score = 0
             
-            correct_number = request.session['correct_number']
-            specific_hint = response_obj['specific_hint']
+            specific_hint = redis_client.hget(request.user.username, "specific_hint")
+            correct_number = redis_client.hget(request.user.username, "correct_number")
+            correct_number = int(correct_number)
 
             context = {
-                'specific_hint' : response_obj['specific_hint'],
+                'specific_hint' : specific_hint,
                 'level' : level,
                 'latest_score' : latest_score,
                 'correct_number' : correct_number
@@ -183,11 +187,19 @@ def guess_the_digit_game(request):
                 user_guess = int(request.POST.get('guess_number_input_field', ''))
 
                 # Extract the random number that will be the correct number
-                correct_number = request.session.get('correct_number')
+                correct_number = redis_client.hget(request.user.username, "correct_number")
+                correct_number = int(correct_number)
+
+                level = redis_client.hget(request.user.username, "level")
+
+                specific_hint = redis_client.hget(request.user.username, "specific_hint")
+
+                number_of_guesses = redis_client.hget(request.user.username, "number_of_guesses")
+                number_of_guesses = int(number_of_guesses)
 
                 # Creating a result string which will hold the prompt from the program (whether user has guessed right or not)
                 result = ""
-
+                
                 if user_guess == correct_number:
                     result = "Correct guess! Well done!"
 
@@ -224,14 +236,17 @@ def guess_the_digit_game(request):
                             # Calling the function which will update the user score with the required number of points
                             update_user_score(HARD_LEVEL_HINTS_ENABLED_POINTS)
 
-                elif user_guess != correct_number and number_of_guesses != 0:
+                elif user_guess != correct_number:
                     number_of_guesses -= 1
+                    redis_client.hset(request.user.username, "number_of_guesses", number_of_guesses)
+                    number_of_guesses = redis_client.hget(request.user.username, "number_of_guesses")
+                    number_of_guesses = int(number_of_guesses)
 
                     if number_of_guesses != 0:
                         result = "Wrong guess! Try again!"
                     else:
                         result = "Game over! The correct number was " + str(correct_number)
-                        request.session.pop('correct_number', None)
+                        redis_client.hdel(request.user.username, "correct_number")
                 
                 try:
                     game_user_profile = GameUserProfile.objects.get(user=request.user)
