@@ -4,5 +4,88 @@
 
 <body>
     {% block content %}
+
+    <section id="admin_dashboard_header">
+        <div class="text-center">
+            <h2>Admin Dashboard - Welcome back, {{ user.username }}</h2>
+        </div>
+    </section>
+
+    <section id="quick_statistical_overview">
+        <div class="container text-center">
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h3>Total Users</h3>
+
+                            <p class="website_statistical_numbers">10</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h3>Number of User Requests</h3>
+
+                            <p class="website_statistical_numbers">10</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h3>Number of Testimonials</h3>
+
+                            <p class="website_statistical_numbers">20</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="admin_options_menu">
+        <div class="container text-center">
+            <div class="row text-center">
+
+                <div class="col-md-4 d-flex mx-auto">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h3>User Account Management</h3>
+
+                            <p class="admin_dashboard_option_descriptions">Here, you can update a user's first name, surname, email address, as well as resetting their password and deleting their account.</p>
+
+                            <button type="submit" class="btn btn-primary btn-lg" id="user_account_management_btn">Manage Users</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 d-flex mx-auto">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h3>User Request Management</h3>
+                            <p class="admin_dashboard_option_descriptions">Handle user requests that were submitted via the "Customer Support" section. </p>
+                            <button type="submit" class="btn btn-primary btn-lg" id="user_request_management_btn">View User Requests</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 d-flex mx-auto">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h3>Testimonials</h3>
+                            <p class="admin_dashboard_option_descriptions">Manage all the testimonials that have been submitted.</p>
+                            <button type="submit" class="btn btn-primary btn-lg" id="testimonial_management">View Testimonials</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     {% endblock %}
 </body>
