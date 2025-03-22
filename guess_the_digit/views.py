@@ -138,6 +138,7 @@ def guess_the_digit_game(request):
             correct_number = redis_client.hget(request.user.username, "correct_number")
             correct_number = int(correct_number)
 
+            # The variables are stored in the context so that they can be returned back to the html template
             context = {
                 'specific_hint' : specific_hint,
                 'level' : level,
@@ -234,7 +235,7 @@ def guess_the_digit_game(request):
                 retrieve_latest_user_score()
                 latest_score = redis_client.hget(request.user.username, "latest_score")
 
-                # The result is stored in the context so it can be returned back to the html template
+                # The variables are stored in the context so that they can be returned back to the html template
                 context = {
                     'result': result,
                     'latest_score': latest_score,
