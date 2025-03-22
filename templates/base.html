@@ -30,8 +30,13 @@
                         <li class="nav-item"><a class="nav-link" id="homepage_link" aria-current="page" data-url="{% url 'homepage' %}" href="javascript:void(0)">Home</a></li>
                         <li class="nav-item"><a class="nav-link" id="testimonials_link" data-url="{% url 'testimonials_page' %}" href="javascript:void(0)">Testimonials</a></li>
                         {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" id="profile_link" data-url="{% url 'my_profile' %}" href="javascript:void(0)">Profile</a></li>
-                        <li class="nav-item"><a class="nav-link" id="logout_link" data-url="{% url 'logout' %}" href="javascript:void(0)">Logout</a></li>
+
+                            {% if user.account_type == "super_admin" or user.account_type == "admin" %}
+                                <li class="nav-item"><a class="nav-link" id="admin_dashboard_link" data-url="{% url 'admin_dashboard' %}" href="javascript:void(0)">Admin Dashboard</a></li>
+                            {% endif %}
+
+                            <li class="nav-item"><a class="nav-link" id="profile_link" data-url="{% url 'my_profile' %}" href="javascript:void(0)">Profile</a></li>
+                            <li class="nav-item"><a class="nav-link" id="logout_link" data-url="{% url 'logout' %}" href="javascript:void(0)">Logout</a></li>
                         {% else %}
                             <li class="nav-item"><a class="nav-link" id="sign_up_link" data-url="{% url 'sign_up' %}" href="javascript:void(0)">Sign Up</a></li>
                         {% endif %}
