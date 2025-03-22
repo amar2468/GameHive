@@ -67,8 +67,12 @@ input::-webkit-inner-spin-button {
   border-radius: 20px;
 }
 
-#intro_about_paragraph, .gamehive_values, .game_description {
+#intro_about_paragraph, .gamehive_values, .game_description .admin_dashboard_option_descriptions {
   text-align: justify;
+}
+
+.website_statistical_numbers {
+  font-size:2em;
 }
 
 .highlight_sign_up_nav_link_in_login_page {
