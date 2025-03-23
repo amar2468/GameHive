@@ -24,6 +24,46 @@ def admin_dashboard(request):
     # If the user is not logged in, the page is forbidden for them.
     else:
         return render(request, "403.html")
+    
+# View that will show all the users, giving the admin the opportunity to perform tasks such as resetting the password, deleting the 
+# account, and updating the profile
+def manage_users(request):
+    # If the user is logged in, we will then check to see if the user is an admin or super admin. If so, the
+    # page with all the users will be displayed.
+    if request.user.is_authenticated:
+        if request.user.account_type == "super_admin" or request.user.account_type == "admin":
+            return render(request, "manage_users.html")
+        else:
+            return render(request, "403.html")
+    # If the user is not logged in, the page is forbidden for them.
+    else:
+        return render(request, "403.html")
+
+# View that allows an admin to view all the user requests
+def user_request_mgmt(request):
+    # If the user is logged in, we will then check to see if the user is an admin or super admin. If so, the
+    # page with the user requests will be displayed.
+    if request.user.is_authenticated:
+        if request.user.account_type == "super_admin" or request.user.account_type == "admin":
+            return render(request, "user_requests.html")
+        else:
+            return render(request, "403.html")
+    # If the user is not logged in, the page is forbidden for them
+    else:
+        return render(request, "403.html")
+
+# View that allows an admin to view all the testimonials
+def testimonials_mgmt(request):
+    # If the user is logged in, we will then check to see if the user is an admin or super admin. If so, the
+    # page with all the testimonials will be displayed.
+    if request.user.is_authenticated:
+        if request.user.account_type == "super_admin" or request.user.account_type == "admin":
+            return render(request, "testimonials_mgmt.html")
+        else:
+            return render(request, "403.html")
+    # If the user is not logged in, the page is forbidden for them
+    else:
+        return render(request, "403.html")
 
 # First part of this view is the POST method, which saves a testimonial to the relevant custom model. The else part will just display
 # the page to the user without submitting any forms
