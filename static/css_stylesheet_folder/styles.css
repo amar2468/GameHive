@@ -71,6 +71,11 @@ input::-webkit-inner-spin-button {
   text-align: justify;
 }
 
+.admin_dashboard_sections {
+  margin-top:10px;
+  margin-bottom: 30px;
+}
+
 .website_statistical_numbers {
   font-size:2em;
 }
@@ -259,6 +264,7 @@ iframe {
     max-width: 1320px;
   }
 }
+
 .row {
   --bs-gutter-x: 1.5rem;
   --bs-gutter-y: 0;
