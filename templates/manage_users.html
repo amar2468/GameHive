@@ -4,6 +4,38 @@
 
 <body>
     {% block content %}
-        Manage Users
+    
+    <section id="manage_users_heading">
+        <div class="text-center">
+            <h2>Users - All Users</h2>
+        </div>
+    </section>
+
+    <section id="list_of_users_section">
+        <div class="container">
+            <table class="table table-responsive">
+                <thead class="text-center">
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Account Type</th>
+                    </tr>
+                </thead>
+
+                <tbody class="text-center">
+                    {% for user_record in all_users %}
+                        <tr>
+                            <th scope="row"><input type="checkbox" aria-label="Select the user data row" /></th>
+                            <td></td>
+                            <td>{{ user_record.username }}</td>
+                            <td>{{ user_record.account_type }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
     {% endblock %}
 </body>
