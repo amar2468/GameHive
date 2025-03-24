@@ -18,7 +18,15 @@ def admin_dashboard(request):
     # admin dashboard will be displayed.
     if request.user.is_authenticated:
         if request.user.account_type == "super_admin" or request.user.account_type == "admin":
-            return render(request, "admin_dashboard.html")
+            all_users = CustomUser.objects.all()
+            all_testimonials = TestimonialsModel.objects.all()
+            
+            statistical_info_about_gamehive = {
+                'number_of_users' : len(all_users),
+                'number_of_testimonials' : len(all_testimonials)
+            }
+            
+            return render(request, "admin_dashboard.html", statistical_info_about_gamehive)
         else:
             return render(request, "403.html")
     # If the user is not logged in, the page is forbidden for them.
@@ -32,7 +40,13 @@ def manage_users(request):
     # page with all the users will be displayed.
     if request.user.is_authenticated:
         if request.user.account_type == "super_admin" or request.user.account_type == "admin":
-            return render(request, "manage_users.html")
+            all_users = CustomUser.objects.all()
+
+            response_all_users = {
+                'all_users' : all_users
+            }
+
+            return render(request, "manage_users.html", response_all_users)
         else:
             return render(request, "403.html")
     # If the user is not logged in, the page is forbidden for them.
