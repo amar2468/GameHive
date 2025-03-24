@@ -18,8 +18,8 @@
                     <div class="card flex-fill">
                         <div class="card-body">
                             <h3>Total Users</h3>
-
-                            <p class="website_statistical_numbers">10</p>
+                            <i class="bi bi-people icons_for_admin_options"></i>
+                            <p class="website_statistical_numbers">{{ number_of_users }}</p>
                         </div>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                     <div class="card flex-fill">
                         <div class="card-body">
                             <h3>Number of User Requests</h3>
-
+                            <i class="bi bi-clipboard-check icons_for_admin_options"></i>
                             <p class="website_statistical_numbers">10</p>
                         </div>
                     </div>
@@ -38,8 +38,8 @@
                     <div class="card flex-fill">
                         <div class="card-body">
                             <h3>Number of Testimonials</h3>
-
-                            <p class="website_statistical_numbers">20</p>
+                            <i class="bi bi-chat-left-quote icons_for_admin_options"></i>
+                            <p class="website_statistical_numbers">{{ number_of_testimonials }}</p>
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                     <div class="card flex-fill">
                         <div class="card-body">
                             <h3>User Account Management</h3>
-
+                            <i class="bi bi-people icons_for_admin_options"></i>
                             <p class="admin_dashboard_option_descriptions">Here, you can update a user's first name, surname, email address, as well as resetting their password and deleting their account.</p>
 
                             <a href="{% url 'manage_users' %}"><button type="button" class="btn btn-primary btn-lg" id="user_account_management_btn">Manage Users</button></a>
@@ -67,6 +67,7 @@
                     <div class="card flex-fill">
                         <div class="card-body">
                             <h3>User Request Management</h3>
+                            <i class="bi bi-clipboard-check icons_for_admin_options"></i>
                             <p class="admin_dashboard_option_descriptions">Handle user requests that were submitted via the "Customer Support" section. </p>
                             <a href="{% url 'user_request_mgmt' %}"><button type="button" class="btn btn-primary btn-lg" id="user_request_management_btn">View User Requests</button></a>
                         </div>
@@ -77,6 +78,7 @@
                     <div class="card flex-fill">
                         <div class="card-body">
                             <h3>Testimonials</h3>
+                            <i class="bi bi-chat-left-quote icons_for_admin_options"></i>
                             <p class="admin_dashboard_option_descriptions">Manage all the testimonials that have been submitted.</p>
                             <a href="{% url 'testimonials_mgmt' %}"><button type="submit" class="btn btn-primary btn-lg" id="testimonial_management">View Testimonials</button></a>
                         </div>
