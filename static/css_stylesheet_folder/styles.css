@@ -107,7 +107,7 @@ input::-webkit-inner-spin-button {
   font-size:13px;
 }
 
-.profile_sidebar_nav_link_styling {
+.profile_sidebar_nav_link_styling, .icons_for_admin_options {
   font-size: 2rem;
 }
 
