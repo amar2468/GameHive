@@ -4,6 +4,36 @@
 
 <body>
     {% block content %}
-        All testimonials
+        <section id="testimonial_mgmt_heading">
+            <div class="text-center">
+                <h2>Testimonials - All Testimonials</h2>
+            </div>
+        </section>
+
+        <section id="list_of_testimonials_section">
+            <div class="container">
+                <table class="table table-responsive">
+                    <thead class="bg-dark text-center text-white">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="text-center text-black">
+                        {% for testimonial_record in all_testimonials %}
+                            <tr>
+                                <th scope="row"><input class="form-check-input" type="checkbox" id="select_row" aria-label="Select the testimonial record row."></th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
     {% endblock %}
 </body>
