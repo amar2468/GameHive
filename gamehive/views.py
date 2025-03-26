@@ -4,7 +4,7 @@ from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordF
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
-from gamehive.models import CustomUser,GameUserProfile,TestimonialsModel, PersonalDetails
+from gamehive.models import CustomUser,GameUserProfile,TestimonialsModel
 from django.http import JsonResponse
 
 # View that renders the homepage which allows a user to either sign up/login or play the game of their choice
@@ -187,13 +187,14 @@ def my_profile(request):
     if request.user.is_authenticated:
         leaderboard_entries = GameUserProfile.objects.all().order_by('-current_score')
 
-        try:
-            user_details = PersonalDetails.objects.get(user=request.user)
-        except PersonalDetails.DoesNotExist:
-            user_details = PersonalDetails(user=request.user)
-            user_details.save()
+        user_details = CustomUser.objects.get(username=request.user)
 
-        return render(request, 'profile.html', {'leaderboard_entries': leaderboard_entries, 'user_details' : user_details})
+        response_my_profile = {
+            'leaderboard_entries' : leaderboard_entries,
+            'user_details' : user_details
+        }
+
+        return render(request, 'profile.html', response_my_profile)
     else:
         return render(request, '403.html')
 
@@ -212,20 +213,18 @@ def update_personal_details(request):
                 change_surname = form.cleaned_data['change_surname']
 
                 try:
-                    user_details = PersonalDetails.objects.get(user=request.user)
+                    user_details = CustomUser.objects.get(username=request.user)
 
                     user_details.first_name = change_first_name
 
-                    user_details.surname = change_surname
+                    user_details.last_name = change_surname
 
-                    user_details.user.email = change_email
+                    user_details.email = change_email
 
                     user_details.save()
-
-                    user_details.user.save()
                     
-                except PersonalDetails.DoesNotExist:
-                    user_details = PersonalDetails(user=request.user, first_name = change_first_name, surname = change_surname)
+                except CustomUser.DoesNotExist:
+                    user_details = CustomUser(user=request.user, first_name = change_first_name, surname = change_surname, email = change_email)
                     user_details.save()
                     
                 response_info_update_personal_details = {
@@ -348,6 +347,8 @@ def sign_up(request):
 
         if form.is_valid():
             username = form.cleaned_data['username']
+            name = form.cleaned_data['name']
+            surname = form.cleaned_data['surname']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
 
@@ -366,7 +367,7 @@ def sign_up(request):
             # to pick a unique username.
             
             try:
-                user = CustomUser.objects.create_user(username=username, email=email, password=password, account_type="user")
+                user = CustomUser.objects.create_user(username=username, first_name=name, last_name=surname, email=email, password=password, account_type="user")
             except IntegrityError as e:
                 if 'UNIQUE constraint failed: auth_user.username' in str(e):
                     error_message = "Username already exists. Please choose a different username."
