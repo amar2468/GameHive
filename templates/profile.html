@@ -108,7 +108,7 @@
                             <!-- Change/Add Surname -->
                             <div class="d-flex">
                                 <div class="form-floating mb-3 flex-grow-1">
-                                    <input class="form-control" id="change_surname_id" name="change_surname" value="{{ user_details.surname }}" type="text" autocomplete="off" />
+                                    <input class="form-control" id="change_surname_id" name="change_surname" value="{{ user_details.last_name }}" type="text" autocomplete="off" />
                                     <label for="change_surname_id">Surname</label>
                                 </div>
 
@@ -215,7 +215,7 @@
                         </p>
 
                         {% for leaderboard in leaderboard_entries %}
-                            {% if leaderboard.user.username == user_details.user|stringformat:"s" %}
+                            {% if leaderboard.user.username == user_details.username|stringformat:"s" %}
                                 <h5 class="text-black text-center">Points: {{ leaderboard.current_score }}</h5>
                             {% endif %}
                         {% endfor %}
