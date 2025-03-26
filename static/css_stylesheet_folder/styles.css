@@ -111,6 +111,10 @@ input::-webkit-inner-spin-button {
   font-size: 2rem;
 }
 
+#username_link_manage_users {
+  text-decoration: none;
+}
+
 table {
   border-collapse: collapse;
   border: 1px solid black !important;
