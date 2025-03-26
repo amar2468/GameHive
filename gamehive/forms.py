@@ -19,6 +19,8 @@ def validate_username(username):
 
 class RegistrationForm(forms.Form):
     username = forms.CharField(max_length=MAX_USERNAME_LENGTH, required=True, validators=[validate_username])
+    name = forms.CharField(max_length=25, required=True)
+    surname = forms.CharField(max_length=25, required=True)
     email = forms.EmailField(required=True)
     password = forms.CharField(widget=forms.PasswordInput(), required=True)
 
