@@ -72,7 +72,13 @@ def testimonials_mgmt(request):
     # page with all the testimonials will be displayed.
     if request.user.is_authenticated:
         if request.user.account_type == "super_admin" or request.user.account_type == "admin":
-            return render(request, "testimonials_mgmt.html")
+            all_testimonials = TestimonialsModel.objects.all()
+
+            response_all_testimonials = {
+                'all_testimonials' : all_testimonials
+            }
+
+            return render(request, "testimonials_mgmt.html", response_all_testimonials)
         else:
             return render(request, "403.html")
     # If the user is not logged in, the page is forbidden for them
