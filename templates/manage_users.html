@@ -27,7 +27,7 @@
                     {% for user_record in all_users %}
                         <tr>
                             <th scope="row"><input class="form-check-input" type="checkbox" id="select_row" aria-label="Select the user record row."></th>
-                            <td></td>
+                            <td>{{ user_record.first_name }} {{ user_record.last_name }}</td>
                             <td><a href="#" id="username_link_manage_users">{{ user_record.username }}</a></td>
                             <td>{{ user_record.account_type }}</td>
                         </tr>
