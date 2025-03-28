@@ -10,6 +10,8 @@ class BaseTestCase(TestCase):
         # Create the test user
         self.user = CustomUser.objects.create_user(
             username='testuser',
+            first_name='test',
+            last_name='user',
             email='testuser@gmail.com',
             password='Password34*',
             account_type="user"

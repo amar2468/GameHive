@@ -11,6 +11,8 @@ class RegistrationTestCase(TestCase):
     def testing_valid_reg_form(self):
         data = {
             'username': 'testuser',
+            'name': 'test',
+            'surname': 'user',
             'email': 'test@example.com',
             'password': 'testpassword'
         }
@@ -30,6 +32,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': '', # empty username
+            'name': 'test',
+            'surname': 'user',
             'email': 'test@example.com',
             'password': 'testpassword'
         }
@@ -45,6 +49,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'testuser',
+            'name': 'test',
+            'surname': 'user',
             'email': '', # empty email
             'password': 'testpassword'
         }
@@ -60,6 +66,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'testuser',
+            'name': 'test',
+            'surname': 'user',
             'email': '',
             'password': '' # empty password
         }
@@ -76,6 +84,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'testuser',
+            'name': 'test',
+            'surname': 'user',
             'email': 'amar@gmail',
             'password': 'Strongpassword12!'
         }
@@ -89,6 +99,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'testuser',
+            'name': 'test',
+            'surname': 'user',
             'email': 'amar@',
             'password': 'Strongpassword12!'
         }
@@ -101,6 +113,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'testuser',
+            'name': 'test',
+            'surname': 'user',
             'email': 'amar@',
             'password': 'Strongpassword12!'
         }
@@ -113,6 +127,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'testuser',
+            'name': 'test',
+            'surname': 'user',
             'email': '&"*"*"@gmail.com',
             'password': 'Strongpassword12!'
         }
@@ -125,6 +141,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'testuser',
+            'name': 'test',
+            'surname': 'user',
             'email': 'amar.com',
             'password': 'Strongpassword12!'
         }
@@ -137,6 +155,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'testuser',
+            'name': 'test',
+            'surname': 'user',
             'email': 'amar pla@gmail.com',
             'password': 'Strongpassword12!'
         }
@@ -149,6 +169,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'testuser',
+            'name': 'test',
+            'surname': 'user',
             'email': 'a'*1000 + '@' + 'b'*1000 + '.com',
             'password': 'Strongpassword12!'
         }
@@ -161,6 +183,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'testuser',
+            'name': 'test',
+            'surname': 'user',
             'email': 'юзер@example.com',
             'password': 'Strongpassword12!'
         }
@@ -174,6 +198,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'te',
+            'name': 'test',
+            'surname': 'user',
             'email': 'amar@example.com',
             'password': 'Strongpassword12!'
         }
@@ -186,6 +212,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'usernameisthebestasdf',
+            'name': 'test',
+            'surname': 'user',
             'email': 'amar@example.com',
             'password': 'Strongpassword12!'
         }
@@ -198,6 +226,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'test user',
+            'name': 'test',
+            'surname': 'user',
             'email': 'amar@example.com',
             'password': 'Strongpassword12!'
         }
@@ -210,6 +240,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'test!*',
+            'name': 'test',
+            'surname': 'user',
             'email': 'amar@example.com',
             'password': 'Strongpassword12!'
         }
@@ -222,6 +254,8 @@ class RegistrationTestCase(TestCase):
 
         data = {
             'username': 'admin',
+            'name': 'test',
+            'surname': 'user',
             'email': 'amar@example.com',
             'password': 'Strongpassword12!'
         }
@@ -249,6 +283,8 @@ class RegistrationIntegrationTestCase(TestCase):
         response_for_weak_password = self.client.post(registration_url,
                                                       {
                                                           'username': 'testuser',
+                                                          'name': 'test',
+                                                          'surname': 'user',
                                                           'email': 'amar@gmail.com',
                                                           'password': weak_password
                                                       })
@@ -263,6 +299,8 @@ class RegistrationIntegrationTestCase(TestCase):
         response_for_strong_password = self.client.post(registration_url,
                                                       {
                                                           'username': 'testuser',
+                                                          'name': 'test',
+                                                          'surname': 'user',
                                                           'email': 'amar@gmail.com',
                                                           'password': strong_password
                                                       })
@@ -275,6 +313,8 @@ class RegistrationIntegrationTestCase(TestCase):
 
         data = {
             'username': 'testuser',
+            'name': 'test',
+            'surname': 'user',
             'email': 'amar@gmail.com',
             'password': 'StrOngp@assword'
         }
@@ -300,6 +340,8 @@ class LoginIntegrationTestCase(TestCase):
         # Created test user to attempt the login process
         self.user = CustomUser.objects.create_user(
             username='david12',
+            first_name='test',
+            last_name='user',
             password='Whatis12!',
             account_type="user"
         )
@@ -365,7 +407,7 @@ class TestimonialsFormTestCase(TestCase):
 class TestimonialsFormIntegrationTestCase(TestCase):
 
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*', account_type="user")
+        self.user = CustomUser.objects.create_user(username='testuser', first_name='test', last_name='user', password='Password34*', account_type="user")
         self.client = Client()
     
     def test_for_testimonials_form_process(self):
@@ -525,7 +567,7 @@ class UpdatePersonalDetailsTestCase(TestCase):
 class UpdatePersonalDetailsIntegrationTestCase(TestCase):
 
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*', account_type="user")
+        self.user = CustomUser.objects.create_user(username='testuser', first_name='test', last_name='user', password='Password34*', account_type="user")
         self.client = Client()
     
     def test_for_update_personal_details_process(self):
@@ -567,7 +609,7 @@ class ChangePasswordFormTestCase(TestCase):
 class ChangePasswordFormIntegrationTestCase(TestCase):
 
     def setUp(self):
-        self.user = CustomUser.objects.create_user(username='testuser', password='Password34*', account_type="user")
+        self.user = CustomUser.objects.create_user(username='testuser', first_name='test', last_name='user', password='Password34*', account_type="user")
         self.client = Client()
     
     def test_for_change_password_process(self):
