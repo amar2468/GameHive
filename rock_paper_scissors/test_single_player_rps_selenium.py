@@ -14,6 +14,8 @@ class SeleniumTestSinglePlayerRockPaperScissors(LiveServerTestCase):
 
         # Find the form elements in the sign_up page
         username_field_sign_up = self.browser.find_element(By.NAME, "username")
+        first_name_field_sign_up = self.browser.find_element(By.NAME, "name")
+        last_name_field_sign_up = self.browser.find_element(By.NAME, "surname")
         email_field_sign_up = self.browser.find_element(By.NAME, "email")
         password_field_sign_up = self.browser.find_element(By.NAME, "password")
         submit_button_sign_up = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
@@ -21,10 +23,22 @@ class SeleniumTestSinglePlayerRockPaperScissors(LiveServerTestCase):
         # We will clear the fields and then fill them in with the sign up information
         username_field_sign_up.clear()
         username_field_sign_up.send_keys("user34")
+
+        first_name_field_sign_up = self.browser.find_element(By.NAME, "name")
+        first_name_field_sign_up.send_keys("Joe")
+
+        last_name_field_sign_up.clear()
+        last_name_field_sign_up.send_keys("Bloggs")
+
         email_field_sign_up.clear()
         email_field_sign_up.send_keys("user34@gmail.com")
+
         password_field_sign_up.clear()
         password_field_sign_up.send_keys("Strongpassword100!")
+
+        self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+        time.sleep(0.5)
 
         # Submit the form, in order to create the new account
         submit_button_sign_up.click()
