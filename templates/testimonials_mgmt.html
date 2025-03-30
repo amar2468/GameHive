@@ -4,13 +4,29 @@
 
 <body>
     {% block content %}
-        <section id="testimonial_mgmt_heading">
-            <div class="text-center">
+        <section class="mt-3 mb-5" id="testimonial_mgmt_heading">
+            <div class="container">
+                <hr>
                 <h2>Testimonials - All Testimonials</h2>
+                <p>Testimonials in GameHive with the following attributes: username, rating, message. </p>
+                <hr>
             </div>
         </section>
 
-        <section id="list_of_testimonials_section">
+        <section class="mt-5 mb-5" id="testimonial_mgmt_admin_options">
+            <div class="d-flex justify-content-center">
+                <div class="btn-group" role="group" aria-label="Admin options for managing testimonials.">
+                    <button type="button" class="btn admin_options_delete"><i class="bi bi-trash"></i> Delete Testimonial</button>
+                    <button type="button" class="btn admin_options_refresh_page"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search...">
+                        <button class="btn btn-primary" type="button"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-5 mb-5" id="list_of_testimonials_section">
             <div class="container">
                 <table class="table table-responsive">
                     <thead class="bg-dark text-center text-white">
