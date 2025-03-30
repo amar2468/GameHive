@@ -2,8 +2,85 @@
 {% load static %}
 {% block title %}User Requests{% endblock %}
 
+{% block extra_css %}
+  <link href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css" rel="stylesheet">
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
+{% endblock %}
+
 <body>
     {% block content %}
-        User requests
+        <section class="mt-3 mb-5" id="user_requests_heading">
+            <div class="container">
+                <hr>
+                <h2>User requests - All Requests</h2>
+                <p>The admin can view current user requests, as well as the closed requests.</p>
+                <hr>
+            </div>
+        </section>
+
+        <section class="mt-5 mb-5">
+            <div class="container">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link active" id="open_requests_tab" data-bs-toggle="tab" data-bs-target="#open_requests_tab_pane" type="button" role="tab" aria-controls="open_requests_tab_pane" aria-selected="true">Open Requests</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="closed_requests_tab" data-bs-toggle="tab" data-bs-target="#closed_requests_tab_pane" type="button" role="tab" aria-controls="closed_requests_tab_pane" aria-selected="false">Closed Requests</button>
+                    </li>
+                  </ul>
+                  <div class="tab-content" id="open_and_closed_requests_tab_content">
+                    <div class="tab-pane fade show active" id="open_requests_tab_pane" role="tabpanel" aria-labelledby="open_requests_tab" tabindex="0">
+
+                      <table id="open_user_requests_table" class="table table-bordered;">
+                        <thead id="table_heading_user_reqs">
+                          <tr>
+                              <th class="datatable_headings fw-bolder text-black text-center">Heading 1</th>
+                              <th class="datatable_headings fw-bolder text-black text-center">Heading 2</th>
+                              <th class="datatable_headings fw-bolder text-black text-center">Heading 3</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                              <td class="text-black text-center">Data 1</td>
+                              <td class="text-black text-center">Data 2</td>
+                              <td class="text-black text-center">Data 3</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="tab-pane fade" id="closed_requests_tab_pane" role="tabpanel" aria-labelledby="closed_requests_tab" tabindex="0">
+                      <table id="closed_user_requests_table" class="table table-bordered;">
+                        <thead id="table_heading_user_reqs">
+                          <tr>
+                              <th class="datatable_headings fw-bolder text-black text-center">Heading 1</th>
+                              <th class="datatable_headings fw-bolder text-black text-center">Heading 2</th>
+                              <th class="datatable_headings fw-bolder text-black text-center">Heading 3</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                              <td class="text-black text-center">Data 1</td>
+                              <td class="text-black text-center">Data 2</td>
+                              <td class="text-black text-center">Data 3</td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                    </div>
+                  </div>
+            </div>
+        </section>
+
+        <script>
+          $(document).ready(function() {
+            new DataTable("#open_user_requests_table");
+            new DataTable("#closed_user_requests_table");
+          });
+        </script>
+
     {% endblock %}
 </body>
