@@ -61,7 +61,6 @@ class SeleniumTestGuessTheDigit(LiveServerTestCase):
         
         # We are scrolling to the bottom of the page, so that the submit button can be clicked, to register the user
         self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(0.2)
 
         # Saving the current URL, so that we can compare it with the login URL (if the current URL saved is not the login URL,
         # we will be redirected to the login page)
