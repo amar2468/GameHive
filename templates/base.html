@@ -30,6 +30,7 @@
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link" id="homepage_link" aria-current="page" data-url="{% url 'homepage' %}" href="javascript:void(0)">Home</a></li>
                         <li class="nav-item"><a class="nav-link" id="testimonials_link" data-url="{% url 'testimonials_page' %}" href="javascript:void(0)">Testimonials</a></li>
+                        <li class="nav-item"><a class="nav-link" id="customer_support_link" data-url="{% url 'customer_support' %}" href="javascript:void(0)">Customer Support</a></li>
                         {% if user.is_authenticated %}
 
                             {% if user.account_type == "super_admin" or user.account_type == "admin" %}
