@@ -336,6 +336,14 @@ def redeeming_points(request):
             return render(request, 'profile.html')
     else:
         return render(request, '403.html')
+    
+def customer_support(request):
+    # If the user submits the customer support request form, it will be handled in this block.
+    if request.method == "POST":
+        pass
+    # If the user only tries to access this page (not submit the form), this block will be executed, retrieving the relevant template
+    else:
+        return render(request, "customer_support.html")
 
 # View has the POST part, which will take the user registration details and check if they are valid, after which the password will
 # be validated. Finally, the user will be added to the user model and the current score will be set to 0 as the user has only been
