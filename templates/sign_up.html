@@ -29,25 +29,18 @@
                         <form id="registration_form" method="post" data-url="{% url 'sign_up' %}">
                             {% csrf_token %}
 
-                            <!-- First Name input-->
+                            <!-- First Name & Last Name input fields -->
                             <div class="d-flex">
                                 <div class="form-floating mb-3 flex-grow-1">
                                     <input class="form-control" id="{{ form.name.id_for_label }}" name="name" type="text" placeholder="Enter your first name..." autocomplete="off" />
                                     <label for="{{ form.name.id_for_label }}">First Name</label>
                                 </div>
-                                <div class="ms-2 d-flex align-items-center">
-                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your first name."></i>
-                                </div>
-                            </div>
-
-                            <!-- Last Name input-->
-                            <div class="d-flex">
                                 <div class="form-floating mb-3 flex-grow-1">
                                     <input class="form-control" id="{{ form.surname.id_for_label }}" name="surname" type="text" placeholder="Enter your last name..." autocomplete="off" />
                                     <label for="{{ form.surname.id_for_label }}">Last Name</label>
                                 </div>
                                 <div class="ms-2 d-flex align-items-center">
-                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your last name."></i>
+                                    <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter your first name and last name."></i>
                                 </div>
                             </div>
 
