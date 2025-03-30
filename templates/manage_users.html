@@ -5,18 +5,35 @@
 <body>
     {% block content %}
     
-    <section id="manage_users_heading">
-        <div class="text-center">
+    <section class="mt-3 mb-5" id="manage_users_heading">
+        <div class="container">
+            <hr>
             <h2>Users - All Users</h2>
+            <p>GameHive users with the following attributes: full name, username, account type. </p>
+            <hr>
         </div>
     </section>
 
-    <section id="list_of_users_section">
+    <section class="mt-5 mb-5" id="manage_users_admin_taskbar">
+        <div class="d-flex justify-content-center">
+            <div class="btn-group" role="group" aria-label="Admin options for managing users.">
+                <button type="button" class="btn admin_options_delete"><i class="bi bi-trash"></i> Delete User</button>
+                <button type="button" class="btn admin_options_refresh_page"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search...">
+                    <button class="btn btn-primary" type="button"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-5 mb-5" id="list_of_users_section">
         <div class="container">
+            <p><b>Number of Users (2)</b></p>
             <table class="table table-responsive">
                 <thead class="bg-dark text-center text-white">
                     <tr>
-                        <th scope="col"></th>
+                        <th scope="col"><input class="form-check-input" type="checkbox" id="select_row" aria-label="Select the user record row."></th>
                         <th scope="col">Full Name</th>
                         <th scope="col">Username</th>
                         <th scope="col">Account Type</th>
