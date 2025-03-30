@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $('#homepage_link').css("color", "#FFFFFF");
     $('#testimonials_link').css("color", "#FFFFFF");
+    $('#customer_support_link').css("color", "#FFFFFF");
     $('#profile_link').css("color", "#FFFFFF");
     $('#admin_dashboard_link').css("color", "#FFFFFF")
     $('#logout_link').css("color", "#FFFFFF");
@@ -10,6 +11,7 @@ $(document).ready(function() {
     
     let homepage_url = $('#homepage_link').data("url");
     let testimonials_url = $('#testimonials_link').data("url");
+    let customer_support_url = $('#customer_support_link').data("url");
     let profile_url = $('#profile_link').data("url");
     let admin_dashboard_url = $('#admin_dashboard_link').data("url");
     let logout_url = $('#logout_link').data("url");
@@ -20,6 +22,7 @@ $(document).ready(function() {
         $('#homepage_link').css("color", "yellow");
 
         $('#testimonials_link').css("color", "#FFFFFF");
+        $('#customer_support_link').css("color", "#FFFFFF");
         $('#profile_link').css("color", "#FFFFFF");
         $('#admin_dashboard_link').css("color", "#FFFFFF");
         $('#logout_link').css("color", "#FFFFFF");
@@ -29,6 +32,17 @@ $(document).ready(function() {
     else if (currentPath == testimonials_url)
     {
         $('#testimonials_link').css("color", "yellow");
+
+        $('#homepage_link').css("color", "#FFFFFF");
+        $('#profile_link').css("color", "#FFFFFF");
+        $('#customer_support_link').css("color", "#FFFFFF");
+        $('#admin_dashboard_link').css("color", "#FFFFFF");
+        $('#logout_link').css("color", "#FFFFFF");
+        $('#sign_up_link').css("color", "#FFFFFF");
+    }
+
+    else if (currentPath == customer_support_url) {
+        $('#customer_support_link').css("color", "yellow");
 
         $('#homepage_link').css("color", "#FFFFFF");
         $('#profile_link').css("color", "#FFFFFF");
@@ -43,6 +57,7 @@ $(document).ready(function() {
 
         $('#homepage_link').css("color", "#FFFFFF");
         $('#testimonials_link').css("color", "#FFFFFF");
+        $('#customer_support_link').css("color", "#FFFFFF");
         $('#admin_dashboard_link').css("color", "#FFFFFF");
         $('#logout_link').css("color", "#FFFFFF");
         $('#sign_up_link').css("color", "#FFFFFF");
@@ -54,6 +69,7 @@ $(document).ready(function() {
 
         $('#homepage_link').css("color", "#FFFFFF");
         $('#testimonials_link').css("color", "#FFFFFF");
+        $('#customer_support_link').css("color", "#FFFFFF");
         $('#profile_link').css("color", "#FFFFFF");
         $('#logout_link').css("color", "#FFFFFF");
         $('#sign_up_link').css("color", "#FFFFFF");
@@ -65,6 +81,7 @@ $(document).ready(function() {
 
         $('#homepage_link').css("color", "#FFFFFF");
         $('#testimonials_link').css("color", "#FFFFFF");
+        $('#customer_support_link').css("color", "#FFFFFF");
         $('#profile_link').css("color", "#FFFFFF");
         $('#admin_dashboard_link').css("color", "#FFFFFF");
         $('#sign_up_link').css("color", "#FFFFFF");
@@ -76,6 +93,7 @@ $(document).ready(function() {
 
         $('#homepage_link').css("color", "#FFFFFF");
         $('#testimonials_link').css("color", "#FFFFFF");
+        $('#customer_support_link').css("color", "#FFFFFF");
         $('#profile_link').css("color", "#FFFFFF");
         $('#admin_dashboard_link').css("color", "#FFFFFF");
         $('#logout_link').css("color", "#FFFFFF");
@@ -88,6 +106,10 @@ $(document).ready(function() {
     $('#testimonials_link').click(function() {
         window.location.href = testimonials_url;
     });
+
+    $('#customer_support_link').click(function() {
+        window.location.href = customer_support_url;
+    })
 
     $('#profile_link').click(function() {
         window.location.href = profile_url;
