@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
-from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails, BuyItemForm
+from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails, BuyItemForm, ForgotPasswordForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
@@ -11,6 +11,52 @@ from django.http import JsonResponse
 
 def homepage(request):
     return render(request, 'index.html')
+
+# View that handles password resets from a user who is not logged in. If the email exists on the system, an email will be sent to the
+# user, with the password reset link attached.
+
+def forgot_password(request):
+    # If the user submits their email address as part of the password reset form, we will check to see if the email exists in
+    # the system. If it does, an email will be sent to the user, with a password reset link attached.
+    if request.method == "POST":
+        form = ForgotPasswordForm(request.POST)
+
+        # Validating the password reset form, to see whether the user provided the necessary information.
+        if form.is_valid():
+            user_email_for_pwd_reset = form.cleaned_data['user_email_for_pwd_reset']
+
+            # Check if the email exists in the CustomUser model. If it does, send the email with password reset link.
+            try:
+                CustomUser.objects.get(email=user_email_for_pwd_reset)
+
+            # If the user email does not exist, send the error message back to the front-end, so the user can see what is wrong.
+            except CustomUser.DoesNotExist:
+                response_forget_password = {
+                    'success' : "The email you entered could not be found in our system. Make sure that you have typed the email correctly."
+                }
+
+                return JsonResponse(response_forget_password)
+            
+            # If the email was found and the email was sent, send the information back to the user, to inform them that they
+            # need to check their email.
+            response_forget_password = {
+                'success' : "You have been sent an email with the password reset link. Please click on the link and enter your new password."
+            }
+
+            return JsonResponse(response_forget_password)
+
+        # If the user sent an invalid form, the error message will be sent back to the front-end, so the user can see what is wrong.
+        else:
+            response_forget_password = {
+                'success' : "The email you have entered is not a valid one. Please make sure you have entered a valid email address."
+            }
+
+            return JsonResponse(response_forget_password)
+    
+    # If the user is trying to perform a "GET" request on the "forget password" URL, we will display a 403 page, as the retrieving
+    # of the "forget password" form is handled by HTML & JavaScript (by displaying a modal).
+    else:
+        return render(request, "403.html")
 
 # View that will display the admin dashboard, where admin can perform common admin activities.
 def admin_dashboard(request):
