@@ -2,6 +2,30 @@
 $(document).ready(function () {
     $('[data-bs-toggle="tooltip"]').tooltip();
 
+    $('#forgot_password_link').click(function() {
+        $('#forgot_password_modal').modal("show");
+    });
+
+    $('#submit_email_for_password_reset_btn').click(function(e) {
+        e.preventDefault();
+
+        form_data = $('#forgot_password_form').serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: $('#forgot_password_form').data("url"),
+            data: form_data,
+
+            success: function(response) {
+                window.alert(response.success);
+            },
+
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+
     // If the form is submitted, this will perform an AJAX call and send the registration info to the backend.
     // Then, it will be sent back to the client-side, so that it can be displayed.
     $('#registration_form').submit(function (e) {
