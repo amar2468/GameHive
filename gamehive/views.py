@@ -58,6 +58,20 @@ def forgot_password(request):
     else:
         return render(request, "403.html")
 
+# View that will allow a user that is not logged in to enter their new password.
+def password_reset_view(request):
+    # If the user is already logged in, they shouldn't be allowed to view this URL, as they can change their password in
+    # the profile section.
+    if request.user.is_authenticated:
+        return render(request, "403.html")
+    # If the user is not logged in, we will check whether the user is just trying to retrieve the page or actually submitting the
+    # new password.
+    else:
+        if request.method == "POST":
+            pass
+        else:
+            return render(request, "password_reset.html")
+
 # View that will display the admin dashboard, where admin can perform common admin activities.
 def admin_dashboard(request):
     # If the user is logged in, we will then check to see if the user is an admin or super admin. If so, the
