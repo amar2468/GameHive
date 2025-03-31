@@ -28,6 +28,9 @@ class LoginForm(forms.Form):
     username = forms.CharField(max_length=MAX_USERNAME_LENGTH, required=True, validators=[validate_username])
     password = forms.CharField(widget=forms.PasswordInput(), required=True)
 
+class ForgotPasswordForm(forms.Form):
+    user_email_for_pwd_reset = forms.EmailField(required=True)
+
 class TestimonialsForm(forms.Form):
     testimonial_message = forms.CharField(widget=forms.Textarea, required=True)
     star_rating = forms.IntegerField()
