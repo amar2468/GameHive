@@ -1,11 +1,15 @@
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
 from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails, BuyItemForm, ForgotPasswordForm
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth import password_validation
+from django.contrib.auth import authenticate, login, logout, password_validation
+from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
 from gamehive.models import CustomUser,GameUserProfile,TestimonialsModel
 from django.http import JsonResponse
+from django.core.mail import send_mail
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.urls import reverse
 
 # View that renders the homepage which allows a user to either sign up/login or play the game of their choice
 
@@ -19,6 +23,7 @@ def forgot_password(request):
     # If the user submits their email address as part of the password reset form, we will check to see if the email exists in
     # the system. If it does, an email will be sent to the user, with a password reset link attached.
     if request.method == "POST":
+        # Creating an instance of the ForgotPasswordForm, so that we can validate the user input
         form = ForgotPasswordForm(request.POST)
 
         # Validating the password reset form, to see whether the user provided the necessary information.
@@ -27,20 +32,41 @@ def forgot_password(request):
 
             # Check if the email exists in the CustomUser model. If it does, send the email with password reset link.
             try:
-                CustomUser.objects.get(email=user_email_for_pwd_reset)
+                user = CustomUser.objects.get(email=user_email_for_pwd_reset)
 
             # If the user email does not exist, send the error message back to the front-end, so the user can see what is wrong.
             except CustomUser.DoesNotExist:
                 response_forget_password = {
-                    'success' : "The email you entered could not be found in our system. Make sure that you have typed the email correctly."
+                    'success' : "The email you entered could not be found in our system. Make sure that you have typed the email correctly.",
+                    'email_sent' : False
                 }
 
                 return JsonResponse(response_forget_password)
             
+            # Encoding the user's primary key (ID) so that it can be safely included in the URL
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            
+            # Generating a token, which will be used to verify the user's identity. 
+            token = default_token_generator.make_token(user)
+
+            # Including the user's primary ID and token in the URL for the password reset, so that only a user who has requested a 
+            # password reset can change their password.
+            pwd_reset_link = f"http://127.0.0.1:8000{reverse('password_reset_view', kwargs={'uidb64':uid, 'token':token})}"
+
+            # Setting a subject for the email which will contain the password reset link
+            email_subject = "Password Reset Request - GameHive"
+
+            # Setting the body for the email which will contain the password reset link
+            email_body = f"Hello {user.username}. We have received a request to reset your GameHive password. Click on this link to set the new password - {pwd_reset_link}. If you did not request this, please ignore this email. Kind regards, GameHive Admin"
+
+            # Send the email to the user, with the password reset link attached.
+            send_mail(email_subject, email_body, "noreply@gamehive.com", [user_email_for_pwd_reset])
+
             # If the email was found and the email was sent, send the information back to the user, to inform them that they
             # need to check their email.
             response_forget_password = {
-                'success' : "You have been sent an email with the password reset link. Please click on the link and enter your new password."
+                'success' : "You have been sent an email with the password reset link. Please click on the link and enter your new password.",
+                'email_sent' : True
             }
 
             return JsonResponse(response_forget_password)
@@ -48,7 +74,8 @@ def forgot_password(request):
         # If the user sent an invalid form, the error message will be sent back to the front-end, so the user can see what is wrong.
         else:
             response_forget_password = {
-                'success' : "The email you have entered is not a valid one. Please make sure you have entered a valid email address."
+                'success' : "The email you have entered is not a valid one. Please make sure you have entered a valid email address.",
+                'email_sent' : False
             }
 
             return JsonResponse(response_forget_password)
@@ -59,7 +86,7 @@ def forgot_password(request):
         return render(request, "403.html")
 
 # View that will allow a user that is not logged in to enter their new password.
-def password_reset_view(request):
+def password_reset_view(request, uidb64, token):
     # If the user is already logged in, they shouldn't be allowed to view this URL, as they can change their password in
     # the profile section.
     if request.user.is_authenticated:
@@ -67,10 +94,80 @@ def password_reset_view(request):
     # If the user is not logged in, we will check whether the user is just trying to retrieve the page or actually submitting the
     # new password.
     else:
-        if request.method == "POST":
-            pass
+        # We will try to decode the user's primary key and see whether a record exists for the user in the CustomUser model
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = CustomUser.objects.get(pk=uid)
+
+        # If a record of the user does not exist in the CustomUser model, we will display a 403 page.
+        except (CustomUser.DoesNotExist, ValueError, TypeError):
+            return render(request, "403.html")
+        # If the user record exists in the CustomUser mode, we will proceed with this "else" block
         else:
-            return render(request, "password_reset.html")
+            # If the user exists and the token is valid for the user, we will proceed with either the POST or GET request.
+            if user is not None and default_token_generator.check_token(user, token):
+                # When the user enters their new password and submits it, this block will determine whether the new password is valid.
+                # If it is valid, it will set the new password. Otherwise, an error message will be sent back to the front-end.
+                if request.method == "POST":
+                    form = ChangePasswordForm(request.POST)
+
+                    # If all the fields in the form were filled in using valid info, we will proceed with further checks
+                    if form.is_valid():
+                        # Retrieve the new password and the confirmed new password from the django form.
+                        new_password = form.cleaned_data['change_password']
+                        new_password_confirmed = form.cleaned_data['change_password_confirm']
+
+                        # If the new password is equal to the new password confirmed, we will go ahead with the validation of the password
+                        if new_password == new_password_confirmed:
+                            
+                            # If the password is valid, set it as the new password. Otherwise, retrieve the error message
+                            # and display it to the user, so they can remediate.
+                            try:
+                                password_validation.validate_password(new_password)
+                            
+                            except ValidationError as e:
+                                
+                                response_password_reset = {
+                                    'message' : e.messages,
+                                    'password_changed' : False
+                                }
+
+                                return JsonResponse(response_password_reset)
+
+                            # Setting the new password
+                            user.set_password(new_password)
+
+                            # Saving the record in the model.
+                            user.save()
+
+                            response_password_reset = {
+                                'message' : "The password has been updated successfully. Please login using the new password.",
+                                'password_changed' : True
+                            }
+
+                            return JsonResponse(response_password_reset)
+
+                        else:
+                            response_password_reset = {
+                                'message' : "The passwords don't match. Make sure that the passwords match.",
+                                'password_changed' : False
+                            }
+
+                            return JsonResponse(response_password_reset)
+
+                    else:
+                        response_password_reset = {
+                            'message' : "The password is not a valid one. Make sure that the password contains at least 8 characters, with a variety of characters.",
+                            'password_changed' : False
+                        }
+
+                        return JsonResponse(response_password_reset)
+                # If this was a GET request, we will just retrieve the relevant HTML template, and pass the user's primary ID and token
+                else:
+                    return render(request, "password_reset.html", {'uidb64' : uidb64, 'token' : token})
+            
+            # If the user record does not exist, a 403 will be displayed.
+            return render(request, "403.html")
 
 # View that will display the admin dashboard, where admin can perform common admin activities.
 def admin_dashboard(request):
