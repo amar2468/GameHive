@@ -1,8 +1,68 @@
 $(document).ready(function() {
     $('[data-bs-toggle="tooltip"]').tooltip();
 
+    // When we are on the login page, we want the "sign_up" nav link to be highlighted and the "homepage" nav link to be unhighlighted.
     $('#sign_up_link').addClass('highlight_sign_up_nav_link_in_login_page');
     $('#homepage_link').addClass('unhighlight_nav_links');
+
+    // If the user clicks on the "forgot your password?" link in the login page, we will display the modal that will allow
+    // the user to enter the email address where they want the password reset link to be sent.
+    $('#forgot_password_link').click(function() {
+        $('#forgot_password_modal').modal("show");
+    });
+
+    // When the user submits their email address as part of the password reset process, this will get executed.
+    $('#submit_email_for_password_reset_btn').click(function(e) {
+        // We are preventing the submission of the form, as this will be done through AJAX
+        e.preventDefault();
+
+        // We are serialising the form data, so that it can be sent to the backend for review.
+        form_data = $('#forgot_password_form').serialize();
+
+        // AJAX POST request, which will attempt to send the user an email with the password reset link & deliver the outcome 
+        // (success or failure) to the user
+        $.ajax({
+            type: 'POST',
+            url: $('#forgot_password_form').data("url"),
+            data: form_data,
+
+            success: function(response) {
+                // If the user's email exists when they enter it in the "forget password" form, we will display a message
+                // to say that an email was sent, containing the link for the password reset.
+                if (response.email_sent === true) {
+                    // Clearing the text for the success message, and hiding both divs (success & failure) if they haven't been hidden.
+                    $('#paragraph_outcome_email_exists_success').text("");
+                    $('#div_outcome_email_exists_success').hide();
+                    $('#div_outcome_email_exists_failure').hide();
+                    
+                    // Populating the success message into the success paragraph and displaying the div that shows the success message
+                    $('#paragraph_outcome_email_exists_success').text(response.success);
+                    $('#div_outcome_email_exists_success').show();
+
+                    // Hiding all the other elements in the form, as they are not necessary anymore.
+                    $('#forgot_password_info').hide();
+                    $('#forgot_password_form').hide();
+                }
+                
+                // If the user's email does not exist when they enter it in the "forget password" form, we will display a message
+                // to say that there was an issue encountered.
+                else if (response.email_sent === false) {
+                    // Clearing the text for the failure message, and hiding both divs (success & failure) if they haven't been hidden.
+                    $('#paragraph_outcome_email_exists_failure').text("");
+                    $('#div_outcome_email_exists_failure').hide();
+                    $('#div_outcome_email_exists_success').hide();
+
+                    // Populating the failure message into the failure paragraph and displaying the div that shows the failure message
+                    $('#paragraph_outcome_email_exists_failure').text(response.success);
+                    $('#div_outcome_email_exists_failure').show();
+                }
+            },
+
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
 
     // If the form is submitted, this will perform an AJAX call and send the login info to the backend.
     // Then, it will be sent back to the client-side, so that it can be displayed.
