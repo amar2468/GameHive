@@ -55,8 +55,45 @@
                             <div class="d-grid"><button class="btn btn-primary btn-lg" id="submitButton" type="submit">Login</button></div>
 
                             <p>Don't have an account? <a href="{% url 'sign_up' %}" class="link-primary">Sign Up</a></p>
-                            <p><a href="#" class="link-primary">Forgot your password?</a></p>
+                            <p><a href="javascript:void(0)" class="link-primary" id="forgot_password_link">Forgot your password?</a></p>
                         </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal" id="forgot_password_modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Forgot Password</h5>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="alert alert-success" id="div_outcome_email_exists_success" role="alert" style="display:none;">
+                                <p id="paragraph_outcome_email_exists_success"></p>
+                            </div>
+
+                            <div class="alert alert-danger" id="div_outcome_email_exists_failure" role="alert" style="display:none;">
+                                <p id="paragraph_outcome_email_exists_failure"></p>
+                            </div>
+
+                            <p id="forgot_password_info">If you have forgot your password, enter the email address that you used to create your account in the input field below.</p>
+
+                            <form id="forgot_password_form" method="POST" data-url="{% url 'forgot_password' %}">
+                                {% csrf_token %}
+                                <div>
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="{{ form.user_email_for_pwd_reset.id_for_label }}" name="user_email_for_pwd_reset" type="email" placeholder="Enter your email..." autocomplete="off" />
+                                        <label for="{{ form.user_email_for_pwd_reset.id_for_label }}">Email</label>
+                                    </div>
+
+                                    <div class="form-floating">
+                                        <button type="submit" class="btn btn-primary btn-lg" id="submit_email_for_password_reset_btn">Reset</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
                     </div>
                 </div>
             </div>
