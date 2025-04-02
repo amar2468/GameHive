@@ -96,7 +96,15 @@
                         </div>
 
                         <div class="modal-body">
-                            <p>If you have forgot your password, enter the email address that you used to create your account in the input field below.</p>
+                            <div class="alert alert-success" id="div_outcome_email_exists_success" role="alert" style="display:none;">
+                                <p id="paragraph_outcome_email_exists_success"></p>
+                            </div>
+
+                            <div class="alert alert-danger" id="div_outcome_email_exists_failure" role="alert" style="display:none;">
+                                <p id="paragraph_outcome_email_exists_failure"></p>
+                            </div>
+
+                            <p id="forgot_password_info">If you have forgot your password, enter the email address that you used to create your account in the input field below.</p>
 
                             <form id="forgot_password_form" method="POST" data-url="{% url 'forgot_password' %}">
                                 {% csrf_token %}
