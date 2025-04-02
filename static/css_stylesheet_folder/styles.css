@@ -143,7 +143,7 @@ table td {
   border: 1px solid black;
 }
 
-#table_heading_leaderboard, #table_heading_user_reqs {
+#table_heading_leaderboard, #table_heading_user_reqs, #users_table_headers, #testimonials_mgmt_table_headers {
   background-color: #00FFFF;
 }
 
