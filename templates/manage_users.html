@@ -23,18 +23,32 @@
         </div>
     </section>
 
+    <section>
+        <div class="d-flex container justify-content-center">
+            <div class="col-12">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3>Total Users</h3>
+                        <i class="bi bi-people icons_for_admin_options"></i>
+                        <p class="website_statistical_numbers">{{ number_of_users }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="mt-5 mb-5" id="manage_users_admin_taskbar">
-        <div class="d-flex justify-content-center">
-            <div class="btn-group" role="group" aria-label="Admin options for managing users.">
+        <div class="d-flex container justify-content-center">
+            <div class="btn-group col-12" role="group" aria-label="Admin options for managing users.">
                 <button type="button" class="btn admin_options_delete"><i class="bi bi-trash"></i> Delete User</button>
                 <button type="button" class="btn admin_options_refresh_page"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                <button type="button" class="btn admin_options_refresh_page"><i class="bi bi-download"></i> Download Users</button>
             </div>
         </div>
     </section>
 
     <section class="mt-5 mb-5" id="list_of_users_section">
         <div class="container">
-            <p><b>Number of Users (2)</b></p>
             <table class="table table-responsive" id="manage_users_table">
                 <thead id="users_table_headers">
                     <tr>
