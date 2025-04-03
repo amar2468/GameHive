@@ -233,7 +233,8 @@ def testimonials_mgmt(request):
             all_testimonials = TestimonialsModel.objects.all()
 
             response_all_testimonials = {
-                'all_testimonials' : all_testimonials
+                'all_testimonials' : all_testimonials,
+                'number_of_testimonials' : len(all_testimonials)
             }
 
             return render(request, "testimonials_mgmt.html", response_all_testimonials)
