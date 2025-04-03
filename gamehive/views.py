@@ -200,7 +200,8 @@ def manage_users(request):
             all_users = CustomUser.objects.all()
 
             response_all_users = {
-                'all_users' : all_users
+                'all_users' : all_users,
+                'number_of_users' : len(all_users)
             }
 
             return render(request, "manage_users.html", response_all_users)
