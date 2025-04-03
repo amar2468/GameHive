@@ -22,9 +22,23 @@
             </div>
         </section>
 
+        <section>
+            <div class="d-flex container justify-content-center">
+                <div class="col-12">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h3>Total Testimonials</h3>
+                            <i class="bi bi-chat-left-quote icons_for_admin_options"></i>
+                            <p class="website_statistical_numbers">{{ number_of_testimonials }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="mt-5 mb-5" id="testimonial_mgmt_admin_options">
-            <div class="d-flex justify-content-center">
-                <div class="btn-group" role="group" aria-label="Admin options for managing testimonials.">
+            <div class="d-flex container justify-content-center">
+                <div class="btn-group col-12" role="group" aria-label="Admin options for managing testimonials.">
                     <button type="button" class="btn admin_options_delete"><i class="bi bi-trash"></i> Delete Testimonial</button>
                     <button type="button" class="btn admin_options_refresh_page"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
                     <button type="button" class="btn admin_options_refresh_page"><i class="bi bi-download"></i> Download Testimonials</button>
