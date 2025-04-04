@@ -13,73 +13,111 @@
 
 <body>
     {% block content %}
-    
-    <section class="mt-3 mb-5" id="manage_users_heading">
-        <div class="container">
-            <hr>
-            <h2>Users - All Users</h2>
-            <p>GameHive users with the following attributes: full name, username, account type. </p>
-            <hr>
-        </div>
-    </section>
+    <section id="main_section">
+        <section class="mt-3 mb-5" id="manage_users_heading">
+            <div class="container">
+                <hr>
+                <h2>Users - All Users</h2>
+                <p>GameHive users with the following attributes: full name, username, account type. </p>
+                <hr>
+            </div>
+        </section>
 
-    <section>
-        <div class="d-flex container justify-content-center">
-            <div class="col-12">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h3>Total Users</h3>
-                        <i class="bi bi-people icons_for_admin_options"></i>
-                        <p class="website_statistical_numbers">{{ number_of_users }}</p>
+        <section>
+            <div class="d-flex container justify-content-center">
+                <div class="col-12">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h3>Total Users</h3>
+                            <i class="bi bi-people icons_for_admin_options"></i>
+                            <p class="website_statistical_numbers">{{ number_of_users }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="mt-5 mb-5" id="manage_users_admin_taskbar">
-        <div class="d-flex container justify-content-center">
-            <div class="btn-group col-12" role="group" aria-label="Admin options for managing users.">
-                <button type="button" class="btn admin_options_delete"><i class="bi bi-trash"></i> Delete User</button>
-                <button type="button" class="btn admin_options_refresh_page"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
-                <button type="button" class="btn admin_options_refresh_page"><i class="bi bi-download"></i> Download Users</button>
+        <section class="mt-5 mb-5" id="manage_users_admin_taskbar">
+            <div class="d-flex container justify-content-center">
+                <div class="btn-group col-12" role="group" aria-label="Admin options for managing users.">
+                    <button type="button" class="btn admin_options_delete"><i class="bi bi-trash"></i> Delete User</button>
+                    <button type="button" id="refresh_users_btn" class="btn admin_options_refresh_page"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                    <button type="button" class="btn admin_options_refresh_page"><i class="bi bi-download"></i> Download Users</button>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="mt-5 mb-5" id="list_of_users_section">
-        <div class="container">
-            <table class="table table-responsive" id="manage_users_table">
-                <thead id="users_table_headers">
-                    <tr>
-                        <th scope="col"><input class="form-check-input" type="checkbox" id="select_row" aria-label="Select the user record row."></th>
-                        <th scope="col" class="text-black text-center">Full Name</th>
-                        <th scope="col" class="text-black text-center">Username</th>
-                        <th scope="col" class="text-black text-center">Account Type</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for user_record in all_users %}
+        <section class="mt-5 mb-5" id="list_of_users_section">
+            <div class="container">
+                <table class="table table-responsive" id="manage_users_table">
+                    <thead id="users_table_headers">
                         <tr>
-                            <th scope="row"><input class="form-check-input" type="checkbox" id="select_row" aria-label="Select the user record row."></th>
-                            <td class="text-black text-center">{{ user_record.first_name }} {{ user_record.last_name }}</td>
-                            <td class="text-black text-center"><a href="#" id="username_link_manage_users">{{ user_record.username }}</a></td>
-                            <td class="text-black text-center">{{ user_record.account_type }}</td>
+                            <th scope="col"><input class="form-check-input" type="checkbox" id="select_row" aria-label="Select the user record row."></th>
+                            <th scope="col" class="text-black text-center">Full Name</th>
+                            <th scope="col" class="text-black text-center">Username</th>
+                            <th scope="col" class="text-black text-center">Account Type</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+
+                    <tbody>
+                        {% for user_record in all_users %}
+                            <tr>
+                                <th scope="row"><input class="form-check-input" type="checkbox" id="select_row" aria-label="Select the user record row."></th>
+                                <td class="text-black text-center">{{ user_record.first_name }} {{ user_record.last_name }}</td>
+                                <td class="text-black text-center"><a href="#" id="username_link_manage_users">{{ user_record.username }}</a></td>
+                                <td class="text-black text-center">{{ user_record.account_type }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </section>
 
     <script>
         $(document).ready(function() {
+            // When we are on the "Manage Users" page, we want the "Admin Dashboard" nav link to be highlighted.
+            $('#admin_dashboard_link').addClass('highlight_sign_up_nav_link_in_login_page');
+
+            // Initialise the HTML table to be a datatable, with the "sort" option disabled for the first column.
             new DataTable('#manage_users_table', {
                 columnDefs: [
                     { orderable:false, targets:0 }
                 ]
             });
+            
+            // When the admin clicks the button the refresh the page, we will perform a GET request and bring the changes
+            // from the page without a page reload.
+            $('#refresh_users_btn').click(function() {
+                $.ajax({
+                    type: 'GET',
+                    url: "{% url 'manage_users' %}",
+
+                    // If the page refresh was successful, we will perform the below.
+                    success: function(response) {
+                        // We are clearing the information from the datatable, so that it can be updated with the latest info
+                        let manage_users_table = $('#manage_users_table').DataTable();
+                        manage_users_table.destroy();
+
+                        // Find the main section (whole page) and update the HTML with the new info
+                        let main_section_refresh = $(response).find("#main_section").html();
+                        $('#main_section').html(main_section_refresh);
+                        
+                        // Update the datatable with the new information.
+                        $('#manage_users_table').DataTable({
+                            columnDefs: [
+                                { orderable: false, targets: 0 }
+                            ]
+                        });
+                    },
+                    
+                    // If an error was encountered, we will log it to the console.
+                    error: function(error) {
+                        console.log(error);
+                    }
+
+                });
+            })
 
         });
 

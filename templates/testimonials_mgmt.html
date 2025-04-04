@@ -13,6 +13,7 @@
 
 <body>
     {% block content %}
+    <section id="main_section">
         <section class="mt-3 mb-5" id="testimonial_mgmt_heading">
             <div class="container">
                 <hr>
@@ -40,7 +41,7 @@
             <div class="d-flex container justify-content-center">
                 <div class="btn-group col-12" role="group" aria-label="Admin options for managing testimonials.">
                     <button type="button" class="btn admin_options_delete"><i class="bi bi-trash"></i> Delete Testimonial</button>
-                    <button type="button" class="btn admin_options_refresh_page"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                    <button type="button" id="refresh_testimonials_btn" class="btn admin_options_refresh_page"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
                     <button type="button" class="btn admin_options_refresh_page"><i class="bi bi-download"></i> Download Testimonials</button>
                 </div>
             </div>
@@ -75,15 +76,53 @@
                 </table>
             </div>
         </section>
+    </section>
 
-        <script>
-            $(document).ready(function() {
-                new DataTable("#manage_testimonials_table", {
-                    columnDefs: [
-                        { orderable:false, targets:0 }
-                    ]
-                });
+    <script>
+        $(document).ready(function() {
+            // When we are on the "Testimonials Management" page, we want the "Admin Dashboard" nav link to be highlighted.
+            $('#admin_dashboard_link').addClass('highlight_sign_up_nav_link_in_login_page');
+
+            // Initialise the HTML table to be a datatable, with the "sort" option disabled for the first column.
+            new DataTable("#manage_testimonials_table", {
+                columnDefs: [
+                    { orderable:false, targets:0 }
+                ]
             });
-        </script>
+
+            // When the admin clicks the button the refresh the page, we will perform a GET request and bring the changes
+            // from the page without a page reload.
+            $('#refresh_testimonials_btn').click(function() {
+                $.ajax({
+                    type: 'GET',
+                    url: "{% url 'testimonials_mgmt' %}",
+
+                    // If the page refresh was successful, we will perform the below.
+                    success: function(response) {
+                        // We are clearing the information from the datatable, so that it can be updated with the latest info
+                        let manage_testimonials_table = $('#manage_testimonials_table').DataTable();
+                        manage_testimonials_table.destroy();
+                        
+                        // Find the main section (whole page) and update the HTML with the new info
+                        let main_section_refresh = $(response).find("#main_section").html();
+                        $('#main_section').html(main_section_refresh);
+
+                        // Update the datatable with the new information.
+                        $('#manage_testimonials_table').DataTable({
+                            columnDefs: [
+                                { orderable: false, targets: 0 }
+                            ]
+                        });
+                        
+                    },
+
+                    // If an error was encountered, we will log it to the console.
+                    error: function(error) {
+                        console.log(error);
+                    }
+                })
+            });
+        });
+    </script>
     {% endblock %}
 </body>
