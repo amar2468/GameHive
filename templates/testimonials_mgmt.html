@@ -9,6 +9,7 @@
 {% block extra_js %}
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
+    <script src="{% static 'js/testimonials_mgmt.js' %}"></script>
 {% endblock %}
 
 <body>
@@ -52,7 +53,7 @@
                 <table class="table table-responsive" id="manage_testimonials_table">
                     <thead id="testimonials_mgmt_table_headers">
                         <tr>
-                            <th scope="col"><input class="form-check-input" type="checkbox" id="select_row" aria-label="Select the testimonial record row."></th>
+                            <th scope="col"><input class="form-check-input" id="select_all_testimonials" type="checkbox" aria-label="Select the testimonial record row."></th>
                             <th scope="col" class="text-black text-center">Username</th>
                             <th scope="col" class="text-black text-center">Rating</th>
                             <th scope="col" class="text-black text-center">Message</th>
@@ -61,8 +62,8 @@
 
                     <tbody>
                         {% for testimonial_record in all_testimonials %}
-                            <tr>
-                                <th scope="row"><input class="form-check-input" type="checkbox" id="select_row" aria-label="Select the testimonial record row."></th>
+                            <tr class="testimonial-row">
+                                <th scope="row"><input class="form-check-input select-row" type="checkbox" aria-label="Select the testimonial record row."></th>
                                 <td class="text-black text-center">{{ testimonial_record.user.username }}</td>
                                 <td class="text-black text-center">
                                     {% for i in ""|rjust:testimonial_record.star_rating %}
@@ -77,52 +78,5 @@
             </div>
         </section>
     </section>
-
-    <script>
-        $(document).ready(function() {
-            // When we are on the "Testimonials Management" page, we want the "Admin Dashboard" nav link to be highlighted.
-            $('#admin_dashboard_link').addClass('highlight_sign_up_nav_link_in_login_page');
-
-            // Initialise the HTML table to be a datatable, with the "sort" option disabled for the first column.
-            new DataTable("#manage_testimonials_table", {
-                columnDefs: [
-                    { orderable:false, targets:0 }
-                ]
-            });
-
-            // When the admin clicks the button the refresh the page, we will perform a GET request and bring the changes
-            // from the page without a page reload.
-            $('#refresh_testimonials_btn').click(function() {
-                $.ajax({
-                    type: 'GET',
-                    url: "{% url 'testimonials_mgmt' %}",
-
-                    // If the page refresh was successful, we will perform the below.
-                    success: function(response) {
-                        // We are clearing the information from the datatable, so that it can be updated with the latest info
-                        let manage_testimonials_table = $('#manage_testimonials_table').DataTable();
-                        manage_testimonials_table.destroy();
-                        
-                        // Find the main section (whole page) and update the HTML with the new info
-                        let main_section_refresh = $(response).find("#main_section").html();
-                        $('#main_section').html(main_section_refresh);
-
-                        // Update the datatable with the new information.
-                        $('#manage_testimonials_table').DataTable({
-                            columnDefs: [
-                                { orderable: false, targets: 0 }
-                            ]
-                        });
-                        
-                    },
-
-                    // If an error was encountered, we will log it to the console.
-                    error: function(error) {
-                        console.log(error);
-                    }
-                })
-            });
-        });
-    </script>
     {% endblock %}
 </body>
