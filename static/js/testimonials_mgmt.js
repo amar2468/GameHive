@@ -2,6 +2,9 @@ $(document).ready(function() {
     // When we are on the "Testimonials Management" page, we want the "Admin Dashboard" nav link to be highlighted.
     $('#admin_dashboard_link').addClass('highlight_sign_up_nav_link_in_login_page');
 
+    // Disabling the button the delete the testimonial, when the page is initially loaded.
+    $('.admin_options_delete').prop("disabled", true);
+
     // Initialise the HTML table to be a datatable, with the "sort" option disabled for the first column.
     new DataTable("#manage_testimonials_table", {
         columnDefs: [
@@ -42,19 +45,27 @@ $(document).ready(function() {
         })
     });
 
-    // If the user clicks on the "select all" button, it will either select all or unselect all options.
+    // If the admin clicks on the "select all" button, it will either select all or unselect all options.
     $(document).on("click", "#select_all_testimonials", function() {
         // If all the rows are already selected and the "select all" option is clicked again, it will deselect all the rows
         if (($('.select-row').length) === ($('.select-row:checked').length))
         {
+            // Deselects all the rows and deselects the "select all" option
             $('.select-row').prop("checked", false);
             $('#select_all_testimonials').prop("checked", false);
+
+            // Disabling the "delete testimonial" button, when no rows are selected.
+            $('.admin_options_delete').prop("disabled", true);
         }
 
         // If all rows are NOT selected and the "select all" option is chosen, it will select all the rows.
         else {
+            // Selects all the rows and selects the "select all" option
             $('.select-row').prop("checked", true);
             $('#select_all_testimonials').prop("checked", true);
+
+            // Enabling the "delete testimonial" button, when all rows are selected.
+            $('.admin_options_delete').prop("disabled", false);
         }
     });
 
@@ -66,11 +77,41 @@ $(document).ready(function() {
 
         // Check if it is checked/unchecked and do the inverse to the checkbox, which makes it a toggle.
         select_this_row.prop("checked", !select_this_row.prop("checked"));
+
+        // If no rows are selected, we will disable the "delete testimonial" button and uncheck the "select all" button.
+        if (($('.select-row:checked').length) === 0) {
+            $('.admin_options_delete').prop("disabled", true);
+            $('#select_all_testimonials').prop("checked", false);
+        }
+
+        else if (($('.select-row:checked').length) === ($('.select-row').length)) {
+            $('#select_all_testimonials').prop("checked", true);
+        }
+        
+        // If at least one row is selected, we will enable the "delete testimonial" button.
+        else {
+            $('.admin_options_delete').prop("disabled", false);
+        }
     });
 
     // To prevent the error of not being able to click on the checkbox directly, we need to include this part.
     $(document).on("click", ".select-row", function(e) {
         e.stopPropagation();
+
+        // If no rows are selected, we will disable the "delete testimonial" button and uncheck the "select all" button.
+        if (($('.select-row:checked').length) === 0) {
+            $('.admin_options_delete').prop("disabled", true);
+            $('#select_all_testimonials').prop("checked", false);
+        }
+
+        else if (($('.select-row:checked').length) === ($('.select-row').length)) {
+            $('#select_all_testimonials').prop("checked", true);
+        }
+
+        // If at least one row is selected, we will enable the "delete testimonial" button.
+        else {
+            $('.admin_options_delete').prop("disabled", false);
+        }
     });
 
 });
