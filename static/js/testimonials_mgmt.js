@@ -84,6 +84,7 @@ $(document).ready(function() {
             $('#select_all_testimonials').prop("checked", false);
         }
 
+        // If all individual rows are selected (checked), we will select the "select all" option to be enabled.
         else if (($('.select-row:checked').length) === ($('.select-row').length)) {
             $('#select_all_testimonials').prop("checked", true);
         }
@@ -104,6 +105,7 @@ $(document).ready(function() {
             $('#select_all_testimonials').prop("checked", false);
         }
 
+        // If all individual rows are selected (checked), we will select the "select all" option to be enabled.
         else if (($('.select-row:checked').length) === ($('.select-row').length)) {
             $('#select_all_testimonials').prop("checked", true);
         }
