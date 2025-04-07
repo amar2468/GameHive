@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.urls import reverse
+import json
 
 # View that renders the homepage which allows a user to either sign up/login or play the game of their choice
 
@@ -193,23 +194,62 @@ def admin_dashboard(request):
 # View that will show all the users, giving the admin the opportunity to perform tasks such as resetting the password, deleting the 
 # account, and updating the profile
 def manage_users(request):
-    # If the user is logged in, we will then check to see if the user is an admin or super admin. If so, the
-    # page with all the users will be displayed.
-    if request.user.is_authenticated:
-        if request.user.account_type == "super_admin" or request.user.account_type == "admin":
-            all_users = CustomUser.objects.all()
+    if request.method == "POST":
+        # Gets the JSON data from the request
+        data = json.loads(request.body)
 
-            response_all_users = {
-                'all_users' : all_users,
-                'number_of_users' : len(all_users)
+        # Finds the "users_to_delete_list" array, that was stored in the JSON object.
+        users_to_delete = data.get("users_to_delete_list")
+
+        # Iterating through the users to delete and deleting them individually
+        for remove_user in users_to_delete:
+            # We are retrieving the user record from the CustomUser model
+            user_to_remove = CustomUser.objects.get(username=remove_user)
+
+            # Delete the user record that was retrieved above.
+            user_to_remove.delete()
+
+        # If only one user was deleted, we will notify the admin that one user was deleted.
+        if len(users_to_delete) == 1:
+            response_manage_users = {
+                'status' : "The selected user has been removed from the system.",
+                'success' : True
+            }
+        
+        # If more than one user was deleted, we will notify the admin that more than one user was deleted.
+        elif len(users_to_delete) > 1:
+            response_manage_users = {
+                'status' : "The selected users have been removed from the system.",
+                'success' : True
+            }
+        
+        # If no users were deleted, the admin should receive an error message, where they need to investigate the issue.
+        else:
+            response_manage_users = {
+                'status' : "Error: No users were deleted. Please investigate why this is the case.",
+                'success' : False
             }
 
-            return render(request, "manage_users.html", response_all_users)
+        # Returning the response in JSON form to the front-end.
+        return JsonResponse(response_manage_users)
+    else:
+        # If the user is logged in, we will then check to see if the user is an admin or super admin. If so, the
+        # page with all the users will be displayed.
+        if request.user.is_authenticated:
+            if request.user.account_type == "super_admin" or request.user.account_type == "admin":
+                all_users = CustomUser.objects.all()
+
+                response_all_users = {
+                    'all_users' : all_users,
+                    'number_of_users' : len(all_users)
+                }
+
+                return render(request, "manage_users.html", response_all_users)
+            else:
+                return render(request, "403.html")
+        # If the user is not logged in, the page is forbidden for them.
         else:
             return render(request, "403.html")
-    # If the user is not logged in, the page is forbidden for them.
-    else:
-        return render(request, "403.html")
 
 # View that allows an admin to view all the user requests
 def user_request_mgmt(request):
@@ -226,23 +266,63 @@ def user_request_mgmt(request):
 
 # View that allows an admin to view all the testimonials
 def testimonials_mgmt(request):
-    # If the user is logged in, we will then check to see if the user is an admin or super admin. If so, the
-    # page with all the testimonials will be displayed.
-    if request.user.is_authenticated:
-        if request.user.account_type == "super_admin" or request.user.account_type == "admin":
-            all_testimonials = TestimonialsModel.objects.all()
+    if request.method == "POST":
+        # Gets the JSON data from the request
+        data = json.loads(request.body)
 
-            response_all_testimonials = {
-                'all_testimonials' : all_testimonials,
-                'number_of_testimonials' : len(all_testimonials)
+        # Finds the "testimonials_to_delete" array, that was stored in the JSON object.
+        testimonials_to_delete = data.get("testimonials_to_delete")
+
+        # Iterating through the testimonials to delete and deleting them individually
+        for remove_testimonial in testimonials_to_delete:
+            # Retrieve the user that created the testimonial, as this record will be used when deleting the testimonial itself.
+            testimonial_author = CustomUser.objects.get(username=remove_testimonial)
+
+            # We are retrieving the testimonial record from the TestimonialsModel model
+            testimonial_to_remove = TestimonialsModel.objects.get(user=testimonial_author)
+
+            # Delete the testimonial record that was retrieved above.
+            testimonial_to_remove.delete()
+        
+        # If only one testimonial was deleted, we will notify the admin that one testimonial was deleted.
+        if len(testimonials_to_delete) == 1:
+            response_testimonials_mgmt = {
+                'status' : "The selected testimonial has been removed from the system."
+            }
+        
+        # If more than one testimonial was deleted, we will notify the admin that more than one testimonial was deleted.
+        elif len(testimonials_to_delete) > 1:
+            response_testimonials_mgmt = {
+                'status' : "The selected testimonials have been removed from the system."
+            }
+        
+        # If no testimonials were deleted, the admin should receive an error message, where they need to investigate the issue.
+        else:
+            response_testimonials_mgmt = {
+                'status' : "Error: No testimonials were deleted. Please investigate why this is the case.",
+                'success' : False
             }
 
-            return render(request, "testimonials_mgmt.html", response_all_testimonials)
+        # Returning the response in JSON form to the front-end.
+        return JsonResponse(response_testimonials_mgmt)
+    else:
+        # If the user is logged in, we will then check to see if the user is an admin or super admin. If so, the
+        # page with all the testimonials will be displayed.
+        if request.user.is_authenticated:
+            if request.user.account_type == "super_admin" or request.user.account_type == "admin":
+                all_testimonials = TestimonialsModel.objects.all()
+
+                response_all_testimonials = {
+                    'all_testimonials' : all_testimonials,
+                    'number_of_testimonials' : len(all_testimonials)
+                }
+
+                return render(request, "testimonials_mgmt.html", response_all_testimonials)
+            else:
+                return render(request, "403.html")
+        # If the user is not logged in, the page is forbidden for them
         else:
             return render(request, "403.html")
-    # If the user is not logged in, the page is forbidden for them
-    else:
-        return render(request, "403.html")
 
 # First part of this view is the POST method, which saves a testimonial to the relevant custom model. The else part will just display
 # the page to the user without submitting any forms
