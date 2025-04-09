@@ -24,10 +24,14 @@ SUPER_ADMIN_EMAIL = os.getenv("SUPER_ADMIN_EMAIL")
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# Getting the env variable "DJANGO_DEBUG" from .env file. The default value is set as "False", which will only be applied if
+# the env variable cannot be found. The "== True" part is there because the os.getenv part will only return "True" or "False" as 
+# a string but we want the value to be Boolean. So comparing it to "True" will either retrieve a True/False boolean value.
+DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# Retrieves the env variable "DJANGO_ALLOWED_HOSTS". If nothing is specified, the default will be localhost. We are splitting it
+# for every comma that appears, as we want a comma separated list.
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 # We are specifying that we want Django to use CustomUser model as the user model, instead of the default (User model)
 AUTH_USER_MODEL='gamehive.CustomUser'
