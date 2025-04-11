@@ -151,6 +151,10 @@ if DEBUG == True:
     ]
 
 if DEBUG == False:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static')
+    ]
+    
     STATIC_ROOT = "/opt/render/project/src/staticfiles"
 
     MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
