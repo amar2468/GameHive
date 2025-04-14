@@ -24,6 +24,8 @@ SUPER_ADMIN_EMAIL = os.getenv("SUPER_ADMIN_EMAIL")
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
+redis_url = os.getenv("REDIS_URL")
+
 # Getting the env variable "DJANGO_DEBUG" from .env file. The default value is set as "False", which will only be applied if
 # the env variable cannot be found. The "== True" part is there because the os.getenv part will only return "True" or "False" as 
 # a string but we want the value to be Boolean. So comparing it to "True" will either retrieve a True/False boolean value.
@@ -81,17 +83,16 @@ TEMPLATES = [
     },
 ]
 
-
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", "6379")],
+            "hosts": [redis_url],
         },
     },
 }
 
-ASGI_APPLICATION = 'gamehive.routing.application'
+ASGI_APPLICATION = 'gamehive.asgi.application'
 
 # Emails that are sent will be displayed in the console, for testing purposes.
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
@@ -149,6 +150,8 @@ if DEBUG == True:
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, 'static')
     ]
+
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 if DEBUG == False:
     STATICFILES_DIRS = [
