@@ -8,13 +8,3 @@ websocket_urlpatterns=[
         r"ws/multiplayer_rps/$", consumers.RockPaperScissorsConsumer.as_asgi()
     ),
 ]
-
-application = ProtocolTypeRouter( 
-    {
-        "websocket": AuthMiddlewareStack(
-            URLRouter(
-               websocket_urlpatterns
-            )
-        ),
-    }
-)
