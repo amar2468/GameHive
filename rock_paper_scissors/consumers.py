@@ -1,13 +1,23 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
-from django.contrib.auth.models import User
-from gamehive.models import GameUserProfile
+from gamehive.models import GameUserProfile, CustomUser
 from asgiref.sync import sync_to_async
 import random
 import redis
+from urllib.parse import urlparse
+from dotenv import load_dotenv
+import os
+
+# We are retrieving the redis URL from the .env file, so that we can extract the hostname, password, and port number, which are
+# all needed for the part where we connect to the Redis instance.
+load_dotenv()
+
+redis_url = os.getenv("REDIS_URL")
+
+url = urlparse(redis_url)
 
 # Creating an instance of the Redis client
-redis_client = redis.Redis(host="127.0.0.1", port="6379", db=0, decode_responses=True)
+redis_client = redis.Redis(host=url.hostname, password=url.password, port=url.port, ssl=True, decode_responses=True)
 
 class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
     # Creating a constant variable that stores the total number of wins required to win the game
@@ -230,7 +240,7 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                     # Attempt to update the user score by 10, if they won. Except part will run if this is the user's first ever game
                     try:
                         # Retrieving the username
-                        user_instance = await sync_to_async(User.objects.get)(username=user1_name)
+                        user_instance = await sync_to_async(CustomUser.objects.get)(username=user1_name)
                         # Based on the username, we are trying to find the game record that goes with the username
                         game_user_profile = await sync_to_async(GameUserProfile.objects.get)(user=user_instance)
                         # Increase the user score by 10, as they won
@@ -239,7 +249,7 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                         await sync_to_async(game_user_profile.save)()
                     except GameUserProfile.DoesNotExist:
                         # Retrieving the username
-                        user_instance = await sync_to_async(User.objects.get)(username=user1_name)
+                        user_instance = await sync_to_async(CustomUser.objects.get)(username=user1_name)
                         # Create the user profile that will keep track of the points won. Set the score to be 10, as they won.
                         game_user_profile = await sync_to_async(GameUserProfile.objects.create) (
                             user = user_instance,
@@ -254,7 +264,7 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                     # Attempt to update the user score by 10, if they won. Except part will run if this is the user's first ever game
                     try:
                         # Retrieving the username
-                        user_instance_2 = await sync_to_async(User.objects.get)(username=user2_name)
+                        user_instance_2 = await sync_to_async(CustomUser.objects.get)(username=user2_name)
                         # Based on the username, we are trying to find the game record that goes with the username
                         game_user_profile = await sync_to_async(GameUserProfile.objects.get)(user=user_instance_2)
                         # Increase the user score by 10, as they won
@@ -263,7 +273,7 @@ class RockPaperScissorsConsumer(AsyncWebsocketConsumer):
                         await sync_to_async(game_user_profile.save)()
                     except GameUserProfile.DoesNotExist:
                         # Retrieving the username
-                        user_instance_2 = await sync_to_async(User.objects.get)(username=user2_name)
+                        user_instance_2 = await sync_to_async(CustomUser.objects.get)(username=user2_name)
                         # Create the user profile that will keep track of the points won. Set the score to be 10, as they won.
                         game_user_profile = await sync_to_async(GameUserProfile.objects.create) (
                             user = user_instance_2,
