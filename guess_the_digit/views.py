@@ -3,6 +3,9 @@ from .forms import GuessTheNumberInputForm
 import random
 from gamehive.models import GameUserProfile
 import redis
+from urllib.parse import urlparse
+from dotenv import load_dotenv
+import os
 
 # Guess the digit game functionality in the view below
 def guess_the_digit_game(request):
@@ -76,8 +79,14 @@ def guess_the_digit_game(request):
         HARD_LEVEL_ATTEMPTS_HINTS_ENABLED = 11
         HARD_LEVEL_ATTEMPTS_HINTS_DISABLED = 20
 
+        load_dotenv()
+
+        redis_url = os.getenv("REDIS_URL")
+
+        url = urlparse(redis_url)
+
         # Creating an instance of the Redis client
-        redis_client = redis.Redis(host="127.0.0.1", port="6379", db=0, decode_responses=True)
+        redis_client = redis.Redis(host=url.hostname, password=url.password, port=url.port, ssl=True, decode_responses=True)
         
         # This block below will execute when the user fills in the form (which asks for the level and if hints should be enabled)
         if request.method == "GET":
