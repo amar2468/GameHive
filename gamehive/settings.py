@@ -172,6 +172,7 @@ if DEBUG == True and not using_runserver:
 
 # If Debug mode is turned off (which would be the case if this app is deployed), we will set the STATIC_ROOT to point to 
 # the "staticfiles" folder in the specific location in Render, where collected static files will be stored.
+if DEBUG == False:
     STATIC_ROOT = "/opt/render/project/src/staticfiles"
 
     MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
