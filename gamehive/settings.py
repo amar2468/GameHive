@@ -6,6 +6,7 @@ from pathlib import Path
 import os
 import environ
 from dotenv import load_dotenv
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -146,18 +147,31 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-if DEBUG == True:
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'static')
-    ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
+# Checking to see if the user ran "python manage.py runserver"
+using_runserver = "runserver" in sys.argv
+
+# If the Debug mode is turned on and the user is using "python manage.py runserver" to run the server, we don't want to use 
+# whitenoise, as runserver automatically handles static files in Debug mode. We only need to set the STATIC_ROOT to point to
+# the "staticfiles" folder, where collected static files will be stored
+if DEBUG == True and using_runserver:
     STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-if DEBUG == False:
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'static')
-    ]
-    
+# If Debug mode is turned on and the user is not using runserver (perhaps they are using something like uvicorn) to run the app,
+# then we will set the STATIC_ROOT to point to the "staticfiles" folder, where collected static files will be stored. We are also
+# configuring the server to use whitenoise for static file handling.
+if DEBUG == True and not using_runserver:
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+    MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# If Debug mode is turned off (which would be the case if this app is deployed), we will set the STATIC_ROOT to point to 
+# the "staticfiles" folder in the specific location in Render, where collected static files will be stored.
     STATIC_ROOT = "/opt/render/project/src/staticfiles"
 
     MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
