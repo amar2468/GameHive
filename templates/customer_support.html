@@ -2,6 +2,107 @@
 {% load static %}
 {% block title %}Customer Support{% endblock %}
 
+{% block extra_js %}
+    <script src="{% static 'js/customer_support.js' %}"></script>
+{% endblock %}
+
 {% block content %}
-Content here...
+    <section class="mt-3 mb-5 text-center">
+        <h2>Customer Support - Form</h2>
+    </section>
+
+    <section class="mt-5 mb-5 text-center">
+        <div class="container">
+            <h5 class="subheading_intro_customer_support_form">Need Help?</h5>
+            <p class="intro_customer_support_form">
+                Our support team is here to assist you with account deletion, edits, refunds, or any other issues you might run into — even the unusual ones. Just fill out the form below and we'll get back to you as soon as possible.
+            </p>
+        </div>
+    </section>
+
+    <section class="mt-5 mb-5 text-center">
+        <div class="container">
+            <div class="col-6">
+                <form id="customer_support_form" method="post" data-url="{% url 'customer_support' %}">
+                    {% csrf_token %}
+
+                    <div class="d-flex">
+                        <div class="form-floating mb-3 flex-grow-1" >
+                            <input class="form-control" id="{{ form.customer_username.id_for_label }}" name="customer_username" type="text" placeholder="Enter your username..." autocomplete="off" />
+                            <label for="{{ form.customer_username.id_for_label }}">Username</label>
+                        </div>
+
+                        <div class="ms-2 d-flex align-items-center">
+                            <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter the username that you used to create your GameHive account."></i>
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <div class="form-floating mb-3 flex-grow-1">
+                            <input class="form-control" id="{{ form.customer_email.id_for_label }}" name="customer_email" type="email" placeholder="Enter your email..." autocomplete="off" />
+                            <label for="{{ form.customer_email.id_for_label }}">Email</label>
+                        </div>
+
+                        <div class="ms-2 d-flex align-items-center">
+                            <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter the email address that you used when creating your GameHive account."></i>
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <div class="form-floating mb-3 flex-grow-1">
+                            <select class="form-select text-black" name="request_type_option" aria-label="Choose the request type for this ticket e.g. delete user, edit user, cancel purchase, or general request.">
+                                <option selected disabled value="">Choose Request Type</option>
+                                <option value="delete_user_account">Delete Your Account</option>
+                                <option value="edit_user_account">Edit Your Account</option>
+                                <option value="cancel_user_purchase">Cancel Your Purchase</option>
+                                <option value="general_requests">General Requests</option>
+                            </select>
+                        </div>
+
+                        <div class="ms-2 d-flex align-items-center">
+                            <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Choose the request type for this ticket e.g. delete user, edit user, cancel purchase, or general requests. If unsure, just choose 'general requests'."></i>
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <div class="form-floating mb-3 flex-grow-1">
+                            <input class="form-control" id="{{ form.customer_title_of_request.id_for_label }}" name="customer_title_of_request" type="text" placeholder="Enter the title for this request..." autocomplete="off" />
+                            <label for="{{ form.customer_title_of_request.id_for_label }}">Request Title</label>
+                        </div>
+
+                        <div class="ms-2 d-flex align-items-center">
+                            <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter the title for this request, which will reflect the type of request that you have."></i>
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <div class="form-floating mb-3 flex-grow-1">
+                            <textarea class="form-control" id="{{ form.customer_ticket_description.id_for_label }}" name="customer_ticket_description"></textarea>
+                            <label for="{{ form.customer_ticket_description.id_for_label }}">Description</label>
+                        </div>
+
+                        <div class="ms-2 d-flex align-items-center">
+                            <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Add a description to explain the request type in more detail."></i>
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <div class="customer_support_attachments_label mb-3 flex-grow-1">
+                            <label for="{{ form.customer_ticket_attachments.id_for_label}}" class="form-label">Attachments</label>
+                            <input class="form-control" type="file" id="{{ form.customer_ticket_attachments.id_for_label }}">
+                        </div>
+
+                        <div class="ms-2 d-flex align-items-center">
+                            <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Add any attachments to this ticket, to support your case or to show something."></i>
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <button class="btn btn-primary" type="submit" id="submit_customer_support_form">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
 {% endblock %}
