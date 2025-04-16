@@ -1,4 +1,7 @@
 # GameHive
+
+URL: https://gamehive-y2i9.onrender.com/
+
 GameHive is a Web application which allows users to play the game of their choice.
 
 ![image](https://github.com/user-attachments/assets/360422e1-7c84-47b6-96b0-3505c098be7e)
