@@ -67,7 +67,15 @@ input::-webkit-inner-spin-button {
   border-radius: 20px;
 }
 
-#intro_about_paragraph, .gamehive_values, .game_description .admin_dashboard_option_descriptions {
+.subheading_intro_customer_support_form {
+  text-align:left;
+}
+
+.customer_support_attachments_label {
+  text-align:left;
+}
+
+#intro_about_paragraph, .gamehive_values, .game_description .admin_dashboard_option_descriptions, .intro_customer_support_form {
   text-align: justify;
 }
 
