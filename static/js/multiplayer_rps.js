@@ -10,10 +10,21 @@ $('.multiplayer_back_to_homepage_button').click(function() {
     window.location.href = $('.multiplayer_back_to_homepage_button').data("url");
 });
 
-const gameSocket = new WebSocket(
-    'ws://' + window.location.host +
-    '/ws/multiplayer_rps/'
-);
+// If the web app is using HTTP as the protocol, we want to use "ws" websocket
+if (window.location.protocol === "http:") {
+    gameSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/multiplayer_rps/'
+    );
+}
+
+// If the web app is using HTTPS as the protocol, we want to use "wss" websocket.
+else {
+    gameSocket = new WebSocket(
+        'wss://' + window.location.host +
+        '/ws/multiplayer_rps/'
+    );
+}
 
 const message = {
     user_option : "",
