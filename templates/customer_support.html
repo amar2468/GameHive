@@ -22,8 +22,23 @@
 
     <section class="mt-5 mb-5 text-center">
         <div class="container">
-            <div class="col-6">
-                <form id="customer_support_form" method="post" data-url="{% url 'customer_support' %}">
+            <div class="col-12 col-md-10 col-xl-12">
+                <div class="alert alert-success" id="div_outcome_customer_support_submit_success" role="alert" style="display:none;">
+                    <p id="paragraph_outcome_customer_support_submit_success"></p>
+                </div>
+
+                
+                <div id="div_customer_support_errors" class="alert alert-danger" style="display: none;">
+                    <ul id="customer_support_errors_list">
+                    </ul>
+                </div>
+
+                <div class="alert alert-danger" id="div_outcome_customer_support_submit_failure" role="alert" style="display:none;">
+                    <p id="paragraph_outcome_customer_support_submit_failure"></p>
+                </div>
+                <br>
+
+                <form id="customer_support_form" method="post" enctype="multipart/form-data" data-url="{% url 'customer_support' %}">
                     {% csrf_token %}
 
                     <div class="d-flex">
@@ -36,21 +51,23 @@
                             <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter the username that you used to create your GameHive account."></i>
                         </div>
                     </div>
+                    
+                    {% if not user.is_authenticated %}
+                        <div class="d-flex">
+                            <div class="form-floating mb-3 flex-grow-1">
+                                <input class="form-control" id="{{ form.customer_email.id_for_label }}" name="customer_email" type="email" placeholder="Enter your email..." autocomplete="off" />
+                                <label for="{{ form.customer_email.id_for_label }}">Email</label>
+                            </div>
+
+                            <div class="ms-2 d-flex align-items-center">
+                                <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter the email address that you used when creating your GameHive account."></i>
+                            </div>
+                        </div>
+                    {%  endif %}
 
                     <div class="d-flex">
                         <div class="form-floating mb-3 flex-grow-1">
-                            <input class="form-control" id="{{ form.customer_email.id_for_label }}" name="customer_email" type="email" placeholder="Enter your email..." autocomplete="off" />
-                            <label for="{{ form.customer_email.id_for_label }}">Email</label>
-                        </div>
-
-                        <div class="ms-2 d-flex align-items-center">
-                            <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Enter the email address that you used when creating your GameHive account."></i>
-                        </div>
-                    </div>
-
-                    <div class="d-flex">
-                        <div class="form-floating mb-3 flex-grow-1">
-                            <select class="form-select text-black" name="request_type_option" aria-label="Choose the request type for this ticket e.g. delete user, edit user, cancel purchase, or general request.">
+                            <select class="form-select text-black" name="customer_request_type" aria-label="Choose the request type for this ticket e.g. delete user, edit user, cancel purchase, or general request.">
                                 <option selected disabled value="">Choose Request Type</option>
                                 <option value="delete_user_account">Delete Your Account</option>
                                 <option value="edit_user_account">Edit Your Account</option>
@@ -89,7 +106,7 @@
                     <div class="d-flex">
                         <div class="customer_support_attachments_label mb-3 flex-grow-1">
                             <label for="{{ form.customer_ticket_attachments.id_for_label}}" class="form-label">Attachments</label>
-                            <input class="form-control" type="file" id="{{ form.customer_ticket_attachments.id_for_label }}">
+                            <input class="form-control" type="file" id="{{ form.customer_ticket_attachments.id_for_label }}" name="customer_ticket_attachments" />
                         </div>
 
                         <div class="ms-2 d-flex align-items-center">
