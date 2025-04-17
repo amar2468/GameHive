@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
-from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails, BuyItemForm, ForgotPasswordForm
+from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails, BuyItemForm, ForgotPasswordForm, CustomerSupportForm
 from django.contrib.auth import authenticate, login, logout, password_validation
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
@@ -579,7 +579,54 @@ def redeeming_points(request):
 def customer_support(request):
     # If the user submits the customer support request form, it will be handled in this block.
     if request.method == "POST":
-        pass
+        form = CustomerSupportForm(request.POST, request.FILES)
+
+        # If the user is authenticated (logged in), we want to remove the "email" field from the form, as the username is enough
+        if request.user.is_authenticated:
+            # Excluding the email field, as this is only needed if the user is not logged in and has no access to view the ticket
+            form.fields.pop("customer_email")
+
+        # Validating the customer support form, to see whether the user provided the necessary information.
+        if form.is_valid():
+            if request.user.is_authenticated:
+                customer_username = form.cleaned_data['customer_username']
+                customer_request_type = form.cleaned_data['customer_request_type']
+                customer_title_of_request = form.cleaned_data['customer_title_of_request']
+                customer_ticket_description = form.cleaned_data['customer_ticket_description']
+                customer_ticket_attachments = form.cleaned_data['customer_ticket_attachments']
+
+                response_customer_support = {
+                    'valid_form' : True,
+                    'submit_form_outcome' : "Your support request was submitted successfully. We'll be in touch soon!",
+                    'error_messages' : ""
+                }
+                
+                return JsonResponse(response_customer_support)
+            else:
+                customer_username = form.cleaned_data['customer_username']
+                customer_email = form.cleaned_data['customer_email']
+                customer_request_type = form.cleaned_data['customer_request_type']
+                customer_title_of_request = form.cleaned_data['customer_title_of_request']
+                customer_ticket_description = form.cleaned_data['customer_ticket_description']
+                customer_ticket_attachments = form.cleaned_data['customer_ticket_attachments']
+
+                response_customer_support = {
+                    'valid_form' : True,
+                    'submit_form_outcome' : "Your support request was submitted successfully. We'll be in touch soon!",
+                    'error_messages' : ""
+                }
+                
+                return JsonResponse(response_customer_support)
+        
+        else:
+            response_customer_support = {
+                'valid_form' : False,
+                'submit_form_outcome' : "One or more errors were encountered when submitting the form. Please check the form and fix any errors.",
+                'error_messages' : form.errors
+            }
+            
+            return JsonResponse(response_customer_support)
+            
     # If the user only tries to access this page (not submit the form), this block will be executed, retrieving the relevant template
     else:
         return render(request, "customer_support.html")
