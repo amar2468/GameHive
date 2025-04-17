@@ -61,4 +61,4 @@ class CustomerSupportForm(forms.Form):
     customer_request_type = forms.ChoiceField(choices=customer_request_options, required=True)
     customer_title_of_request = forms.CharField(max_length=150, required=True)
     customer_ticket_description = forms.CharField(required=True)
-    customer_ticket_attachments = forms.FileField()
+    customer_ticket_attachments = forms.FileField(required=False)
