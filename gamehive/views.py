@@ -4,7 +4,7 @@ from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordF
 from django.contrib.auth import authenticate, login, logout, password_validation
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
-from gamehive.models import CustomUser,GameUserProfile,TestimonialsModel
+from gamehive.models import CustomUser,GameUserProfile,TestimonialsModel, CustomerSupportModel
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -585,24 +585,49 @@ def customer_support(request):
         if request.user.is_authenticated:
             # Excluding the email field, as this is only needed if the user is not logged in and has no access to view the ticket
             form.fields.pop("customer_email")
+        
+        # If the user is not logged in, we want to remove the "username" field from the form, as the email is enough.
+        else:
+            form.fields.pop("customer_username")
 
         # Validating the customer support form, to see whether the user provided the necessary information.
         if form.is_valid():
+            # If the user is logged in and the form is valid, we will use the username for the user identifier field.
             if request.user.is_authenticated:
+                # Getting all the form fields that the user filled in
                 customer_username = form.cleaned_data['customer_username']
                 customer_request_type = form.cleaned_data['customer_request_type']
                 customer_title_of_request = form.cleaned_data['customer_title_of_request']
                 customer_ticket_description = form.cleaned_data['customer_ticket_description']
                 customer_ticket_attachments = form.cleaned_data['customer_ticket_attachments']
 
+                # Populating the CustomerSupportModel with the user request information
+                customer_support_ticket = CustomerSupportModel(
+                    requester_username=customer_username,
+                    ticket_request_type=customer_request_type,
+                    ticket_title=customer_title_of_request,
+                    ticket_description=customer_ticket_description,
+                    ticket_attachments=customer_ticket_attachments,
+                    ticket_status="Open",
+                    ticket_assigned_to=""
+                )
+
+                # Saving the record in the model
+                customer_support_ticket.save()
+
+                # Creating a dictionary, which will inform the front-end that the form is valid.
                 response_customer_support = {
                     'valid_form' : True,
                     'submit_form_outcome' : "Your support request was submitted successfully. We'll be in touch soon!",
                     'error_messages' : ""
                 }
                 
+                # Returning the response above to the front-end
                 return JsonResponse(response_customer_support)
+            
+            # If the user is NOT logged in and the form is valid, we will use the email for the user identifier field.
             else:
+                # Getting all the form fields that the user filled in
                 customer_username = form.cleaned_data['customer_username']
                 customer_email = form.cleaned_data['customer_email']
                 customer_request_type = form.cleaned_data['customer_request_type']
@@ -610,21 +635,40 @@ def customer_support(request):
                 customer_ticket_description = form.cleaned_data['customer_ticket_description']
                 customer_ticket_attachments = form.cleaned_data['customer_ticket_attachments']
 
+                # Populating the CustomerSupportModel with the user request information
+                customer_support_ticket = CustomerSupportModel(
+                    requester_email=customer_email,
+                    ticket_request_type=customer_request_type,
+                    ticket_title=customer_title_of_request,
+                    ticket_description=customer_ticket_description,
+                    ticket_attachments=customer_ticket_attachments,
+                    ticket_status="Open",
+                    ticket_assigned_to=""
+                )
+
+                # Saving the record in the model
+                customer_support_ticket.save()
+
+                # Creating a dictionary, which will inform the front-end that the form is valid.
                 response_customer_support = {
                     'valid_form' : True,
                     'submit_form_outcome' : "Your support request was submitted successfully. We'll be in touch soon!",
                     'error_messages' : ""
                 }
                 
+                # Returning the response above to the front-end
                 return JsonResponse(response_customer_support)
         
+        # If the form is deemed to be invalid, this "else" block will be executed
         else:
+            # Response informing the front-end that there were errors during the submission of the form will be returned
             response_customer_support = {
                 'valid_form' : False,
                 'submit_form_outcome' : "One or more errors were encountered when submitting the form. Please check the form and fix any errors.",
                 'error_messages' : form.errors
             }
             
+            # Returning the response above to the front-end
             return JsonResponse(response_customer_support)
             
     # If the user only tries to access this page (not submit the form), this block will be executed, retrieving the relevant template
