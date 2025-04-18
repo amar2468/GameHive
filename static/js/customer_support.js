@@ -6,8 +6,9 @@ $(document).ready(function() {
         // We are preventing the submission of the form, as this will be done through AJAX
         e.preventDefault();
 
-        // We are serialising the form data, so that it can be sent to the backend for review.
-        form_data = $('#customer_support_form').serialize();
+        // Create a FormData object from the submitted form, including all input fields and uploaded files.
+        // This allows us to send the form data (including file uploads) using AJAX.
+        const form_data = new FormData(this);
 
         // AJAX POST request, which will attempt send the form data from the customer support form to the backend, 
         // and retrieve the information back from the backend, which will be presented on the page.
@@ -15,6 +16,8 @@ $(document).ready(function() {
             type: 'POST',
             url: $('#customer_support_form').data("url"),
             data: form_data,
+            processData: false, // Prevents jQuery from attempting to process the data
+            contentType: false, // Allows the browser to set the correct Content-Type for multipart data (especially the case for files)
 
             // If the form submission was successful, we will then try to determine if the form is valid or not, based on the
             // django form in forms.py.
