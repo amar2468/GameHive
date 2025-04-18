@@ -151,6 +151,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+MEDIA_URL = "/media/"
+
 # Checking to see if the user ran "python manage.py runserver"
 using_runserver = "runserver" in sys.argv
 
