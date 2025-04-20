@@ -1,6 +1,6 @@
 $(document).ready(function() {
     // When we are on the "Testimonials Management" page, we want the "Admin Dashboard" nav link to be highlighted.
-    $('#admin_dashboard_link').addClass('highlight_sign_up_nav_link_in_login_page');
+    $('#admin_dashboard_link').addClass('highlight_specific_navlink');
 
     // Disabling the button the delete the testimonial, when the page is initially loaded.
     $('.admin_options_delete').prop("disabled", true);

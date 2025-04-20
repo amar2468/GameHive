@@ -2,7 +2,7 @@ $(document).ready(function() {
     $('[data-bs-toggle="tooltip"]').tooltip();
 
     // When we are on the login page, we want the "sign_up" nav link to be highlighted and the "homepage" nav link to be unhighlighted.
-    $('#sign_up_link').addClass('highlight_sign_up_nav_link_in_login_page');
+    $('#sign_up_link').addClass('highlight_specific_navlink');
     $('#homepage_link').addClass('unhighlight_nav_links');
 
     // If the user clicks on the "forgot your password?" link in the login page, we will display the modal that will allow
