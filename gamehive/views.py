@@ -177,11 +177,17 @@ def admin_dashboard(request):
     if request.user.is_authenticated:
         if request.user.account_type == "super_admin" or request.user.account_type == "admin":
             all_users = CustomUser.objects.all()
+            
             all_testimonials = TestimonialsModel.objects.all()
+            
+            all_active_user_requests = CustomerSupportModel.objects.filter(
+                ticket_status__in=["Open","In Progress"]
+            )
             
             statistical_info_about_gamehive = {
                 'number_of_users' : len(all_users),
-                'number_of_testimonials' : len(all_testimonials)
+                'number_of_testimonials' : len(all_testimonials),
+                'number_of_active_user_requests' : len(all_active_user_requests)
             }
             
             return render(request, "admin_dashboard.html", statistical_info_about_gamehive)
@@ -257,7 +263,23 @@ def user_request_mgmt(request):
     # page with the user requests will be displayed.
     if request.user.is_authenticated:
         if request.user.account_type == "super_admin" or request.user.account_type == "admin":
-            return render(request, "user_requests.html")
+            all_active_user_requests = CustomerSupportModel.objects.filter(
+                ticket_status__in=["Open", "In progress"]
+            )
+
+            all_closed_user_requests = CustomerSupportModel.objects.filter(
+                ticket_status="Closed"
+            )
+
+            number_of_active_user_requests = CustomerSupportModel.objects.exclude(ticket_status="Closed")
+
+            response_all_user_requests = {
+                'all_active_user_requests' : all_active_user_requests,
+                'all_closed_user_requests' : all_closed_user_requests,
+                'number_of_active_user_requests' : len(number_of_active_user_requests)
+            }
+
+            return render(request, "user_requests.html", response_all_user_requests)
         else:
             return render(request, "403.html")
     # If the user is not logged in, the page is forbidden for them
@@ -628,12 +650,27 @@ def customer_support(request):
             # If the user is NOT logged in and the form is valid, we will use the email for the user identifier field.
             else:
                 # Getting all the form fields that the user filled in
-                customer_username = form.cleaned_data['customer_username']
                 customer_email = form.cleaned_data['customer_email']
                 customer_request_type = form.cleaned_data['customer_request_type']
                 customer_title_of_request = form.cleaned_data['customer_title_of_request']
                 customer_ticket_description = form.cleaned_data['customer_ticket_description']
                 customer_ticket_attachments = form.cleaned_data['customer_ticket_attachments']
+
+                # Find out whether the email that the user entered exists on the system.
+                try:
+                    CustomUser.objects.get(email=customer_email)
+                # If the email does not exist in the system, we will inform the user about this.
+                except CustomUser.DoesNotExist:
+                    # Creating a dictionary, which will inform the front-end that the email which was provided does not exist
+                    # in the model.
+                    response_customer_support = {
+                        'valid_form' : False,
+                        'submit_form_outcome' : "The email that you entered couldn't be found in our system. Make sure to use the email that you used when creating your GameHive account.",
+                        'error_messages' : ""
+                    }
+
+                    # Returning the response above to the front-end
+                    return JsonResponse(response_customer_support)
 
                 # Populating the CustomerSupportModel with the user request information
                 customer_support_ticket = CustomerSupportModel(
