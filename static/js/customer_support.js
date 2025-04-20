@@ -61,16 +61,19 @@ $(document).ready(function() {
                     $('#div_outcome_customer_support_submit_failure').show();
                     $('#paragraph_outcome_customer_support_submit_failure').text(response.submit_form_outcome);
                     
-                    // Iterating through the specific errors and displaying each on a separate line, without any bulletpoints.
-                    for(let element in response.error_messages) {
-                        response.error_messages[element].forEach(error => {
-                            $('#customer_support_errors_list').append(`<li>${element} is required </li>`);
-                            $('#customer_support_errors_list').css("list-style-type", "none");
-                        });
-                    }
+                    // If errors were encountered in particular form fields, this will identify exactly what fields are the issue.
+                    if (response.error_messages !== "") {
+                        // Iterating through the specific errors and displaying each on a separate line, without any bulletpoints.
+                        for(let element in response.error_messages) {
+                            response.error_messages[element].forEach(error => {
+                                $('#customer_support_errors_list').append(`<li>${element} is required </li>`);
+                                $('#customer_support_errors_list').css("list-style-type", "none");
+                            });
+                        }
 
-                    // Show the list of specific errors that were encountered in the form.
-                    $('#div_customer_support_errors').show();
+                        // Show the list of specific errors that were encountered in the form.
+                        $('#div_customer_support_errors').show();
+                    }   
                 }
             },
 
