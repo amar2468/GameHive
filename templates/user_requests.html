@@ -13,6 +13,7 @@
 
 <body>
     {% block content %}
+      <section id="main_section">
         <section class="mt-3 mb-5" id="user_requests_heading">
             <div class="container">
                 <hr>
@@ -20,6 +21,20 @@
                 <p>The admin can view current user requests, as well as the closed requests.</p>
                 <hr>
             </div>
+        </section>
+
+        <section>
+          <div class="d-flex container justify-content-center">
+            <div class="col-12">
+              <div class="card text-center">
+                <div class="card-body">
+                  <h3>Total Active User Requests</h3>
+                  <i class="bi bi-people icons_for_admin_options"></i>
+                  <p class="website_statistical_numbers">{{ number_of_active_user_requests }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section class="mt-5 mb-5">
@@ -38,17 +53,29 @@
                       <table id="open_user_requests_table" class="table table-bordered;">
                         <thead id="table_heading_user_reqs">
                           <tr>
-                              <th class="datatable_headings fw-bolder text-black text-center">Heading 1</th>
-                              <th class="datatable_headings fw-bolder text-black text-center">Heading 2</th>
-                              <th class="datatable_headings fw-bolder text-black text-center">Heading 3</th>
+                              <th class="datatable_headings fw-bolder text-black text-center">Ticket ID</th>
+                              <th class="datatable_headings fw-bolder text-black text-center">Created At</th>
+                              <th class="datatable_headings fw-bolder text-black text-center">Requester</th>
+                              <th class="datatable_headings fw-bolder text-black text-center">Request Type</th>
+                              <th class="datatable_headings fw-bolder text-black text-center">Title</th>
+                              <th class="datatable_headings fw-bolder text-black text-center">Updated At</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                              <td class="text-black text-center">Data 1</td>
-                              <td class="text-black text-center">Data 2</td>
-                              <td class="text-black text-center">Data 3</td>
-                          </tr>
+                          {% for user_request in all_active_user_requests %}
+                            <tr>
+                                <td class="text-black text-center">{{ user_request.ticket_id }}</td>
+                                <td class="text-black text-center">{{ user_request.ticket_created_at }}</td>
+                                {% if not user_request.requester_email %}
+                                  <td class="text-black text-center">{{ user_request.requester_username }}</td>
+                                {% else %}
+                                  <td class="text-black text-center">{{ user_request.requester_email }}</td>
+                                {% endif %}
+                                <td class="text-black text-center">{{ user_request.ticket_request_type }}</td>
+                                <td class="text-black text-center">{{ user_request.ticket_title }}</td>
+                                <td class="text-black text-center">{{ user_request.ticket_updated_at }}</td>
+                            </tr>
+                          {% endfor %}
                         </tbody>
                       </table>
                     </div>
@@ -56,17 +83,29 @@
                       <table id="closed_user_requests_table" class="table table-bordered;">
                         <thead id="table_heading_user_reqs">
                           <tr>
-                              <th class="datatable_headings fw-bolder text-black text-center">Heading 1</th>
-                              <th class="datatable_headings fw-bolder text-black text-center">Heading 2</th>
-                              <th class="datatable_headings fw-bolder text-black text-center">Heading 3</th>
+                            <th class="datatable_headings fw-bolder text-black text-center">Ticket ID</th>
+                            <th class="datatable_headings fw-bolder text-black text-center">Created At</th>
+                            <th class="datatable_headings fw-bolder text-black text-center">Requester</th>
+                            <th class="datatable_headings fw-bolder text-black text-center">Request Type</th>
+                            <th class="datatable_headings fw-bolder text-black text-center">Title</th>
+                            <th class="datatable_headings fw-bolder text-black text-center">Updated At</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                              <td class="text-black text-center">Data 1</td>
-                              <td class="text-black text-center">Data 2</td>
-                              <td class="text-black text-center">Data 3</td>
-                          </tr>
+                          {% for closed_request in all_closed_user_requests %}
+                            <tr>
+                                <td class="text-black text-center">{{ closed_request.ticket_id }}</td>
+                                <td class="text-black text-center">{{ closed_request.ticket_created_at }}</td>
+                                {% if not closed_request.requester_email %}
+                                  <td class="text-black text-center">{{ closed_request.requester_username }}</td>
+                                {% else %}
+                                  <td class="text-black text-center">{{ closed_request.requester_email }}</td>
+                                {% endif %}
+                                <td class="text-black text-center">{{ closed_request.ticket_request_type }}</td>
+                                <td class="text-black text-center">{{ closed_request.ticket_title }}</td>
+                                <td class="text-black text-center">{{ closed_request.ticket_updated_at }}</td>
+                            </tr>
+                          {% endfor %}
                         </tbody>
                       </table>
 
@@ -74,6 +113,7 @@
                   </div>
             </div>
         </section>
+      </section>
 
         <script>
           $(document).ready(function() {
