@@ -123,7 +123,7 @@ input::-webkit-inner-spin-button {
   text-decoration: none;
 }
 
-.admin_options_delete, .admin_options_refresh_page {
+.admin_options_delete, .admin_options_refresh_page, .admin_options_download_data {
   border: 1px solid black !important;
 }
 
@@ -132,12 +132,12 @@ input::-webkit-inner-spin-button {
   color: #ffffff !important;
 }
 
-.admin_options_refresh_page:hover {
+.admin_options_refresh_page:hover, .admin_options_download_data:hover {
   background-color: rgb(0, 0, 255) !important;
   color: #ffffff !important;
 }
 
-#open_requests_tab.active, #closed_requests_tab.active {
+#unassigned_requests_tab.active, #assigned_to_me_tab.active, #closed_requests_tab.active {
   border: 1px solid #000000;
   border-bottom: none;
 }
@@ -151,7 +151,7 @@ table td {
   border: 1px solid black;
 }
 
-#table_heading_leaderboard, #table_heading_user_reqs, #users_table_headers, #testimonials_mgmt_table_headers {
+#table_heading_leaderboard, .table_heading_user_reqs, #users_table_headers, #testimonials_mgmt_table_headers {
   background-color: #00FFFF;
 }
 
