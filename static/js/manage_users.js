@@ -7,6 +7,15 @@ $(document).ready(function() {
 
     // Initialise the HTML table to be a datatable, with the "sort" option disabled for the first column.
     new DataTable('#manage_users_table', {
+        buttons: [
+            {
+                extend: "csvHtml5",
+                title: "All-Users",
+                exportOptions: {
+                    columns: ":visible"
+                }
+            }
+        ],
         columnDefs: [
             { orderable:false, targets:0 }
         ]
@@ -189,6 +198,15 @@ $(document).ready(function() {
         else {
             $('.admin_options_delete').prop("disabled", false);
         }
+    });
+
+    // Initialize DataTable for managing users and store the instance in a variable for later use
+    const manage_users_table = $('#manage_users_table').DataTable();
+
+    // If the user clicks on the button to download the data from the users table, this function will trigger the built-in CSV button
+    // in the datatable, which will then download the users in a CSV format.
+    $(document).on("click", ".admin_options_download_data", function() {
+        manage_users_table.button('.buttons-csv').trigger();
     });
 
 });
