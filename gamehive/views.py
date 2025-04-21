@@ -263,23 +263,38 @@ def user_request_mgmt(request):
     # page with the user requests will be displayed.
     if request.user.is_authenticated:
         if request.user.account_type == "super_admin" or request.user.account_type == "admin":
-            all_active_user_requests = CustomerSupportModel.objects.filter(
-                ticket_status__in=["Open", "In progress"]
+            # Filtering all the unassigned user requests which are still "open" or "in progress"
+            all_unassigned_user_requests = CustomerSupportModel.objects.filter(
+                ticket_status__in=["Open", "In progress"],
+                ticket_assigned_to=""
+            )
+            
+            # Filtering all requests that are assigned to the specific admin which are still "open" or "in progress",
+            all_requests_assigned_to_me = CustomerSupportModel.objects.filter(
+                ticket_status__in=["Open", "In Progress"],
+                ticket_assigned_to=request.user.username
             )
 
+            # Filtering all the requests which have been closed.
             all_closed_user_requests = CustomerSupportModel.objects.filter(
                 ticket_status="Closed"
             )
 
+            # Populating the variable with all the tickets which are NOT "closed".
             number_of_active_user_requests = CustomerSupportModel.objects.exclude(ticket_status="Closed")
 
+            # Creating a dictionary, which will return the unassigned, assigned to me, closed, and number of active
+            # requests back to the front-end.
             response_all_user_requests = {
-                'all_active_user_requests' : all_active_user_requests,
+                'all_unassigned_user_requests' : all_unassigned_user_requests,
+                'all_requests_assigned_to_me' : all_requests_assigned_to_me,
                 'all_closed_user_requests' : all_closed_user_requests,
                 'number_of_active_user_requests' : len(number_of_active_user_requests)
             }
 
+            # Return the response above back to the front-end.
             return render(request, "user_requests.html", response_all_user_requests)
+        # If the user is not an admin, display a 403 page.
         else:
             return render(request, "403.html")
     # If the user is not logged in, the page is forbidden for them
