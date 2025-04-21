@@ -203,7 +203,7 @@ $(document).ready(function() {
     // Initialize DataTable for managing users and store the instance in a variable for later use
     const manage_users_table = $('#manage_users_table').DataTable();
 
-    // If the user clicks on the button to download the data from the users table, this function will trigger the built-in CSV button
+    // If the admin clicks on the button to download the data from the users table, this function will trigger the built-in CSV button
     // in the datatable, which will then download the users in a CSV format.
     $(document).on("click", ".admin_options_download_data", function() {
         manage_users_table.button('.buttons-csv').trigger();
