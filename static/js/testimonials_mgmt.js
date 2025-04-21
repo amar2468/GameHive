@@ -7,6 +7,15 @@ $(document).ready(function() {
 
     // Initialise the HTML table to be a datatable, with the "sort" option disabled for the first column.
     new DataTable("#manage_testimonials_table", {
+        buttons: [
+            {
+                extend: "csvHtml5",
+                title: "All-Testimonials",
+                exportOptions: {
+                    columns: ":visible"
+                }
+            }
+        ],
         columnDefs: [
             { orderable:false, targets:0 }
         ]
@@ -190,4 +199,12 @@ $(document).ready(function() {
         }
     });
 
+    // Initialize DataTable for managing testimonials and store the instance in a variable for later use
+    const manage_testimonials_table = $('#manage_testimonials_table').DataTable();
+
+    // If the admin clicks on the button to download the data from the testimonials table, this function will trigger the 
+    // built-in CSV button in the datatable, which will then download the testimonials in a CSV format.
+    $(document).on("click", ".admin_options_download_data", function() {
+        manage_testimonials_table.button('.buttons-csv').trigger();
+    });
 });
