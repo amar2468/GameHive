@@ -41,8 +41,8 @@
         <section class="mt-5 mb-5" id="user_requests_admin_options">
           <div class="d-flex container justify-content-center">
             <div class="btn-group col-12" role="group" aria-label="User requests submitted using the customer support form.">
-              <button type="button" class="btn admin_options_delete" data-url=""><i class="bi bi-trash"></i> Delete User Request</button>
-              <button type="button" class="btn admin_options_refresh_page"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+              <button type="button" class="btn admin_options_delete" data-url="{% url 'user_request_mgmt' %}"><i class="bi bi-trash"></i> Delete User Request</button>
+              <button type="button" class="btn admin_options_refresh_page" data-url="{% url 'user_request_mgmt' %}"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
             </div>
           </div>
         </section>
@@ -66,6 +66,7 @@
                       <table id="unassigned_user_requests_table" class="table table-bordered;">
                         <thead class="table_heading_user_reqs">
                           <tr>
+                              <th scope="col"><input class="form-check-input select_all_user_requests" type="checkbox" aria-label="Select the user request record row." /></th>
                               <th class="datatable_headings fw-bolder text-black text-center">Ticket ID</th>
                               <th class="datatable_headings fw-bolder text-black text-center">Created At</th>
                               <th class="datatable_headings fw-bolder text-black text-center">Requester</th>
@@ -76,7 +77,8 @@
                         </thead>
                         <tbody>
                           {% for user_request in all_unassigned_user_requests %}
-                            <tr>
+                            <tr class="user-row">
+                                <td scope="row"><input class="form-check-input select-row" type="checkbox" aria-label="Select the user request record row." /></td>
                                 <td class="text-black text-center">{{ user_request.ticket_id }}</td>
                                 <td class="text-black text-center">{{ user_request.ticket_created_at }}</td>
                                 {% if not user_request.requester_email %}
@@ -97,6 +99,7 @@
                       <table id="assigned_to_me_user_requests_table" class="table table-bordered;">
                         <thead class="table_heading_user_reqs">
                           <tr>
+                            <th scope="col"><input class="form-check-input select_all_user_requests" type="checkbox" aria-label="Select the user request record row." /></th>
                             <th class="datatable_headings fw-bolder text-black text-center">Ticket ID</th>
                             <th class="datatable_headings fw-bolder text-black text-center">Created At</th>
                             <th class="datatable_headings fw-bolder text-black text-center">Requester</th>
@@ -107,7 +110,8 @@
                         </thead>
                         <tbody>
                           {% for request_assigned_to_me in all_requests_assigned_to_me %}
-                            <tr>
+                            <tr class="user-row">
+                                <td scope="row"><input class="form-check-input select-row" type="checkbox" aria-label="Select the user request record row." /></td>
                                 <td class="text-black text-center">{{ request_assigned_to_me.ticket_id }}</td>
                                 <td class="text-black text-center">{{ request_assigned_to_me.ticket_created_at }}</td>
                                 {% if not request_assigned_to_me.requester_email %}
@@ -129,6 +133,7 @@
                       <table id="closed_user_requests_table" class="table table-bordered;">
                         <thead class="table_heading_user_reqs">
                           <tr>
+                            <th scope="col"><input class="form-check-input select_all_user_requests" type="checkbox" aria-label="Select the user request record row." /></th>
                             <th class="datatable_headings fw-bolder text-black text-center">Ticket ID</th>
                             <th class="datatable_headings fw-bolder text-black text-center">Created At</th>
                             <th class="datatable_headings fw-bolder text-black text-center">Requester</th>
@@ -139,7 +144,8 @@
                         </thead>
                         <tbody>
                           {% for closed_request in all_closed_user_requests %}
-                            <tr>
+                            <tr class="user-row">
+                                <td scope="row"><input class="form-check-input select-row" type="checkbox" aria-label="Select the user request record row." /></td>
                                 <td class="text-black text-center">{{ closed_request.ticket_id }}</td>
                                 <td class="text-black text-center">{{ closed_request.ticket_created_at }}</td>
                                 {% if not closed_request.requester_email %}
