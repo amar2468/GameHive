@@ -23,10 +23,10 @@ $(document).ready(function() {
     
     // When the admin clicks the button the refresh the page, we will perform a GET request and bring the changes
     // from the page without a page reload.
-    $('#refresh_users_btn').click(function() {
+    $(document).on("click", "#refresh_users_btn", function() {
         $.ajax({
             type: 'GET',
-            url: $('.admin_options_delete').data("url"),
+            url: $('.admin_options_refresh_page').data("url"),
 
             // If the page refresh was successful, we will perform the below.
             success: function(response) {
@@ -127,7 +127,7 @@ $(document).ready(function() {
 
     });
 
-    // If the user clicks on the "select all" button, it will either select all or unselect all options.
+    // If the admin clicks on the "select all" button, it will either select all or unselect all options.
     $(document).on("click", "#select_all_users", function() {
 
         // If all the rows are already selected and the "select all" option is clicked again, it will deselect all the rows
@@ -173,9 +173,11 @@ $(document).ready(function() {
             $('#select_all_users').prop("checked", true);
         }
         
-        // If at least one row is selected, we will enable the "delete user" button.
+        // If at least one row is selected (but not all rows), we will enable the "delete user" button and uncheck the
+        // select all button, if checked.
         else {
             $('.admin_options_delete').prop("disabled", false);
+            $('#select_all_users').prop("checked", false);
         }
     });
 
@@ -194,9 +196,11 @@ $(document).ready(function() {
             $('#select_all_users').prop("checked", true);
         }
         
-        // If at least one row is selected, we will enable the "delete user" button.
+        // If at least one row is selected (but not all rows), we will enable the "delete user" button and uncheck the
+        // select all button, if checked.
         else {
             $('.admin_options_delete').prop("disabled", false);
+            $('#select_all_users').prop("checked", false);
         }
     });
 
