@@ -23,10 +23,10 @@ $(document).ready(function() {
 
     // When the admin clicks the button the refresh the page, we will perform a GET request and bring the changes
     // from the page without a page reload.
-    $('#refresh_testimonials_btn').click(function() {
+    $(document).on("click", "#refresh_testimonials_btn", function() {
         $.ajax({
             type: 'GET',
-            url: $('.admin_options_delete').data("url"),
+            url: $('.admin_options_refresh_page').data("url"),
 
             // If the page refresh was successful, we will perform the below.
             success: function(response) {
@@ -172,9 +172,11 @@ $(document).ready(function() {
             $('#select_all_testimonials').prop("checked", true);
         }
         
-        // If at least one row is selected, we will enable the "delete testimonial" button.
+        // If at least one row is selected (but not all rows), we will enable the "delete testimonial" button and uncheck the
+        // select all button, if checked.
         else {
             $('.admin_options_delete').prop("disabled", false);
+            $('#select_all_testimonials').prop("checked", false);
         }
     });
 
@@ -193,9 +195,11 @@ $(document).ready(function() {
             $('#select_all_testimonials').prop("checked", true);
         }
 
-        // If at least one row is selected, we will enable the "delete testimonial" button.
+        // If at least one row is selected (but not all rows), we will enable the "delete testimonial" button and uncheck the
+        // select all button, if checked.
         else {
             $('.admin_options_delete').prop("disabled", false);
+            $('#select_all_testimonials').prop("checked", false);
         }
     });
 
