@@ -48,7 +48,7 @@
             <div class="d-flex container justify-content-center">
                 <div class="btn-group col-12" role="group" aria-label="Admin options for managing users.">
                     <button type="button" class="btn admin_options_delete" data-url="{% url 'manage_users' %}"><i class="bi bi-trash"></i> Delete User</button>
-                    <button type="button" id="refresh_users_btn" class="btn admin_options_refresh_page"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                    <button type="button" id="refresh_users_btn" class="btn admin_options_refresh_page" data-url="{% url 'manage_users' %}"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
                     <button type="button" class="btn admin_options_download_data"><i class="bi bi-download"></i> Download Users</button>
                 </div>
             </div>
