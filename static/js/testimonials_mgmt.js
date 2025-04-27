@@ -170,6 +170,7 @@ $(document).ready(function() {
         // If all individual rows are selected (checked), we will select the "select all" option to be enabled.
         else if (($('.select-row:checked').length) === ($('.select-row').length)) {
             $('#select_all_testimonials').prop("checked", true);
+            $('.admin_options_delete').prop("disabled", false);
         }
         
         // If at least one row is selected (but not all rows), we will enable the "delete testimonial" button and uncheck the
@@ -193,6 +194,7 @@ $(document).ready(function() {
         // If all individual rows are selected (checked), we will select the "select all" option to be enabled.
         else if (($('.select-row:checked').length) === ($('.select-row').length)) {
             $('#select_all_testimonials').prop("checked", true);
+            $('.admin_options_delete').prop("disabled", false);
         }
 
         // If at least one row is selected (but not all rows), we will enable the "delete testimonial" button and uncheck the
