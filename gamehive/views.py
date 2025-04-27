@@ -259,47 +259,87 @@ def manage_users(request):
 
 # View that allows an admin to view all the user requests
 def user_request_mgmt(request):
-    # If the user is logged in, we will then check to see if the user is an admin or super admin. If so, the
-    # page with the user requests will be displayed.
-    if request.user.is_authenticated:
-        if request.user.account_type == "super_admin" or request.user.account_type == "admin":
-            # Filtering all the unassigned user requests which are still "open" or "in progress"
-            all_unassigned_user_requests = CustomerSupportModel.objects.filter(
-                ticket_status__in=["Open", "In progress"],
-                ticket_assigned_to=""
-            )
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            # Gets the JSON data from the request
+            data = json.loads(request.body)
+
+            # Finds the "user_requests_to_delete" array, that was stored in the JSON object.
+            user_requests_to_delete = data.get("user_requests_to_delete_list")
+
+            # Iterating through the user requests to delete and deleting them individually
+            for user_request_ticket_id in user_requests_to_delete:
+                # We are retrieving the specific user request from the CustomerSupportModel model
+                remove_user_request = CustomerSupportModel.objects.get(ticket_id=user_request_ticket_id)
+
+                # We are taking the record retrieved above and deleting it from the model.
+                remove_user_request.delete()
             
-            # Filtering all requests that are assigned to the specific admin which are still "open" or "in progress",
-            all_requests_assigned_to_me = CustomerSupportModel.objects.filter(
-                ticket_status__in=["Open", "In Progress"],
-                ticket_assigned_to=request.user.username
-            )
+            # If only one user request was deleted, we will notify the admin that one user request was deleted.
+            if len(user_requests_to_delete) == 1:
+                response_manage_user_records = {
+                    'status' : "The selected user record has been removed from the system.",
+                    'success' : True
+                }
+            
+            # If more than one user record was deleted, we will notify the admin that more than one user record was deleted.
+            elif len(user_requests_to_delete) > 1:
+                response_manage_user_records = {
+                    'status' : "The selected user records have been removed from the system.",
+                    'success' : True
+                }
+            
+            # If no user records were deleted, the admin should receive an error message, where they need to investigate the issue.
+            else:
+                response_manage_user_records = {
+                    'status' : "Error: No users were deleted. Please investigate why this is the case.",
+                    'success' : False
+                }
 
-            # Filtering all the requests which have been closed.
-            all_closed_user_requests = CustomerSupportModel.objects.filter(
-                ticket_status="Closed"
-            )
+            # Returning the response in JSON form to the front-end.
+            return JsonResponse(response_manage_user_records)
+    else:
+        # If the user is logged in, we will then check to see if the user is an admin or super admin. If so, the
+        # page with the user requests will be displayed.
+        if request.user.is_authenticated:
+            if request.user.account_type == "super_admin" or request.user.account_type == "admin":
+                # Filtering all the unassigned user requests which are still "open" or "in progress"
+                all_unassigned_user_requests = CustomerSupportModel.objects.filter(
+                    ticket_status__in=["Open", "In progress"],
+                    ticket_assigned_to=""
+                )
+                
+                # Filtering all requests that are assigned to the specific admin which are still "open" or "in progress",
+                all_requests_assigned_to_me = CustomerSupportModel.objects.filter(
+                    ticket_status__in=["Open", "In Progress"],
+                    ticket_assigned_to=request.user.username
+                )
 
-            # Populating the variable with all the tickets which are NOT "closed".
-            number_of_active_user_requests = CustomerSupportModel.objects.exclude(ticket_status="Closed")
+                # Filtering all the requests which have been closed.
+                all_closed_user_requests = CustomerSupportModel.objects.filter(
+                    ticket_status="Closed"
+                )
 
-            # Creating a dictionary, which will return the unassigned, assigned to me, closed, and number of active
-            # requests back to the front-end.
-            response_all_user_requests = {
-                'all_unassigned_user_requests' : all_unassigned_user_requests,
-                'all_requests_assigned_to_me' : all_requests_assigned_to_me,
-                'all_closed_user_requests' : all_closed_user_requests,
-                'number_of_active_user_requests' : len(number_of_active_user_requests)
-            }
+                # Populating the variable with all the tickets which are NOT "closed".
+                number_of_active_user_requests = CustomerSupportModel.objects.exclude(ticket_status="Closed")
 
-            # Return the response above back to the front-end.
-            return render(request, "user_requests.html", response_all_user_requests)
-        # If the user is not an admin, display a 403 page.
+                # Creating a dictionary, which will return the unassigned, assigned to me, closed, and number of active
+                # requests back to the front-end.
+                response_all_user_requests = {
+                    'all_unassigned_user_requests' : all_unassigned_user_requests,
+                    'all_requests_assigned_to_me' : all_requests_assigned_to_me,
+                    'all_closed_user_requests' : all_closed_user_requests,
+                    'number_of_active_user_requests' : len(number_of_active_user_requests)
+                }
+
+                # Return the response above back to the front-end.
+                return render(request, "user_requests.html", response_all_user_requests)
+            # If the user is not an admin, display a 403 page.
+            else:
+                return render(request, "403.html")
+        # If the user is not logged in, the page is forbidden for them
         else:
             return render(request, "403.html")
-    # If the user is not logged in, the page is forbidden for them
-    else:
-        return render(request, "403.html")
 
 # View that allows an admin to view all the testimonials
 def testimonials_mgmt(request):
