@@ -112,7 +112,7 @@ $(document).ready(function() {
 
                     // We are clearing the failure message and hiding the associated div, as we have already informed the admin
                     $('#paragraph_outcome_delete_user_failure').text("");
-                    $('#div_outcome_delete_testimonial_success').hide();
+                    $('#div_outcome_delete_testimonial_failure').hide();
 
                     // Refresh (not reload) the page by clicking on the refresh button.
                     $('#refresh_users_btn').click();
@@ -171,6 +171,7 @@ $(document).ready(function() {
         // If all individual rows are selected (checked), we will select the "select all" option to be enabled.
         else if (($('.select-row:checked').length) === ($('.select-row').length)) {
             $('#select_all_users').prop("checked", true);
+            $('.admin_options_delete').prop("disabled", false);
         }
         
         // If at least one row is selected (but not all rows), we will enable the "delete user" button and uncheck the
@@ -194,6 +195,7 @@ $(document).ready(function() {
         // If all individual rows are selected (checked), we will select the "select all" option to be enabled.
         else if (($('.select-row:checked').length) === ($('.select-row').length)) {
             $('#select_all_users').prop("checked", true);
+            $('.admin_options_delete').prop("disabled", false);
         }
         
         // If at least one row is selected (but not all rows), we will enable the "delete user" button and uncheck the
