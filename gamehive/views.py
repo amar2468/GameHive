@@ -257,6 +257,38 @@ def manage_users(request):
         else:
             return render(request, "403.html")
 
+# View that only admins and superadmins can use, which allows them to view the profile of the user and make changes
+def edit_user_info(request):
+    # We only want the admin to be able to view/update this page if they are logged in.
+    if request.user.is_authenticated:
+        # We are checking to see if the user who is trying to access the page is either an admin or superadmin. We don't want
+        # normal users to have access to this page
+        if request.user.account_type == "super_admin" or request.user.account_type == "admin":
+            if request.method == "POST":
+                pass
+            
+            # GET request is dealt with here, by getting the username of the user that the admin wants to view and retrieving
+            # the relevant fields for this specific user from the models.
+            else:
+                # Retrieving the username of the user that the admin wants to view. The username was sent using Django
+                # templating engine in the HTML template
+                username = request.GET.get("username")
+
+                # Retrieving all the user fields for the specific user
+                user_profile_details = CustomUser.objects.get(username=username)
+
+                # Retrieving the current score for the same user.
+                game_profile_details = GameUserProfile.objects.get(user=user_profile_details).current_score
+
+                # Adding the user fields and current score to the dictionary
+                response_edit_user_profile = {
+                    'user_profile_details' : user_profile_details,
+                    'game_profile_details' : game_profile_details
+                }
+
+                # Returning the dictionary above to the HTML template and rendering the page.
+                return render(request, "admin_edit_user_info.html", response_edit_user_profile)
+
 # View that allows an admin to view all the user requests
 def user_request_mgmt(request):
     if request.method == "POST":
