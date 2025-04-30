@@ -5,6 +5,7 @@ from django.conf import settings
 
 def create_superadmin(apps, schema_editor):
     CustomUserModel = apps.get_model("gamehive", "CustomUser")
+    GameUserProfile = apps.get_model("gamehive", "GameUserProfile")
 
     if not CustomUserModel.objects.exists():
         # Using the credentials from the .env file to create the super admin
@@ -13,7 +14,7 @@ def create_superadmin(apps, schema_editor):
         PASSWORD_SUPER_ADMIN = settings.SUPER_ADMIN_PASSWORD
 
         # Using the .env credentials to create an account for the super admin, who will be the owner of the web application
-        CustomUserModel.objects.create_user(
+        super_admin = CustomUserModel.objects.create_user(
             first_name="Amar",
             last_name="Plakalo",
             username=USERNAME_SUPER_ADMIN,
@@ -21,6 +22,11 @@ def create_superadmin(apps, schema_editor):
             password=PASSWORD_SUPER_ADMIN,
             account_type="super_admin"
         )
+
+        game_user_profile = GameUserProfile.objects.get_or_create(user=super_admin)
+        game_user_profile = game_user_profile[0]
+        game_user_profile.current_score = 0
+        game_user_profile.save()
 
 class Migration(migrations.Migration):
 
