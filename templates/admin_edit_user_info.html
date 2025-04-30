@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Edit User Information{% endblock %}
+
+<body>
+    {% block content %}
+
+    <section id="main_section">
+        <section class="mt-3 mb-5" id="edit_user_profile_heading">
+            <div class="d-flex container justify-content-center">
+                <h2>Name Surname | Profile</h2>
+            </div>
+        </section>
+    </section>
+
+    <section class="mt-5 mb-5" id="section_with_user_profile_picture">
+        <div class="d-flex container justify-content-center">
+            <img src="{% static 'assets/user-profile.png' %}" alt="Profile picture of the user" height="200px" width="200px" />
+        </div>
+    </section>
+
+    <section class="mt-5 mb-5" id="section_with_edit_user_info">
+        <div class="d-flex container justify-content-center">
+            <form id="edit_user_info_form" method="POST" data-url="{% url 'edit_user_info' %}">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="edit_first_name" name="edit_first_name" value="{{ user_profile_details.first_name }}" autocomplete="off" />
+                    <label for="edit_first_name">First Name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="edit_last_name" name="edit_last_name" value="{{ user_profile_details.last_name }}" autocomplete="off" />
+                    <label for="edit_last_name">Last Name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="edit_username" name="edit_username" value="{{ user_profile_details.username }}" autocomplete="off" />
+                    <label for="edit_username">Username</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="edit_email" name="edit_email" value="{{ user_profile_details.email }}" autocomplete="off" />
+                    <label for="edit_email">Email</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="edit_score" name="edit_score" value="{{ game_profile_details }}" autocomplete="off" />
+                    <label for="edit_score">Score</label>
+                </div>
+
+                <div class="mb-3">
+
+                    {% if user_profile_details.account_type == "super_admin" %}
+                        <select class="form-select text-black" name="user_account_type" aria-label="Dropdown where superadmin can set user level." disabled>
+                            <option value="admin" selected>Superadmin</option>
+                        </select>
+                        <input type="hidden" value="admin" name="user_account_type" />
+                    {% else %}
+                        <select class="form-select text-black" name="user_account_type" aria-label="Dropdown where superadmin can set user level.">
+                            {% if user_profile_details.account_type == "user" %}
+                                <option value="user" selected>User</option>
+                                <option value="admin">Admin</option>
+                            {% elif user_profile_details.account_type == "admin" %}
+                                <option value="admin" selected>Admin</option>
+                                <option value="user">User</option>
+                            {% endif %}
+                        </select>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" id="submit_edit_user_form" class="btn btn-primary">Save Updates</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    {% endblock %}
+</body>
