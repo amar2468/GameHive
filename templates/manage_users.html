@@ -79,7 +79,7 @@
                             <tr class="user-row">
                                 <th scope="row"><input class="form-check-input select-row" type="checkbox" aria-label="Select the user record row."></th>
                                 <td class="text-black text-center">{{ user_record.first_name }} {{ user_record.last_name }}</td>
-                                <td class="text-black text-center"><a href="#" id="username_link_manage_users">{{ user_record.username }}</a></td>
+                                <td class="text-black text-center"><a href="{% url 'edit_user_info' %}?username={{user_record.username}}" id="username_link_manage_users">{{ user_record.username }}</a></td>
                                 <td class="text-black text-center">{{ user_record.account_type }}</td>
                             </tr>
                         {% endfor %}
