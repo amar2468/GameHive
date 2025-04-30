@@ -265,7 +265,7 @@ def edit_user_info(request):
         # normal users to have access to this page
         if request.user.account_type == "super_admin" or request.user.account_type == "admin":
             if request.method == "POST":
-                pass
+                return JsonResponse({"success" : True})
             
             # GET request is dealt with here, by getting the username of the user that the admin wants to view and retrieving
             # the relevant fields for this specific user from the models.
