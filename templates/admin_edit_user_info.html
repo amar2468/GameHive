@@ -27,36 +27,36 @@
         <div class="d-flex container justify-content-center">
             <form id="edit_user_info_form" method="POST" data-url="{% url 'edit_user_info' %}">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="edit_first_name" name="edit_first_name" value="{{ user_profile_details.first_name }}" autocomplete="off" />
-                    <label for="edit_first_name">First Name</label>
+                    <input type="text" class="form-control" id="{{ form.edit_first_name.id_for_label }}" name="edit_first_name" value="{{ user_profile_details.first_name }}" autocomplete="off" />
+                    <label for="{{ form.edit_first_name.id_for_label }}">First Name</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="edit_last_name" name="edit_last_name" value="{{ user_profile_details.last_name }}" autocomplete="off" />
-                    <label for="edit_last_name">Last Name</label>
+                    <input type="text" class="form-control" id="{{ form.edit_last_name.id_for_label }}" name="edit_last_name" value="{{ user_profile_details.last_name }}" autocomplete="off" />
+                    <label for="{{ form.edit_last_name.id_for_label }}">Last Name</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="edit_username" name="edit_username" value="{{ user_profile_details.username }}" autocomplete="off" />
-                    <label for="edit_username">Username</label>
+                    <input type="text" class="form-control" id="{{ form.edit_username.id_for_label }}" name="edit_username" value="{{ user_profile_details.username }}" autocomplete="off" />
+                    <label for="{{ form.edit_username.id_for_label }}">Username</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="edit_email" name="edit_email" value="{{ user_profile_details.email }}" autocomplete="off" />
-                    <label for="edit_email">Email</label>
+                    <input type="email" class="form-control" id="{{ form.edit_email.id_for_label }}" name="edit_email" value="{{ user_profile_details.email }}" autocomplete="off" />
+                    <label for="{{ form.edit_email.id_for_label }}">Email</label>
                 </div>
 
                 <div class="form-floating mb-3">
-                    <input type="number" class="form-control" id="edit_score" name="edit_score" value="{{ game_profile_details }}" autocomplete="off" />
-                    <label for="edit_score">Score</label>
+                    <input type="number" class="form-control" id="{{ form.edit_user_game_score.id_for_label }}" name="edit_user_game_score" value="{{ game_profile_details }}" autocomplete="off" />
+                    <label for="{{ form.edit_user_game_score.id_for_label }}">Score</label>
                 </div>
 
                 <div class="mb-3">
 
                     {% if user_profile_details.account_type == "super_admin" %}
-                        <select class="form-select text-black" name="user_account_type" aria-label="Dropdown where superadmin can set user level." disabled>
+                        <select class="form-select text-black" name="edit_user_type" aria-label="Dropdown where superadmin can set user level." disabled>
                             <option value="admin" selected>Superadmin</option>
                         </select>
-                        <input type="hidden" value="admin" name="user_account_type" />
+                        <input type="hidden" value="admin" name="edit_user_type" />
                     {% else %}
-                        <select class="form-select text-black" name="user_account_type" aria-label="Dropdown where superadmin can set user level.">
+                        <select class="form-select text-black" name="edit_user_type" aria-label="Dropdown where superadmin can set user level.">
                             {% if user_profile_details.account_type == "user" %}
                                 <option value="user" selected>User</option>
                                 <option value="admin">Admin</option>
