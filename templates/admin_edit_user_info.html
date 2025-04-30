@@ -8,6 +8,7 @@
 
 <body>
     {% block content %}
+    <input type="hidden" id="csrf_token" value="{{ csrf_token }}" />
 
     <section id="main_section">
         <section class="mt-3 mb-5" id="edit_user_profile_heading">
