@@ -13,6 +13,13 @@ customer_request_options = [
     ("general_requests", "General Requests")
 ]
 
+# Listing all the options in the "dropdown" menu for "User Type" field in the "Edit User Profile" section.
+user_type_options = [
+    ("user", "User"),
+    ("admin", "Admin"),
+    ("super_admin", "SuperAdmin")
+]
+
 def validate_username(username):
     if len(username) < MIN_USERNAME_LENGTH:
         raise ValidationError(f"Username must be at least {MIN_USERNAME_LENGTH} characters long.")
@@ -62,3 +69,11 @@ class CustomerSupportForm(forms.Form):
     customer_title_of_request = forms.CharField(max_length=150, required=True)
     customer_ticket_description = forms.CharField(required=True)
     customer_ticket_attachments = forms.FileField(required=False)
+
+class AdminEditUserProfileForm(forms.Form):
+    edit_first_name = forms.CharField(max_length=25, required=True)
+    edit_last_name = forms.CharField(max_length=25, required=True)
+    edit_username = forms.CharField(max_length=MAX_USERNAME_LENGTH, required=True, validators=[validate_username])
+    edit_email = forms.EmailField(required=True)
+    edit_user_game_score = forms.IntegerField()
+    edit_user_type = forms.ChoiceField(choices=user_type_options, required=True)
