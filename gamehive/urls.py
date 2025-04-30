@@ -21,6 +21,7 @@ urlpatterns = [
     path('remove_testimonial/', views.remove_testimonial, name='remove_testimonial'),
     path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('manage_users/', views.manage_users, name='manage_users'),
+    path('edit_user_info/', views.edit_user_info, name='edit_user_info'),
     path('user_request_mgmt/', views.user_request_mgmt, name='user_request_mgmt'),
     path('testimonials_mgmt/', views.testimonials_mgmt, name='testimonials_mgmt'),
     path('login/', views.sign_in, name='login'),
