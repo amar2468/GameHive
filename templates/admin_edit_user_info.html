@@ -26,6 +26,7 @@
 
     <section class="mt-5 mb-5" id="section_with_edit_user_info">
         <div class="d-flex container justify-content-center">
+            <input type="hidden" id="current_username" data-url="{{ user_profile_details.username }}" />
             <form id="edit_user_info_form" method="POST" data-url="{% url 'edit_user_info' %}">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="{{ form.edit_first_name.id_for_label }}" name="edit_first_name" value="{{ user_profile_details.first_name }}" autocomplete="off" />
@@ -53,9 +54,9 @@
 
                     {% if user_profile_details.account_type == "super_admin" %}
                         <select class="form-select text-black" name="edit_user_type" aria-label="Dropdown where superadmin can set user level." disabled>
-                            <option value="admin" selected>Superadmin</option>
+                            <option value="super_admin" selected>Superadmin</option>
                         </select>
-                        <input type="hidden" value="admin" name="edit_user_type" />
+                        <input type="hidden" value="super_admin" name="edit_user_type" />
                     {% else %}
                         <select class="form-select text-black" name="edit_user_type" aria-label="Dropdown where superadmin can set user level.">
                             {% if user_profile_details.account_type == "user" %}
