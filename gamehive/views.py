@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
-from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails, BuyItemForm, ForgotPasswordForm, CustomerSupportForm
+from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails, BuyItemForm, ForgotPasswordForm, CustomerSupportForm, AdminEditUserProfileForm
 from django.contrib.auth import authenticate, login, logout, password_validation
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
@@ -264,8 +264,106 @@ def edit_user_info(request):
         # We are checking to see if the user who is trying to access the page is either an admin or superadmin. We don't want
         # normal users to have access to this page
         if request.user.account_type == "super_admin" or request.user.account_type == "admin":
+            # If the user profile was edited by the admin, we will take a look at all the fields in the form and see what ones
+            # need to be updated, and send that info back to the front-end.
             if request.method == "POST":
-                return JsonResponse({"success" : True})
+                # Creating an instance of the AdminEditUserProfileForm, so that we can validate the admin input
+                form = AdminEditUserProfileForm(request.POST)
+                
+                # Checking to see if the fields were filled in correctly.
+                if form.is_valid():
+                    # Getting the values from all the fields, so we can determine whether any of them have been updated.
+                    change_first_name = form.cleaned_data['edit_first_name']
+                    change_last_name = form.cleaned_data['edit_last_name']
+                    change_username = form.cleaned_data['edit_username']
+                    change_email = form.cleaned_data['edit_email']
+                    change_user_game_score = form.cleaned_data['edit_user_game_score']
+                    change_user_account_type = form.cleaned_data['edit_user_type']
+                    current_username = request.POST.get("current_username")
+
+                    # Retrieving the user record from the model, so that we can update the necessary fields, if applicable.
+                    update_user = CustomUser.objects.get(username=current_username)
+
+                    # Creating a list that will hold all the messages regarding which fields have been updated.
+                    updated_fields_success_messages = []
+
+                    # If the username was updated, we will update the username and inform the admin that it was updated.
+                    if change_username != current_username:
+                        update_user.username = change_username
+                        update_user.save()
+
+                        updated_fields_success_messages.append("The username has been updated.")
+
+                        response_update_user_profile = {
+                            "success" : True,
+                            "message" : updated_fields_success_messages
+                        }
+                    
+                    # If the first name was updated, we will update the first name and inform the admin that it was updated.
+                    if change_first_name != update_user.first_name:
+                        update_user.first_name = change_first_name
+                        update_user.save()
+
+                        updated_fields_success_messages.append("The first name has been updated.")
+
+                        response_update_user_profile = {
+                            "success" : True,
+                            "message" : updated_fields_success_messages
+                        }
+
+                    # If the last name was updated, we will update the last name and inform the admin that it was updated.
+                    if change_last_name != update_user.last_name:
+                        update_user.last_name = change_last_name
+                        update_user.save()
+
+                        updated_fields_success_messages.append("The last name has been updated.")
+
+                        response_update_user_profile = {
+                            "success" : True,
+                            "message" : updated_fields_success_messages
+                        }
+
+                    # If the email was updated, we will update the email and inform the admin that it was updated.
+                    if change_email != update_user.email:
+                        update_user.email = change_email
+                        update_user.save()
+
+                        updated_fields_success_messages.append("The email has been updated.")
+
+                        response_update_user_profile = {
+                            "success" : True,
+                            "message" : updated_fields_success_messages
+                        }
+
+                    # If the account type was updated, we will update the account type and inform the admin that it was updated.
+                    if change_user_account_type != update_user.account_type:
+                        update_user.account_type = change_user_account_type
+                        update_user.save()
+
+                        updated_fields_success_messages.append("The account type has been updated.")
+
+                        response_update_user_profile = {
+                            "success" : True,
+                            "message" : updated_fields_success_messages
+                        }
+                
+                    update_user_score = GameUserProfile.objects.get(user=update_user)
+
+                    # If the user score was updated, we will update the user score and inform the admin that it was updated.
+                    if change_user_game_score != update_user_score.current_score:
+                        update_user_score.current_score = change_user_game_score
+
+                        update_user_score.save()
+
+                        updated_fields_success_messages.append("The user score has been updated.")
+
+                        response_update_user_profile = {
+                            "success" : True,
+                            "message" : updated_fields_success_messages
+                        }
+
+                # Returning the responses to the HTML template and rendering the page.
+                return JsonResponse(response_update_user_profile)
             
             # GET request is dealt with here, by getting the username of the user that the admin wants to view and retrieving
             # the relevant fields for this specific user from the models.
