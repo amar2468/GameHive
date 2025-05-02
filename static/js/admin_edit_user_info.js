@@ -11,6 +11,9 @@ $(document).ready(function() {
         // We are serialising the form data, so that it can be sent to the backend for review.
         form_data = $('#edit_user_info_form').serialize();
 
+        // Added the current username to the form, in case the admin changes the username of this user.
+        form_data += "&current_username=" + ($('#current_username').data("url"));
+
         // AJAX POST request, which will submit the form to update the user profile by passing the data from the form, the relevant
         // URL to call, and the CSRF token.
         $.ajax({
