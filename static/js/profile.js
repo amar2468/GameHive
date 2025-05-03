@@ -110,17 +110,38 @@ $(document).ready(function() {
                 // this will display all the error messages in a list fashion.
                 if (response.success === "")
                 {
-                    // Iterating through each error message and displaying it in the required list, so user can correct their
-                    // actions
-                    for (let element in response.error_messages)
-                    {
-                        response.error_messages[element].forEach(error => {
-                            $('#update_personal_details_errors_unordered_list').append(`<li>${element} : ${error}</li>`);
-                        });
+                    // If the error is in the form of a string, we will not display it in a list format.
+                    if ($.type(response.error_messages) === "string") {
+                        // We are removing all the previous errors, as they are irrelevant now.
+                        $('#update_personal_details_errors_unordered_list').text("");
+                        
+                        // Displaying the new error on the page.
+                        $('#update_personal_details_errors_string').text(response.error_messages);
+                        
+                        // Change the email back to the current one, instead of the one that the user wanted to change to.
+                        $('#change_email_id').val($('#current_email').data("url"));
+                        
+                        // Show the error messages on the screen.
+                        $('#update_personal_details_errors_div').show();
                     }
 
-                    // Displays the div, which holds the list of errors
-                    $('#update_personal_details_errors_div').show();
+                    // If the error is in the form of an object, we will display it in a list format.
+                    else {
+                        // We are removing all the previous errors, as they are irrelevant now.
+                        $('#update_personal_details_errors_string').text("");
+
+                        // Iterating through each error message and displaying it in the required list, so user can correct their
+                        // actions
+                        for (let element in response.error_messages)
+                        {
+                            response.error_messages[element].forEach(error => {
+                                $('#update_personal_details_errors_unordered_list').append(`<li>${element} : ${error}</li>`);
+                            });
+                        }
+    
+                        // Displays the div, which holds the list of errors
+                        $('#update_personal_details_errors_div').show();
+                    }
 
                 }
 
