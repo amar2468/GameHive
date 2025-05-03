@@ -287,16 +287,62 @@ def edit_user_info(request):
                     # Creating a list that will hold all the messages regarding which fields have been updated.
                     updated_fields_success_messages = []
 
+                    # If no changes are made, we will inform the front-end that no changes were made to the user profile.
+                    response_update_user_profile = {
+                        "success" : False,
+                        "message" : "No changes have been made to the user profile.",
+                        "updated_fields" : []
+                    }
+
                     # If the username was updated, we will update the username and inform the admin that it was updated.
                     if change_username != current_username:
-                        update_user.username = change_username
-                        update_user.save()
+                        try:
+                            update_user.username = change_username
+                            update_user.save()
+                        except IntegrityError:
+                            response_update_user_profile = {
+                                "success" : False,
+                                "message" : "The username entered already exists on the system. Choose a unique one.",
+                                "updated_fields" : []
+                            }
+
+                            return JsonResponse(response_update_user_profile)
 
                         updated_fields_success_messages.append("The username has been updated.")
 
                         response_update_user_profile = {
                             "success" : True,
-                            "message" : updated_fields_success_messages
+                            "message" : "User profile updated.",
+                            "updated_fields" : updated_fields_success_messages
+                        }
+                    
+                    
+                    # If the email was updated, we will update the email and inform the admin that it was updated.
+                    if change_email != update_user.email:
+
+                        # Checking to see if the email that the admin entered for the user already exists in the system.
+                        email_exists_on_system = CustomUser.objects.filter(email=change_email)
+
+                        # If the email exists on the system, we don't want the user to be associated with this email.
+                        if email_exists_on_system:
+                            response_update_user_profile = {
+                                "success" : False,
+                                "message" : "The email that you entered already exists on the system. Choose a unique one.",
+                                "updated_fields" : []
+                            }
+
+                            return JsonResponse(response_update_user_profile)
+                        
+                        update_user.email = change_email
+                        
+                        update_user.save()
+
+                        updated_fields_success_messages.append("The email has been updated.")
+
+                        response_update_user_profile = {
+                            "success" : True,
+                            "message" : "User profile updated.",
+                            "updated_fields" : updated_fields_success_messages
                         }
                     
                     # If the first name was updated, we will update the first name and inform the admin that it was updated.
@@ -308,7 +354,8 @@ def edit_user_info(request):
 
                         response_update_user_profile = {
                             "success" : True,
-                            "message" : updated_fields_success_messages
+                            "message" : "User profile updated.",
+                            "updated_fields" : updated_fields_success_messages
                         }
 
                     # If the last name was updated, we will update the last name and inform the admin that it was updated.
@@ -320,19 +367,8 @@ def edit_user_info(request):
 
                         response_update_user_profile = {
                             "success" : True,
-                            "message" : updated_fields_success_messages
-                        }
-
-                    # If the email was updated, we will update the email and inform the admin that it was updated.
-                    if change_email != update_user.email:
-                        update_user.email = change_email
-                        update_user.save()
-
-                        updated_fields_success_messages.append("The email has been updated.")
-
-                        response_update_user_profile = {
-                            "success" : True,
-                            "message" : updated_fields_success_messages
+                            "message" : "User profile updated.",
+                            "updated_fields" : updated_fields_success_messages
                         }
 
                     # If the account type was updated, we will update the account type and inform the admin that it was updated.
@@ -344,7 +380,8 @@ def edit_user_info(request):
 
                         response_update_user_profile = {
                             "success" : True,
-                            "message" : updated_fields_success_messages
+                            "message" : "User profile updated.",
+                            "updated_fields" : updated_fields_success_messages
                         }
                 
                     update_user_score = GameUserProfile.objects.get(user=update_user)
@@ -359,11 +396,12 @@ def edit_user_info(request):
 
                         response_update_user_profile = {
                             "success" : True,
-                            "message" : updated_fields_success_messages
+                            "message" : "User profile updated.",
+                            "updated_fields" : updated_fields_success_messages
                         }
 
-                # Returning the responses to the HTML template and rendering the page.
-                return JsonResponse(response_update_user_profile)
+                    # Returning the responses to the HTML template and rendering the page.
+                    return JsonResponse(response_update_user_profile)
             
             # GET request is dealt with here, by getting the username of the user that the admin wants to view and retrieving
             # the relevant fields for this specific user from the models.
@@ -658,6 +696,18 @@ def update_personal_details(request):
                 change_first_name = form.cleaned_data['change_first_name']
                 change_surname = form.cleaned_data['change_surname']
 
+                # Checking if the email entered already exists in the system.
+                email_exists_on_system = CustomUser.objects.filter(email=change_email)
+
+                # If the email that was entered already exists in the system, we will return that notification back to the frontend.                
+                if email_exists_on_system:
+                    response_info_update_personal_details = {
+                        'success' : "",
+                        'error_messages' : "The email that you entered already exists on the system. Choose a unqiue one."
+                    }
+
+                    return JsonResponse(response_info_update_personal_details)
+
                 try:
                     user_details = CustomUser.objects.get(username=request.user)
 
@@ -918,6 +968,19 @@ def sign_up(request):
                 response_info_sign_up = {
                     'success' : "",
                     'error_messages' : e.messages
+                }
+
+                return JsonResponse(response_info_sign_up)
+            
+            # Checking if the email has already been used by someone else on the system
+            user_email_used = CustomUser.objects.filter(email=email)
+
+            # If the email has already been used, we want to tell the user that they have to pick a different email.
+            if user_email_used:
+                error_message = "The email entered is already being used by a different user on the system. Please choose a unique email."
+                response_info_sign_up = {
+                    'success' : "",
+                    'error_messages' : error_message
                 }
 
                 return JsonResponse(response_info_sign_up)
