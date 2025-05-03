@@ -61,6 +61,7 @@
                 </div>
 
                 <div class="col">
+                    <input type="hidden" id="current_email" data-url="{{ user.email }}" />
                     <div id="personal_details_div">
                         <form id="update_details_form" method="post" data-url="{% url 'update_personal_details' %}">
                             {% csrf_token %}
@@ -127,6 +128,7 @@
                                 <div class="alert alert-danger">
                                     <ul id="update_personal_details_errors_unordered_list">
                                     </ul>
+                                    <p id="update_personal_details_errors_string"></p>
                                 </div>
                             </div>
 
