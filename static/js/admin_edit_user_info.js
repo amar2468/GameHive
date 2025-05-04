@@ -30,8 +30,19 @@ $(document).ready(function() {
                 // If the user profile was updated, we will notify the admin, and show what fields were updated.
                 if (response.success === true) {
                     // Clearing the previous messages from the page, as they are now irrelevant.
+                    $('#list_of_updated_fields').text("");
+                    $('#list_of_updated_fields').hide();
+                    
+                    // Clearing the previous messages from the page, as they are now irrelevant.
                     $("#paragraph_outcome_edit_user_profile_no_changes").text("");
                     $("#div_outcome_edit_user_profile_no_changes").hide();
+
+                    // Iterating through the updated fields in the user profile and displaying them to the admin, as a verification
+                    // of what was done.
+                    for(let updated_field of response.updated_fields) {
+                        $('#list_of_updated_fields').append(`<li>${updated_field}</li>`);
+                        $('#list_of_updated_fields').show();
+                    }
 
                     // Showing the message that informs the admin that the user profile update was successful.
                     $('#paragraph_outcome_edit_user_profile_success').text(response.message);
@@ -40,6 +51,10 @@ $(document).ready(function() {
                 
                 // If the user profile was not updated, we will notify the admin.
                 else if (response.success === false) {
+                    // Clearing the previous messages from the page, as they are now irrelevant.
+                    $('#list_of_updated_fields').text("");
+                    $('#list_of_updated_fields').hide();
+
                     // If no changes were made, we will just display the info on the screen.
                     if (response.message === "No changes have been made to the user profile.") {
                         // Clearing the previous messages from the page, as they are now irrelevant.
