@@ -34,7 +34,7 @@ $(document).ready(function() {
                     $('#list_of_updated_fields').hide();
                     
                     // Clearing the previous messages from the page, as they are now irrelevant.
-                    $("#paragraph_outcome_edit_user_profile_no_changes").text("");
+                    $("#heading_outcome_edit_user_profile_no_changes").text("");
                     $("#div_outcome_edit_user_profile_no_changes").hide();
 
                     // Iterating through the updated fields in the user profile and displaying them to the admin, as a verification
@@ -45,7 +45,7 @@ $(document).ready(function() {
                     }
 
                     // Showing the message that informs the admin that the user profile update was successful.
-                    $('#paragraph_outcome_edit_user_profile_success').text(response.message);
+                    $('#heading_outcome_edit_user_profile_success').text(response.message);
                     $('#div_outcome_edit_user_profile_success').show();
                 }
                 
@@ -58,11 +58,11 @@ $(document).ready(function() {
                     // If no changes were made, we will just display the info on the screen.
                     if (response.message === "No changes have been made to the user profile.") {
                         // Clearing the previous messages from the page, as they are now irrelevant.
-                        $("#paragraph_outcome_edit_user_profile_success").text("");
+                        $("#heading_outcome_edit_user_profile_success").text("");
                         $("#div_outcome_edit_user_profile_success").hide();
                         
                         // Showing the message that informs the admin that no changes were made to the user profile.
-                        $('#paragraph_outcome_edit_user_profile_no_changes').text(response.message);
+                        $('#heading_outcome_edit_user_profile_no_changes').text(response.message);
                         $('#div_outcome_edit_user_profile_no_changes').show();
                     }
 
@@ -70,12 +70,12 @@ $(document).ready(function() {
                     // or email that they chose already exists on the system.
                     else {
                         // Clearing the previous messages from the page, as they are now irrelevant.
-                        $("#paragraph_outcome_edit_user_profile_success").text("");
+                        $("#heading_outcome_edit_user_profile_success").text("");
                         $("#div_outcome_edit_user_profile_success").hide();
                         
                         // Showing the message that informs the admin that no changes were made to the user profile as the username
                         // already exists on the system.
-                        $('#paragraph_outcome_edit_user_profile_no_changes').text(response.message);
+                        $('#heading_outcome_edit_user_profile_no_changes').text(response.message);
                         $('#div_outcome_edit_user_profile_no_changes').show();
 
                         // Changing the "username" input field to use to current username.
@@ -88,7 +88,7 @@ $(document).ready(function() {
                 
                 // If something unexpected occurred, we will point that out and get the admin to investigate what happened.
                 else {
-                    $('#paragraph_outcome_edit_user_profile_no_changes').text("Something went wrong - please contact the superadmin for assistance.");
+                    $('#heading_outcome_edit_user_profile_no_changes').text("Something went wrong - please contact the superadmin for assistance.");
                     $('#div_outcome_edit_user_profile_no_changes').show();
                 }
             },
