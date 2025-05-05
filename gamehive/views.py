@@ -370,7 +370,6 @@ def edit_user_info(request):
                             "message" : "User profile updated.",
                             "updated_fields" : updated_fields_success_messages
                         }
-
                     # If the account type was updated, we will update the account type and inform the admin that it was updated.
                     if change_user_account_type != update_user.account_type:
                         update_user.account_type = change_user_account_type
@@ -401,6 +400,15 @@ def edit_user_info(request):
                         }
 
                     # Returning the responses to the HTML template and rendering the page.
+                    return JsonResponse(response_update_user_profile)
+                # If the form is invalid, we will inform the admin about it.
+                else:
+                    response_update_user_profile = {
+                        "success" : False,
+                        "message" : "The form that is being sent is invalid - check all the fields to see if the input is correct.",
+                        "updated_fields" : []
+                    }
+
                     return JsonResponse(response_update_user_profile)
             
             # GET request is dealt with here, by getting the username of the user that the admin wants to view and retrieving
