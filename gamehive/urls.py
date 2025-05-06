@@ -23,6 +23,7 @@ urlpatterns = [
     path('manage_users/', views.manage_users, name='manage_users'),
     path('edit_user_info/', views.edit_user_info, name='edit_user_info'),
     path('user_request_mgmt/', views.user_request_mgmt, name='user_request_mgmt'),
+    path('display_ticket_info/', views.display_ticket_info, name='display_ticket_info'),
     path('testimonials_mgmt/', views.testimonials_mgmt, name='testimonials_mgmt'),
     path('login/', views.sign_in, name='login'),
     path('logout/', views.log_out, name='logout')
