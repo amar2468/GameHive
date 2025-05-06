@@ -517,6 +517,12 @@ def user_request_mgmt(request):
         else:
             return render(request, "403.html")
 
+# View that displays the ticket info to the user.
+def display_ticket_info(request):
+    # If the user is trying to open the ticket by clicking on the ticket ID, it will display a page with all the ticket info on it.
+    if request.method == "GET":
+        return render(request, "view_ticket.html")
+
 # View that allows an admin to view all the testimonials
 def testimonials_mgmt(request):
     if request.method == "POST":
