@@ -87,7 +87,7 @@
                           {% for user_request in all_unassigned_user_requests %}
                             <tr class="user-record-row">
                                 <td scope="row"><input class="form-check-input select-row" type="checkbox" aria-label="Select the user request record row." /></td>
-                                <td class="text-black text-center ticket_id">{{ user_request.ticket_id }}</td>
+                                <td class="text-black text-center ticket_id"><a href="{% url 'display_ticket_info' %}">{{ user_request.ticket_id }}</a></td>
                                 <td class="text-black text-center">{{ user_request.ticket_created_at }}</td>
                                 {% if not user_request.requester_email %}
                                   <td class="text-black text-center">{{ user_request.requester_username }}</td>
@@ -120,7 +120,7 @@
                           {% for request_assigned_to_me in all_requests_assigned_to_me %}
                             <tr class="user-record-row">
                                 <td scope="row"><input class="form-check-input select-row" type="checkbox" aria-label="Select the user request record row." /></td>
-                                <td class="text-black text-center ticket_id">{{ request_assigned_to_me.ticket_id }}</td>
+                                <td class="text-black text-center ticket_id"><a href="{% url 'display_ticket_info' %}">{{ request_assigned_to_me.ticket_id }}</a></td>
                                 <td class="text-black text-center">{{ request_assigned_to_me.ticket_created_at }}</td>
                                 {% if not request_assigned_to_me.requester_email %}
                                   <td class="text-black text-center">{{ request_assigned_to_me.requester_username }}</td>
@@ -154,7 +154,7 @@
                           {% for closed_request in all_closed_user_requests %}
                             <tr class="user-record-row">
                                 <td scope="row"><input class="form-check-input select-row" type="checkbox" aria-label="Select the user request record row." /></td>
-                                <td class="text-black text-center ticket_id">{{ closed_request.ticket_id }}</td>
+                                <td class="text-black text-center ticket_id"><a href="{% url 'display_ticket_info' %}">{{ closed_request.ticket_id }}</a></td>
                                 <td class="text-black text-center">{{ closed_request.ticket_created_at }}</td>
                                 {% if not closed_request.requester_email %}
                                   <td class="text-black text-center">{{ closed_request.requester_username }}</td>
