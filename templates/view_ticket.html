@@ -5,7 +5,57 @@
 <body>
     {% block content %}
 
-        Ticket goes here...
-        
+    <section id="main_section">
+        <section class="d-flex container">
+            <section class="mt-3 mb-5 ms-5 col-4 col-sm-6 col-md-10 col-lg-10 col-xl-8" id="heading_for_viewing_ticket_page">
+                <h2 class="mt-3 mb-5">{{ ticket_info.ticket_title }}</h2>
+                <p class="mt-3 mb-5">{{ ticket_info.ticket_description }}</p>
+                
+                <hr>
+
+                <section id="comments_section">
+                    <h4>Comments</h4>
+                </section>
+            </section>
+
+            <section class="mt-3 mb-5 col-8 col-sm-6 col-md-2 col-lg-2 col-xl-4">
+                <div class="d-flex flex-column flex-shrink-0 p-3 bg-light">
+                    <h5>Ticket Information</h5>
+                    
+                    <dl class="row">
+                        <dt class="mt-3 col-sm-5">Ticket ID</dt>
+                        <dd class="mt-3 col-sm-7">{{ ticket_info.ticket_id }}</dd>
+
+                        <dt class="mt-3 col-sm-5">Requester</dt>
+                        {% if ticket_info.requester_email == "" %}
+                            <dd class="mt-3 col-sm-7">{{ ticket_info.requester_username }}</dd>
+                        {% else %}
+                            <dd class="mt-3 col-sm-7">{{ ticket_info.requester_email }}</dd>
+                        {% endif %}
+
+                        <dt class="mt-3 col-sm-5">Ticket Type</dt>
+                        <dd class="mt-3 col-sm-7">{{ ticket_info.ticket_request_type }}</dd>
+
+                        <dt class="mt-3 col-sm-5">Ticket Status</dt>
+                        <dd class="mt-3 col-sm-7">{{ ticket_info.ticket_status }}</dd>
+
+                        <dt class="mt-3 col-sm-5">Assigned To</dt>
+                        {% if ticket_info.ticket_assigned_to == "" %}
+                            <dd class="mt-3 col-sm-7">Unassigned</dd>
+                        {% else %}
+                            <dd class="mt-3 col-sm-7">{{ ticket_info.ticket_assigned_to }}</dd>
+                        {% endif %}
+
+                        <dt class="mt-3 col-sm-5">Created At</dt>
+                        <dd class="mt-3 col-sm-7">{{ ticket_info.ticket_created_at }}</dd>
+
+                        <dt class="mt-3 col-sm-5">Updated At</dt>
+                        <dd class="mt-3 col-sm-7">{{ ticket_info.ticket_updated_at }}</dd>
+                    </dl>
+
+                </div>
+            </section>
+        </section>
+    </section>
     {% endblock %}
 </body>
