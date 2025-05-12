@@ -521,7 +521,15 @@ def user_request_mgmt(request):
 def display_ticket_info(request):
     # If the user is trying to open the ticket by clicking on the ticket ID, it will display a page with all the ticket info on it.
     if request.method == "GET":
-        return render(request, "view_ticket.html")
+        ticket_number = request.GET.get("ticket_id")
+
+        ticket_info = CustomerSupportModel.objects.get(ticket_id=ticket_number)
+
+        response_display_ticket_info = {
+            'ticket_info' : ticket_info
+        }
+
+        return render(request, "view_ticket.html", response_display_ticket_info)
 
 # View that allows an admin to view all the testimonials
 def testimonials_mgmt(request):
