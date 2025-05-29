@@ -176,6 +176,16 @@ table tbody tr:nth-child(even) {
   white-space: nowrap;
 }
 
+.ticket_attribute_values {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.ticket_info {
+  border: 2px solid #C0C0C0;
+  border-radius: 20px;
+}
+
 .wrapper {
   min-height: 95vh;
   display: flex;
