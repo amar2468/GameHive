@@ -67,6 +67,18 @@ input::-webkit-inner-spin-button {
   border-radius: 20px;
 }
 
+#footer_id {
+  position: fixed;
+  bottom: 0;
+  z-index:92389283;
+  width:100%;
+}
+
+#footer_div {
+  background-color: #191970;
+  border-radius: 20px;
+}
+
 .subheading_intro_customer_support_form {
   text-align:left;
 }
