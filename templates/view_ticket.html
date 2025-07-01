@@ -10,8 +10,8 @@
     {% block content %}
 
     <section id="main_section">
-        <section class="d-flex container">
-            <section class="mt-3 mb-5 ms-sm-0 ms-md-5" id="heading_for_viewing_ticket_page">
+        <section id="flex_container_section" class="d-flex container gap-5">
+            <section class="mt-3 mb-5 ms-sm-0 ms-md-5 flex-grow-1" id="heading_for_viewing_ticket_page">
                 <h2 class="mt-3 mb-5">{{ ticket_info.ticket_title }}</h2>
                 <p class="mt-3 mb-5">{{ ticket_info.ticket_description }}</p>
                 
@@ -22,40 +22,40 @@
                 </section>
             </section>
 
-            <section class="mt-3 ms-sm-0 ms-md-5 mb-5">
+            <section class="ms-sm-0 ms-md-5">
                 
-                <button class="toggle_sidebar_btn mb-2 btn-primary btn-lg" type="button" id="toggle_sidebar" aria-label="Toggle sidebar"><i class="bi bi-list"></i></button>
-                
-                <div class="ticket_info d-none mt-2 col-md-9">
-                    <dl class="row">
-                        <dt class="ticket_attributes mt-2 ms-1 me-2 col-sm-5">Ticket ID</dt>
-                        <dd class="ticket_attribute_values mt-2 ms-1 me-2 col-sm-7"><b>{{ ticket_info.ticket_id }}</b></dd>
+                <div class="ticket_info mt-5 col-md-9 ms-auto">
+                    <button class="toggle_sidebar_btn mb-1 btn-primary btn-lg" style="float:right;" type="button" id="toggle_sidebar" aria-label="Toggle sidebar"><i class="bi bi-list"></i></button>
+                    
+                    <dl class="row d-none">
+                        <dt class="ticket_attributes mt-2 ms-1 me-2 ">Ticket ID</dt>
+                        <dd class="ticket_attribute_values mt-2 ms-1 me-2 "><b>{{ ticket_info.ticket_id }}</b></dd>
 
-                        <dt class="ticket_attributes mt-2 ms-1 me-2 col-sm-5">Requester</dt>
+                        <dt class="ticket_attributes mt-2 ms-1 me-2 ">Requester</dt>
                         {% if ticket_info.requester_email == "" %}
-                            <dd class="ticket_attribute_values mt-2 ms-1 me-2 col-sm-7"><b>{{ ticket_info.requester_username }}</b></dd>
+                            <dd class="ticket_attribute_values mt-2 ms-1 me-2 "><b>{{ ticket_info.requester_username }}</b></dd>
                         {% else %}
-                            <dd class="ticket_attribute_values mt-2 ms-1 me-2 col-sm-7"><b>{{ ticket_info.requester_email }}</b></dd>
+                            <dd class="ticket_attribute_values mt-2 ms-1 me-2 "><b>{{ ticket_info.requester_email }}</b></dd>
                         {% endif %}
 
-                        <dt class="ticket_attributes mt-2 ms-1 me-2 col-sm-5">Ticket Type</dt>
-                        <dd class="ticket_attribute_values mt-2 ms-1 me-2 col-sm-7"><b>{{ ticket_info.ticket_request_type }}</b></dd>
+                        <dt class="ticket_attributes mt-2 ms-1 me-2 ">Ticket Type</dt>
+                        <dd class="ticket_attribute_values mt-2 ms-1 me-2 "><b>{{ ticket_info.ticket_request_type }}</b></dd>
 
-                        <dt class="ticket_attributes mt-2 ms-1 me-2 col-sm-5">Ticket Status</dt>
-                        <dd class="ticket_attribute_values mt-2 ms-1 me-2 col-sm-7"><b>{{ ticket_info.ticket_status }}</b></dd>
+                        <dt class="ticket_attributes mt-2 ms-1 me-2 ">Ticket Status</dt>
+                        <dd class="ticket_attribute_values mt-2 ms-1 me-2 "><b>{{ ticket_info.ticket_status }}</b></dd>
 
-                        <dt class="ticket_attributes mt-2 ms-1 me-2 col-sm-5">Assigned To</dt>
+                        <dt class="ticket_attributes mt-2 ms-1 me-2 ">Assigned To</dt>
                         {% if ticket_info.ticket_assigned_to == "" %}
-                            <dd class="ticket_attribute_values mt-2 ms-1 me-2 col-sm-7"><b>Unassigned</b></dd>
+                            <dd class="ticket_attribute_values mt-2 ms-1 me-2 "><b>Unassigned</b></dd>
                         {% else %}
-                            <dd class="ticket_attribute_values mt-2 ms-1 me-2 col-sm-7"><b>{{ ticket_info.ticket_assigned_to }}</b></dd>
+                            <dd class="ticket_attribute_values mt-2 ms-1 me-2 "><b>{{ ticket_info.ticket_assigned_to }}</b></dd>
                         {% endif %}
 
-                        <dt class="ticket_attributes mt-2 ms-1 me-2 col-sm-5">Created At</dt>
-                        <dd class="ticket_attribute_values mt-2 ms-1 me-2 col-sm-7"><b>{{ ticket_info.ticket_created_at }}</b></dd>
+                        <dt class="ticket_attributes mt-2 ms-1 me-2 ">Created At</dt>
+                        <dd class="ticket_attribute_values mt-2 ms-1 me-2 "><b>{{ ticket_info.ticket_created_at }}</b></dd>
 
-                        <dt class="ticket_attributes mt-2 ms-1 me-2 col-sm-5">Updated At</dt>
-                        <dd class="ticket_attribute_values mt-2 ms-1 me-2 col-sm-7"><b>{{ ticket_info.ticket_updated_at }}</b></dd>
+                        <dt class="ticket_attributes mt-2 ms-1 me-2 ">Updated At</dt>
+                        <dd class="ticket_attribute_values mt-2 ms-1 me-2 "><b>{{ ticket_info.ticket_updated_at }}</b></dd>
                     </dl>
                 </div>
             </section>
