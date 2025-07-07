@@ -18,7 +18,38 @@
                 <hr>
 
                 <section id="comments_section">
-                    <h4>Comments</h4>
+                    <h4 class="mt-4 mb-4">Comments</h4>
+                    
+                    <form id="add_comment_in_ticket_form" method="POST" data-url="{% url 'add_comment_customer_support_ticket' %}">
+                        {% csrf_token %}
+
+                        <textarea class="form-control mb-3" name="comment_content" rows="3" placeholder="Enter your comment here..."></textarea>
+
+                        <input type="hidden" name="commenter_username" id="commenter_username" value="{{ user }}" /> 
+
+                        <input type="hidden" name="ticket_id" value="{{ ticket_info.ticket_id }}" />
+
+                        <button type="submit" class="mb-3 btn-primary btn-lg" id="reply_to_ticket"><i class="bi bi-reply"></i> Reply</button>
+                    </form>
+                    
+                    {% for comment in ticket_comments %}
+                        <div class="card mb-3">
+                            <div class="card-body p-4">
+                                <div class="d-flex flex-start">
+                                    <img class="rounded-circle me-3" src="{% static 'assets/user-profile.png' %}" alt="Avatar" height="60" width="60" />
+
+                                    <div>
+                                        <h6 class="fw-bolder mb-1">{{ comment.commenter_username }}</h6>
+
+                                        <p class="mb-3">{{ comment.timestamp }}</p>
+
+                                        <p class="mb-3">{{ comment.comment_content }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                
                 </section>
             </section>
 
