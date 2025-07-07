@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
-from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails, BuyItemForm, ForgotPasswordForm, CustomerSupportForm, AdminEditUserProfileForm
+from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails, BuyItemForm, ForgotPasswordForm, CustomerSupportForm, AdminEditUserProfileForm, AddCommentWithinTicketForm
 from django.contrib.auth import authenticate, login, logout, password_validation
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
@@ -11,6 +11,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.urls import reverse
 import json
+from datetime import datetime
 
 # View that renders the homepage which allows a user to either sign up/login or play the game of their choice
 
@@ -525,11 +526,66 @@ def display_ticket_info(request):
 
         ticket_info = CustomerSupportModel.objects.get(ticket_id=ticket_number)
 
+        try:
+            ticket_comments = json.loads(ticket_info.ticket_comments)
+        except:
+            print("There are no comments for this ticket.")
+
         response_display_ticket_info = {
-            'ticket_info' : ticket_info
+            'ticket_info' : ticket_info,
+            'ticket_comments' : ticket_comments
         }
 
         return render(request, "view_ticket.html", response_display_ticket_info)
+
+# View that handles comments that are submitted within a specific customer support ticket.
+def add_comment_customer_support_ticket(request):
+    if request.method == "POST":
+        # Creating an instance of the AddCommentWithinTicketForm, so that we can validate the fields from the form
+        form = AddCommentWithinTicketForm(request.POST)
+
+        # If the form is deemed valid (all input fields are getting the expected values), we will proceed to save the comment.
+        if form.is_valid():
+            # Retrieving the three fields from the form
+            comment_content = form.cleaned_data['comment_content']
+            commenter_username = form.cleaned_data['commenter_username']
+            ticket_id = form.cleaned_data['ticket_id']
+            
+            # Retrieving the relevant ticket in question, so that we can update the comments that are associated with it.
+            customer_support_ticket = CustomerSupportModel.objects.get(ticket_id=ticket_id)
+
+            # Retrieving all the current comments that are in this ticket, so that we don't overwrite them.
+            comments = json.loads(customer_support_ticket.ticket_comments)
+
+            # Adding the new comment to the list that stores the comments.
+            comments.insert(0, {
+                "commenter_username" : commenter_username,
+                "comment_content" : comment_content,
+                "timestamp" : datetime.now().strftime("%d %b %Y, %H:%M")
+            })
+
+            # Updating the comments list with the updated comments list.
+            customer_support_ticket.ticket_comments = json.dumps(comments)
+
+            # Saving the comments
+            customer_support_ticket.save()
+
+            # Sending back a success message when the comment is saved.
+            response_add_comment_to_ticket = {
+                'status' : "Successfully added comment within the ticket",
+                'success' : True
+            }
+
+            return JsonResponse(response_add_comment_to_ticket)
+        
+        # If there was unexpected input in the form, we will tell the user that the form is invalid.
+        else:
+            response_add_comment_to_ticket = {
+                'status' : "Failed to add comment within the comment - form is invalid.",
+                'success' : False
+            }
+
+            return JsonResponse(response_add_comment_to_ticket)
 
 # View that allows an admin to view all the testimonials
 def testimonials_mgmt(request):
