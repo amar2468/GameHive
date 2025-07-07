@@ -25,6 +25,7 @@ urlpatterns = [
     path('user_request_mgmt/', views.user_request_mgmt, name='user_request_mgmt'),
     path('display_ticket_info/', views.display_ticket_info, name='display_ticket_info'),
     path('testimonials_mgmt/', views.testimonials_mgmt, name='testimonials_mgmt'),
+    path('add_comment_customer_support_ticket/', views.add_comment_customer_support_ticket, name='add_comment_customer_support_ticket'),
     path('login/', views.sign_in, name='login'),
     path('logout/', views.log_out, name='logout')
 ]
