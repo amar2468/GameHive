@@ -77,3 +77,8 @@ class AdminEditUserProfileForm(forms.Form):
     edit_email = forms.EmailField(required=True)
     edit_user_game_score = forms.IntegerField()
     edit_user_type = forms.ChoiceField(choices=user_type_options, required=True)
+
+class AddCommentWithinTicketForm(forms.Form):
+    comment_content = forms.CharField(required=True)
+    commenter_username = forms.CharField(required=True)
+    ticket_id = forms.CharField(required=True)
