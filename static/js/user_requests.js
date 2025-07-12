@@ -150,6 +150,9 @@ $(document).ready(function() {
                     $('#div_outcome_delete_user_request_failure').show();
                 }
 
+                // Disable the delete button, while the request is being processed.
+                $('.admin_options_delete').prop("disabled", true);
+
                 // After 1 second, we want to refresh (not reload) the page, removing the success/failure messages and showing
                 // the up-to-date user record tables.
                 setTimeout(function() {
@@ -163,6 +166,13 @@ $(document).ready(function() {
 
                     // Refresh (not reload) the page by clicking on the refresh button.
                     $('.admin_options_refresh_page').click();
+
+                    // Wait for 100ms before disabling the button (to allow the page to refresh)
+                    setTimeout(function() {
+                        // Disable the delete button, as the record that the user wanted to delete is gone.
+                        $('.admin_options_delete').prop("disabled", true);
+                    }, 100);
+
                 }, 1000);
             },
 
