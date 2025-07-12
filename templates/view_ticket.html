@@ -19,6 +19,14 @@
 
                 <section id="comments_section">
                     <h4 class="mt-4 mb-4">Comments</h4>
+
+                    <div class="alert alert-success" id="div_outcome_comment_success" role="alert" style="display:none;">
+                        <p id="paragraph_outcome_comment_success"></p>
+                    </div>
+
+                    <div class="alert alert-danger" id="div_outcome_comment_failure" role="alert" style="display:none;">
+                        <p id="paragraph_outcome_comment_failure"></p>
+                    </div>
                     
                     <form id="add_comment_in_ticket_form" method="POST" data-url="{% url 'add_comment_customer_support_ticket' %}">
                         {% csrf_token %}
@@ -29,7 +37,7 @@
 
                         <input type="hidden" name="ticket_id" value="{{ ticket_info.ticket_id }}" />
 
-                        <button type="submit" class="mb-3 btn-primary btn-lg" id="reply_to_ticket"><i class="bi bi-reply"></i> Reply</button>
+                        <button type="submit" class="mb-3 btn btn-primary btn-lg" id="reply_to_ticket"><i class="bi bi-reply"></i> Reply</button>
                     </form>
                     
                     {% for comment in ticket_comments %}
