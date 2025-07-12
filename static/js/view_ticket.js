@@ -35,7 +35,44 @@ $(document).ready(function() {
             success: function(response) {
                 // If the comment was successfully added, we will tell the user that it was successfully done.
                 if (response.success === true) {
-                    console.log("SUCCESS!!!");
+                    // Shows the success alert, to notify the user that the comment was successfully added.
+                    $('#paragraph_outcome_comment_success').text(response.status);
+                    $('#div_outcome_comment_success').show();
+
+                    // Disable the button to submit the reply (preventing user from submitting the form multiple times in a row)
+                    $('#reply_to_ticket').prop("disabled", true);
+
+                    // Setting a timeout of 1.5 seconds, in which the success alert will disappear from the page and the
+                    // page will reload.
+                    setTimeout(function() {
+                        $('#div_outcome_comment_success').hide();
+
+                        // Re-enabling the button.
+                        $('#reply_to_ticket').prop("disabled", false);
+
+                        location.reload(true);
+                    }, 1500);
+                }
+
+                // If there was an issue with adding the comment, the user will be notified about it.
+                else {
+                    // Shows the failure alert, to notify the user that the comment was NOT added.
+                    $('#paragraph_outcome_comment_failure').text(response.status);
+                    $('#div_outcome_comment_failure').show();
+
+                    // Disable the button to submit the reply (preventing user from submitting the form multiple times in a row)
+                    $('#reply_to_ticket').prop("disabled", true);
+
+                    // Setting a timeout of 1.5 seconds, in which the failure alert will disappear from the page and the
+                    // page will reload.
+                    setTimeout(function() {
+                        $('#div_outcome_comment_failure').hide();
+
+                        // Re-enabling the button.
+                        $('#reply_to_ticket').prop("disabled", false);
+
+                        location.reload(true);
+                    }, 1500);
                 }
             },
             
