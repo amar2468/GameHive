@@ -76,10 +76,10 @@
                           <tr>
                               <th scope="col"><input class="form-check-input select_all_user_requests" type="checkbox" aria-label="Select the user request record row." /></th>
                               <th class="datatable_headings fw-bolder text-black text-center">Ticket ID</th>
-                              <th class="datatable_headings fw-bolder text-black text-center">Created At</th>
-                              <th class="datatable_headings fw-bolder text-black text-center">Requester</th>
-                              <th class="datatable_headings fw-bolder text-black text-center">Request Type</th>
                               <th class="datatable_headings fw-bolder text-black text-center">Title</th>
+                              <th class="datatable_headings fw-bolder text-black text-center">Request Type</th>
+                              <th class="datatable_headings fw-bolder text-black text-center">Requester</th>
+                              <th class="datatable_headings fw-bolder text-black text-center">Created At</th>
                               <th class="datatable_headings fw-bolder text-black text-center">Updated At</th>
                           </tr>
                         </thead>
@@ -88,14 +88,14 @@
                             <tr class="user-record-row">
                                 <td scope="row"><input class="form-check-input select-row" type="checkbox" aria-label="Select the user request record row." /></td>
                                 <td class="text-black text-center ticket_id"><a href="{% url 'display_ticket_info' %}?ticket_id={{ user_request.ticket_id }}">{{ user_request.ticket_id }}</a></td>
-                                <td class="text-black text-center">{{ user_request.ticket_created_at }}</td>
+                                <td class="text-black text-center">{{ user_request.ticket_title }}</td>
+                                <td class="text-black text-center">{{ user_request.ticket_request_type }}</td>
                                 {% if not user_request.requester_email %}
                                   <td class="text-black text-center">{{ user_request.requester_username }}</td>
                                 {% else %}
                                   <td class="text-black text-center">{{ user_request.requester_email }}</td>
                                 {% endif %}
-                                <td class="text-black text-center">{{ user_request.ticket_request_type }}</td>
-                                <td class="text-black text-center">{{ user_request.ticket_title }}</td>
+                                <td class="text-black text-center">{{ user_request.ticket_created_at }}</td>
                                 <td class="text-black text-center">{{ user_request.ticket_updated_at }}</td>
                             </tr>
                           {% endfor %}
@@ -109,10 +109,10 @@
                           <tr>
                             <th scope="col"><input class="form-check-input select_all_user_requests" type="checkbox" aria-label="Select the user request record row." /></th>
                             <th class="datatable_headings fw-bolder text-black text-center">Ticket ID</th>
-                            <th class="datatable_headings fw-bolder text-black text-center">Created At</th>
-                            <th class="datatable_headings fw-bolder text-black text-center">Requester</th>
-                            <th class="datatable_headings fw-bolder text-black text-center">Request Type</th>
                             <th class="datatable_headings fw-bolder text-black text-center">Title</th>
+                            <th class="datatable_headings fw-bolder text-black text-center">Request Type</th>
+                            <th class="datatable_headings fw-bolder text-black text-center">Requester</th>
+                            <th class="datatable_headings fw-bolder text-black text-center">Created At</th>
                             <th class="datatable_headings fw-bolder text-black text-center">Updated At</th>
                           </tr>
                         </thead>
@@ -121,14 +121,14 @@
                             <tr class="user-record-row">
                                 <td scope="row"><input class="form-check-input select-row" type="checkbox" aria-label="Select the user request record row." /></td>
                                 <td class="text-black text-center ticket_id"><a href="{% url 'display_ticket_info' %}?ticket_id={{ request_assigned_to_me.ticket_id }}">{{ request_assigned_to_me.ticket_id }}</a></td>
-                                <td class="text-black text-center">{{ request_assigned_to_me.ticket_created_at }}</td>
+                                <td class="text-black text-center">{{ request_assigned_to_me.ticket_title }}</td>
+                                <td class="text-black text-center">{{ request_assigned_to_me.ticket_request_type }}</td>
                                 {% if not request_assigned_to_me.requester_email %}
                                   <td class="text-black text-center">{{ request_assigned_to_me.requester_username }}</td>
                                 {% else %}
                                   <td class="text-black text-center">{{ request_assigned_to_me.requester_email }}</td>
                                 {% endif %}
-                                <td class="text-black text-center">{{ request_assigned_to_me.ticket_request_type }}</td>
-                                <td class="text-black text-center">{{ request_assigned_to_me.ticket_title }}</td>
+                                <td class="text-black text-center">{{ request_assigned_to_me.ticket_created_at }}</td>
                                 <td class="text-black text-center">{{ request_assigned_to_me.ticket_updated_at }}</td>
                             </tr>
                           {% endfor %}
@@ -143,10 +143,10 @@
                           <tr>
                             <th scope="col"><input class="form-check-input select_all_user_requests" type="checkbox" aria-label="Select the user request record row." /></th>
                             <th class="datatable_headings fw-bolder text-black text-center">Ticket ID</th>
-                            <th class="datatable_headings fw-bolder text-black text-center">Created At</th>
-                            <th class="datatable_headings fw-bolder text-black text-center">Requester</th>
-                            <th class="datatable_headings fw-bolder text-black text-center">Request Type</th>
                             <th class="datatable_headings fw-bolder text-black text-center">Title</th>
+                            <th class="datatable_headings fw-bolder text-black text-center">Request Type</th>
+                            <th class="datatable_headings fw-bolder text-black text-center">Requester</th>
+                            <th class="datatable_headings fw-bolder text-black text-center">Created At</th>
                             <th class="datatable_headings fw-bolder text-black text-center">Updated At</th>
                           </tr>
                         </thead>
@@ -155,14 +155,14 @@
                             <tr class="user-record-row">
                                 <td scope="row"><input class="form-check-input select-row" type="checkbox" aria-label="Select the user request record row." /></td>
                                 <td class="text-black text-center ticket_id"><a href="{% url 'display_ticket_info' %}?ticket_id={{ closed_request.ticket_id }}">{{ closed_request.ticket_id }}</a></td>
-                                <td class="text-black text-center">{{ closed_request.ticket_created_at }}</td>
+                                <td class="text-black text-center">{{ closed_request.ticket_title }}</td>
+                                <td class="text-black text-center">{{ closed_request.ticket_request_type }}</td>
                                 {% if not closed_request.requester_email %}
                                   <td class="text-black text-center">{{ closed_request.requester_username }}</td>
                                 {% else %}
                                   <td class="text-black text-center">{{ closed_request.requester_email }}</td>
                                 {% endif %}
-                                <td class="text-black text-center">{{ closed_request.ticket_request_type }}</td>
-                                <td class="text-black text-center">{{ closed_request.ticket_title }}</td>
+                                <td class="text-black text-center">{{ closed_request.ticket_created_at }}</td>
                                 <td class="text-black text-center">{{ closed_request.ticket_updated_at }}</td>
                             </tr>
                           {% endfor %}
