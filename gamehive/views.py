@@ -433,6 +433,14 @@ def edit_user_info(request):
 
                 # Returning the dictionary above to the HTML template and rendering the page.
                 return render(request, "admin_edit_user_info.html", response_edit_user_profile)
+        
+        # If the user is not an admin, display a 403 page.
+        else:
+            return render(request, "403.html")
+    
+    # If the user is not logged in, the page is forbidden for them
+    else:
+        return render(request, "403.html")
 
 # View that allows an admin to view all the user requests
 def user_request_mgmt(request):
@@ -520,23 +528,35 @@ def user_request_mgmt(request):
 
 # View that displays the ticket info to the user.
 def display_ticket_info(request):
-    # If the user is trying to open the ticket by clicking on the ticket ID, it will display a page with all the ticket info on it.
-    if request.method == "GET":
-        ticket_number = request.GET.get("ticket_id")
+    # We only want the admin to be able to view/update this page if they are logged in.
+    if request.user.is_authenticated:
+        # We are checking to see if the user who is trying to access the page is either an admin or superadmin. We don't want
+        # normal users to have access to this page
+        if request.user.account_type == "super_admin" or request.user.account_type == "admin":
+            # If the user is trying to open the ticket by clicking on the ticket ID, it will display a page with all the ticket info on it.
+            if request.method == "GET":
+                ticket_number = request.GET.get("ticket_id")
 
-        ticket_info = CustomerSupportModel.objects.get(ticket_id=ticket_number)
+                ticket_info = CustomerSupportModel.objects.get(ticket_id=ticket_number)
 
-        try:
-            ticket_comments = json.loads(ticket_info.ticket_comments)
-        except:
-            print("There are no comments for this ticket.")
+                try:
+                    ticket_comments = json.loads(ticket_info.ticket_comments)
+                except:
+                    print("There are no comments for this ticket.")
 
-        response_display_ticket_info = {
-            'ticket_info' : ticket_info,
-            'ticket_comments' : ticket_comments
-        }
+                response_display_ticket_info = {
+                    'ticket_info' : ticket_info,
+                    'ticket_comments' : ticket_comments
+                }
 
-        return render(request, "view_ticket.html", response_display_ticket_info)
+                return render(request, "view_ticket.html", response_display_ticket_info)
+        # If the user is not an admin, display a 403 page.
+        else:
+          return render(request, '403.html')
+    
+    # If the user is not logged in, the page is forbidden for them.
+    else:
+        return render(request, '403.html')
 
 # View that handles comments that are submitted within a specific customer support ticket.
 def add_comment_customer_support_ticket(request):
@@ -586,6 +606,49 @@ def add_comment_customer_support_ticket(request):
             }
 
             return JsonResponse(response_add_comment_to_ticket)
+
+# Route which will change the ticket title in the model
+def edit_ticket_title(request):
+    # Checking to see if the user is logged in
+    if request.user.is_authenticated:
+        # If the request was a POST request, as it should be.
+        if request.method == "POST":
+            # Retrieving the new ticket title, which is supposed to be updated in the model
+            new_ticket_title = request.POST.get("newTicketTitle")
+
+            # Getting the ticket ID from the frontend, so we can retrieve the record from the model.
+            ticket_id = request.POST.get("ticketID")
+
+            # Retrieving the full ticket info for the ticket in question
+            ticket_info = CustomerSupportModel.objects.get(ticket_id=ticket_id)
+
+            # Updating the ticket title
+            ticket_info.ticket_title = new_ticket_title
+
+            # Saving the changes
+            ticket_info.save()
+
+            response_edit_ticket_title = {
+                "success": True,
+                "message" : "Ticket title has been updated successfully."
+            }
+
+            return JsonResponse(response_edit_ticket_title)
+
+        else:
+            response_edit_ticket_title = {
+                "success" : False,
+                "message" : "Error encountered when updating the ticket title. Refresh the page and try again."
+            }
+
+            return JsonResponse(response_edit_ticket_title)
+    else:
+        response_edit_ticket_title = {
+            "success" : False,
+            "message" : "Error encountered when updating the ticket title. Refresh the page and try again."
+        }
+
+        return JsonResponse(response_edit_ticket_title)
 
 # View that allows an admin to view all the testimonials
 def testimonials_mgmt(request):
