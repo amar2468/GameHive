@@ -175,4 +175,45 @@ $(document).ready(function() {
         $('.edit_ticket_title').removeClass("d-none");
     });
 
+    // If the form to update the ticket information is submitted, it will try to make a POST request and update the ticket information
+    // that was changed. It will display a success or failure alert, depending on the outcome.
+    $(document).on("submit", "#update_ticket_info_form", function(e) {
+        // We are preventing the submission of the form, as this will be done through AJAX
+        e.preventDefault();
+
+        // We are serialising the form data, so that it can be sent to the backend for review.
+        form_data = $('#update_ticket_info_form').serialize();
+
+        // AJAX POST request, that sends the updated ticket fields to the backend, so that they can be updated in the model.
+        $.ajax({
+            type: "POST",
+            url: $("#update_ticket_info_form").data("url"),
+            data: form_data,
+
+            // If no error was encountered when trying to update the ticket information, we will check to see if the
+            // ticket information updated successfully.
+            success: function(response) {
+                // Clearing any old alerts
+                $('#paragraph_ticket_updated_success').text("");
+                $('#paragraph_ticket_updated_failure').text("");
+
+                // Populating the paragraph with the success message and displaying it on the page.
+                $('#paragraph_ticket_updated_success').text(response.message);
+                $('#div_ticket_updated_success').show();
+            },
+
+            // If an error was encountered, the error will be logged to the console.
+            error: function(error) {
+                console.error(error.statusText);
+                
+                // Clearing any old alerts
+                $('#paragraph_ticket_updated_success').text("");
+
+                // Populating the paragraph with the failure message and displaying it on the page.
+                $('#paragraph_ticket_updated_failure').text(error.responseJSON.message);
+                $('#div_ticket_updated_failure').show();
+            }
+        })
+    });
+
 });
