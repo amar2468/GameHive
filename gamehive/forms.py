@@ -7,10 +7,17 @@ RESERVED_WORDS = ['admin', 'root', 'moderator']
 
 # Listing all the options in the "dropdown" menu for "Request Type" field in the Customer Support section.
 customer_request_options = [
-    ("delete_user_account", "Delete Your Account"),
-    ("edit_user_account", "Edit Your Account"),
-    ("cancel_user_purchase", "Cancel Your Purchase"),
-    ("general_requests", "General Requests")
+    ("Delete Your Account", "Delete Your Account"),
+    ("Edit Your Account", "Edit Your Account"),
+    ("Cancel Your Purchase", "Cancel Your Purchase"),
+    ("General Requests", "General Requests")
+]
+
+# Listing all the options in the dropdown menu for "Ticket status"
+ticket_status_options = [
+    ("Open", "Open"),
+    ("In Progress", "In Progress"),
+    ("Closed", "Closed")
 ]
 
 # Listing all the options in the "dropdown" menu for "User Type" field in the "Edit User Profile" section.
@@ -82,3 +89,9 @@ class AddCommentWithinTicketForm(forms.Form):
     comment_content = forms.CharField(required=True)
     commenter_username = forms.CharField(required=True)
     ticket_id = forms.CharField(required=True)
+
+class EditTicketInfoForm(forms.Form):
+    ticket_request_type = forms.ChoiceField(choices=customer_request_options, required=True)
+    ticket_status_dropdown = forms.ChoiceField(choices=ticket_status_options, required=True)
+    ticket_assigned_to_dropdown = forms.CharField(required=False)
+    ticket_number = forms.CharField(required=True)
