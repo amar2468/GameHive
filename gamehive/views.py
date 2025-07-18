@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
-from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails, BuyItemForm, ForgotPasswordForm, CustomerSupportForm, AdminEditUserProfileForm, AddCommentWithinTicketForm
+from .forms import RegistrationForm,LoginForm, TestimonialsForm, ChangePasswordForm, UpdatePersonalDetails, BuyItemForm, ForgotPasswordForm, CustomerSupportForm, AdminEditUserProfileForm, AddCommentWithinTicketForm, EditTicketInfoForm
 from django.contrib.auth import authenticate, login, logout, password_validation
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
@@ -539,14 +539,31 @@ def display_ticket_info(request):
 
                 ticket_info = CustomerSupportModel.objects.get(ticket_id=ticket_number)
 
+                # Attempt to retrieve the comments. If it fails, the except block will notify that there are no comments for this ticket
                 try:
                     ticket_comments = json.loads(ticket_info.ticket_comments)
                 except:
                     print("There are no comments for this ticket.")
+                
+                # Getting the superadmin and admin users
+                all_admin_users = CustomUser.objects.filter(
+                    account_type__in=["admin", "super_admin"]
+                )
 
+                # Creating a separate list to hold the all_admin_users in string format, as we need this to compare against
+                # the ticket_assigned_to field in the model, which is a string.
+                all_admin_users_string = []
+
+                # Iterating through each admin and superadmin user and adding them to the string list as a string
+                for admin in all_admin_users:
+                    all_admin_users_string.append(str(admin))
+
+                # Returning the response, which consists of the ticket info (all relevant ticket fields), ticket comments, and
+                # a list of all admins and the superadmin
                 response_display_ticket_info = {
                     'ticket_info' : ticket_info,
-                    'ticket_comments' : ticket_comments
+                    'ticket_comments' : ticket_comments,
+                    'all_admin_users_string' : all_admin_users_string
                 }
 
                 return render(request, "view_ticket.html", response_display_ticket_info)
@@ -649,6 +666,89 @@ def edit_ticket_title(request):
         }
 
         return JsonResponse(response_edit_ticket_title)
+
+# Route that will update the ticket info (only can be done by the admin)
+def update_ticket_info(request):
+    # Checking to see if the user is logged in
+    if request.user.is_authenticated:
+        # We want to make sure that the request is a POST one. We are updating the ticket, so that would be a POST request
+        if request.method == "POST":
+            # Verifying that the user is either a superadmin or admin
+            if request.user.account_type == "super_admin" or request.user.account_type == "admin":
+                
+                # Validating the form submitted using the form in forms.py
+                form = EditTicketInfoForm(request.POST)
+
+                # If the user provided valid information when trying to update the ticket, we will get all the values that 
+                # the user provided and see whether any changes have been made
+                if form.is_valid():
+                    # Retrieving the information that the user potentially updated in the ticket.
+                    ticket_request_type = form.cleaned_data['ticket_request_type']
+                    ticket_status_dropdown = form.cleaned_data['ticket_status_dropdown']
+                    ticket_assigned_to_dropdown = form.cleaned_data['ticket_assigned_to_dropdown']
+                    ticket_number = form.cleaned_data['ticket_number']
+
+                    # We want to track if the user made an update to the ticket. This will initally be set to false
+                    update_made = False
+
+                    # We are trying to retrieve the ticket by the ticket_id and see if any changes have been made. If so, we
+                    # want to save the changes.
+                    try:
+                        # Retrieving specific ticket using the ticket_id
+                        specific_ticket = CustomerSupportModel.objects.get(ticket_id=ticket_number)
+
+                        # Checking to see if the ticket_request_type was changed and updating the model with the new value
+                        # and setting the update_made value to True, indicating that a change was made.
+                        if specific_ticket.ticket_request_type != ticket_request_type:
+                            specific_ticket.ticket_request_type = ticket_request_type
+                            update_made = True
+
+                        # Checking to see if the ticket_status was changed and updating the model with the new value
+                        # and setting the update_made value to True, indicating that a change was made.
+                        if specific_ticket.ticket_status != ticket_status_dropdown:
+                            specific_ticket.ticket_status = ticket_status_dropdown
+                            update_made = True
+
+                        # Checking to see if the ticket_assigned_to was changed and updating the model with the new value
+                        # and setting the update_made value to True, indicating that a change was made.
+                        if specific_ticket.ticket_assigned_to != ticket_assigned_to_dropdown:
+                            specific_ticket.ticket_assigned_to = ticket_assigned_to_dropdown
+                            update_made = True
+                        
+                        # If an update was made, we will save all the changes that were made.
+                        if update_made is True:
+                            specific_ticket.save()
+                        
+                        # Returning a success message back to the user
+                        response_edit_ticket_info = {
+                            "message" : "Ticket information updated successfully."
+                        }
+
+                        return JsonResponse(response_edit_ticket_info)
+                    except:
+                        # If there was an issue with updating the ticket information, we will return an error message back to the user
+                        response_edit_ticket_info = {
+                            "message" : "Issue encountered when updating the ticket information."
+                        }
+
+                        return JsonResponse(response_edit_ticket_info, status=500)
+                # If the form is deemed invalid, the user will get the below error message
+                else:
+                    response_edit_ticket_info = {
+                        "message" : "Error encountered: Please make sure that you have selected the correct options."
+                    }
+
+                    return JsonResponse(response_edit_ticket_info, status=400)
+            # If the user is neither an admin or superadmin, they will see the 403.html page
+            else:
+                return render(request, '403.html')
+            
+        # If the user made a GET request on this route, they will get a 403.html page.
+        else:
+            return render(request, '403.html')
+    # If the user is not logged in, they shouldn't see this page.
+    else:
+        return render(request, '403.html')
 
 # View that allows an admin to view all the testimonials
 def testimonials_mgmt(request):
